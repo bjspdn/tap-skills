@@ -5,8 +5,8 @@
   "author": {
     "name": "Ben"
   },
-  "repository": "https://github.com/<owner>/tap",
-  "homepage": "https://github.com/<owner>/tap",
+  "repository": "https://github.com/bjspdn/tap-skills",
+  "homepage": "https://github.com/bjspdn/tap-skills",
   "license": "MIT",
   "keywords": [
     "tdd",
