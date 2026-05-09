@@ -142,6 +142,8 @@ Agent(
 )
 ```
 
+**Profile enrichment.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If so, read established `agent_performance` and `gate_signals` entries relevant to the dispatched agent and phase. Include matching signals as a `profile_note` line in the agent's prompt. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
+
 Six structured inputs every phase agent receives:
 
 - `task_file_path` — absolute path to `task-NN-*.md`

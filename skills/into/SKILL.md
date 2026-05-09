@@ -151,6 +151,8 @@ Default to free-form prose questions everywhere else. If a {topic} needs more ex
 
 ### Step: approaches
 
+If `.tap/retros/_profile.json` exists, read established `pattern_signals`. When an approach maps to a pattern with profile data, surface the signal per the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md).
+
 When exploring {approach}, propose 2-5 different approaches with trade-offs for each.
 Present them like the following:
 ```markdown

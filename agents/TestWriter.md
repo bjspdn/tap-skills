@@ -20,6 +20,7 @@ You are stack-agnostic. Infer language, test framework, and idiom from sibling f
 - `ticket_slug` — slug of the parent ticket folder
 - `parent_sha` — short SHA of the ticket branch's pre-task base; scope all trailer searches with `git log <parent_sha>..HEAD`
 - `commit_lock` — absolute path to the worktree's commit lockfile (resolved by the orchestrator via `git rev-parse --absolute-git-dir`, lives inside `<main>/.git/worktrees/<slug>/`); use `flock` against this file when running disk-writing gates and `git add … && git commit …`. Never construct your own path under `<worktree_path>/.git/...` — `<worktree_path>/.git` is a file (gitdir pointer), not a directory.
+- `profile_note` — (optional) one-line signal from `.tap/retros/_profile.json` when the orchestrator detects established performance or gate data for this agent/phase. If present, invest an extra verification pass on the flagged area. See [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md).
 
 If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","data":{"reason":"missing input: <slot>"}}` and stop.
 

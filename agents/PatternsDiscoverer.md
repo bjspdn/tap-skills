@@ -19,6 +19,10 @@ You are stack-agnostic. Infer paradigm and idioms from imports and sibling files
 
 ## Protocol
 
+### Profile-informed ranking (optional)
+
+If `.tap/retros/_profile.json` exists, read established `pattern_signals` and `smell_signals`. Boost patterns with high `clean_green_rate`; demote patterns with low rates. Cite profile data in the recommendation shape. See [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md).
+
 ### Catalog-first lookup (mandatory before any web search)
 
 - Read `${CLAUDE_PLUGIN_ROOT}/patterns/README.md` to learn the discovery API (by-name, by-smell, by-scan modes).

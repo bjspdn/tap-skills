@@ -83,6 +83,8 @@ Wait for the agent to return. Use the pattern-map alongside the dependency-map a
 
 ### Step: slicing
 
+If `.tap/retros/_profile.json` exists, read it and apply established `slicing_signals` and `pattern_signals` per the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md).
+
 Decide how many tasks the ideation needs. Each task must be a *vertical slice*: one observable behavior, end-to-end, testable in isolation. Do not slice horizontally (one task for types, one for implementation, one for tests) — horizontal slices produce tasks that cannot pass on their own.
 
 See the [task contract](task-contract.md) for vertical-slicing criteria, the TDD philosophy each task must follow, and the [expand-contract pattern](task-contract.md#expand-contract-pattern) for breaking changes to shared modules.
