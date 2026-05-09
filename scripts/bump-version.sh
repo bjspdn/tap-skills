@@ -4,11 +4,11 @@ set -euo pipefail
 # bump-version.sh — version coordinator for the tap plugin
 #
 # Usage:
-#   bump-version.sh <X.Y.Z>   Bump all declared files, roll changelog, commit & tag
+#   bump-version.sh <X.Y.Z>   Bump files, roll changelog, commit, tag, push & GitHub Release
 #   bump-version.sh --check    Report current versions across files, detect drift
 #   bump-version.sh --audit    Run check + grep repo for stale/undeclared version strings
 #
-# Requires: jq, git
+# Requires: jq, git, gh (optional — for GitHub Releases)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -250,11 +250,29 @@ EOF
   (cd "$ROOT_DIR" && git tag -a "v$new_version" -m "Release v$new_version")
   ok "tagged v$new_version"
 
+  # 5. Push commits + tags
+  local branch
+  branch=$(git -C "$ROOT_DIR" rev-parse --abbrev-ref HEAD)
+  (cd "$ROOT_DIR" && git push origin "$branch" --tags)
+  ok "pushed to origin/$branch with tags"
+
+  # 6. Create GitHub Release with changelog content
+  if command -v gh >/dev/null 2>&1; then
+    # Extract release notes for this version from changelog
+    local release_notes
+    release_notes=$(sed -n "/^## \[$new_version\]/,/^## \[/{/^## \[/d; p;}" "$CHANGELOG")
+
+    (cd "$ROOT_DIR" && gh release create "v$new_version" \
+      --title "v$new_version" \
+      --notes "$release_notes")
+    ok "created GitHub Release v$new_version"
+  else
+    warn "gh CLI not found — skipping GitHub Release creation"
+    echo "  Create manually: gh release create v$new_version"
+  fi
+
   echo
   echo -e "${GREEN}${BOLD}Released v$new_version${RESET}"
-  echo
-  echo "Next steps:"
-  echo "  git push origin master --tags"
 }
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
@@ -271,7 +289,7 @@ case "${1:-}" in
   --help|-h|"")
     echo "Usage: bump-version.sh <X.Y.Z> | --check | --audit"
     echo
-    echo "  <X.Y.Z>   Bump version, roll changelog, commit & tag"
+    echo "  <X.Y.Z>   Bump version, roll changelog, commit, tag, push & release"
     echo "  --check    Report current versions, detect drift"
     echo "  --audit    Check + grep for stale version strings"
     ;;
