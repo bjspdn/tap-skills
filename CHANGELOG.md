@@ -8,17 +8,18 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **`/tap:sketch` skill** — rapid single-behavior TDD prototype. Lightweight alternative to the full `into → convey → run` pipeline for changes touching ≤3 files. In-memory task spec, no worktree, no tickets on disk. Reuses TestWriter/CodeWriter/Refactorer agents with inline specs. Bounded failure handling (one Debugger retry per phase).
-- **`/tap:retro` skill** — post-mortem analysis of completed `/tap:run` executions. Two-layer output: ephemeral run report (`.tap/retros/<slug>-<date>.md`) + rolling aggregate profile (`.tap/retros/_profile.json`). Extracts commit trailers, classifies failures into a taxonomy, computes per-agent/per-pattern/per-gate metrics. Profile entries require ≥3 samples before reaching `established` confidence.
-- **Profile contract** (`skills/retro/profile-contract.md`) — reference doc defining how skills and agents consume the retro profile. Signals are advisory, never mandatory. Missing profile = no behavior change.
-- **Architectural pattern cards** (7) — `hexagonal`, `clean-architecture`, `repository`, `cqrs`, `event-sourcing`, `saga`, `dependency-injection`. All conform to `_schema.md`. Catalog count 90 → 97.
-- **Profile consumer wiring** — `into`, `convey`, `sketch`, and `run` skills read established profile signals. TestWriter, CodeWriter, and Refactorer agents accept optional `profile_note` input. PatternsDiscoverer and PatternScanner agents boost/demote patterns based on `clean_green_rate`.
+- **`/tap:sketch` skill** rapid single-behavior TDD prototype. Lightweight alternative to the full `into → convey → run` pipeline for changes touching ≤3 files. In-memory task spec, no worktree, no tickets on disk. Reuses TestWriter/CodeWriter/Refactorer agents with inline specs. Bounded failure handling (one Debugger retry per phase).
+- **`/tap:retro` skill** post-mortem analysis of completed `/tap:run` executions. Two-layer output: ephemeral run report (`.tap/retros/<slug>-<date>.md`) + rolling aggregate profile (`.tap/retros/_profile.json`). Extracts commit trailers, classifies failures into a taxonomy, computes per-agent/per-pattern/per-gate metrics. Profile entries require ≥3 samples before reaching `established` confidence.
+- **Profile contract** (`skills/retro/profile-contract.md`) reference doc defining how skills and agents consume the retro profile. Signals are advisory, never mandatory. Missing profile = no behavior change.
+- **Architectural pattern cards** (7) `hexagonal`, `clean-architecture`, `repository`, `cqrs`, `event-sourcing`, `saga`, `dependency-injection`. All conform to `_schema.md`. Catalog count 90 → 97.
+- **Profile consumer wiring** `into`, `convey`, `sketch`, and `run` skills read established profile signals. TestWriter, CodeWriter, and Refactorer agents accept optional `profile_note` input. PatternsDiscoverer and PatternScanner agents boost/demote patterns based on `clean_green_rate`.
 
 ### Changed
 
-- **`sketch` pattern-check** — now follows the full catalog discovery API: reads `README.md`, resolves aliases, reads actual cards for `composes_with`/`clashes_with`/`test_invariants`, feeds card data into RED/GREEN/REFACTOR shaping.
-- **PatternScanner protocol** — renumbered steps (1→6) to accommodate profile check as step 1.
-- **`_index.json`** — updated with 7 architectural patterns, 7 new aliases, smell routes, bidirectional `composes_with`/`clashes_with` entries. `generated_at` set to 2026-05-10.
+- **`sketch` pattern-check** now follows the full catalog discovery API: reads `README.md`, resolves aliases, reads actual cards for `composes_with`/`clashes_with`/`test_invariants`, feeds card data into RED/GREEN/REFACTOR shaping.
+- **PatternScanner protocol**  renumbered steps (1→6) to accommodate profile check as step 1.
+- **`_index.json`** updated with 7 architectural patterns, 7 new aliases, smell routes, bidirectional `composes_with`/`clashes_with` entries. `generated_at` set to 2026-05-10.
+- `back-at-it` phase removed from `/tap:into`. 
 
 ## [0.1.0] - 2026-05-09
 
