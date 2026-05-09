@@ -1,0 +1,2043 @@
+{
+  "aliases": {
+    "action": "command",
+    "add-back-pointer": "change-unidirectional-association-to-bidirectional",
+    "add-getter-setter": "encapsulate-field",
+    "array-to-record": "replace-array-with-object",
+    "cache": "flyweight",
+    "chain-of-command": "chain-of-responsibility",
+    "client-method-on-foreign-class": "introduce-foreign-method",
+    "clone": "prototype",
+    "collapse-class": "inline-class",
+    "collapse-subclass-hierarchy": "replace-subclass-with-fields",
+    "collection-encapsulation": "encapsulate-collection",
+    "command-query-separation": "separate-query-from-modifier",
+    "controller": "mediator",
+    "cor": "chain-of-responsibility",
+    "cursor": "iterator",
+    "double-dispatch": "visitor",
+    "dumb-data-class": "replace-record-with-data-class",
+    "enum-class": "replace-type-code-with-class",
+    "event-subscriber": "observer",
+    "expression-evaluator": "interpreter",
+    "extension-class": "introduce-local-extension",
+    "extract-explaining-variable": "extract-variable",
+    "extract-function": "extract-method",
+    "extract-method-object": "replace-method-with-method-object",
+    "favor-composition-over-inheritance": "replace-inheritance-with-delegation",
+    "fine-grained": "flyweight",
+    "guard-clause": "replace-nested-conditional-with-guard-clauses",
+    "handle-body": "bridge",
+    "inline-explaining-variable": "inline-variable",
+    "inline-function": "inline-method",
+    "inline-subclass": "replace-subclass-with-fields",
+    "inline-temp": "inline-variable",
+    "intermediary": "mediator",
+    "introduce-delegation": "hide-delegate",
+    "introduce-explaining-variable": "extract-variable",
+    "introduce-symbolic-constant": "replace-magic-number-with-symbolic-constant",
+    "kit": "abstract-factory",
+    "listener": "observer",
+    "move-attribute": "move-field",
+    "move-function": "move-method",
+    "named-constant": "replace-magic-number-with-symbolic-constant",
+    "null-object-pattern": "introduce-null-object",
+    "object-tree": "composite",
+    "objects-for-states": "state",
+    "policy": "strategy",
+    "privatize-field": "encapsulate-field",
+    "publish-subscribe": "observer",
+    "record-to-class": "replace-record-with-data-class",
+    "reference-to-value-object": "change-reference-to-value",
+    "remove-back-pointer": "change-bidirectional-association-to-unidirectional",
+    "remove-delegation-wrapper": "remove-middle-man",
+    "rename-function": "rename-method",
+    "replace-constructor-with-factory-function": "replace-constructor-with-factory-method",
+    "replace-exception-with-conditional": "replace-exception-with-test",
+    "replace-parameter-with-method": "replace-parameter-with-method-call",
+    "separate-domain-from-ui": "duplicate-observed-data",
+    "smart-reference": "decorator",
+    "snapshot": "memento",
+    "split-class": "extract-class",
+    "subclass-per-type": "replace-type-code-with-subclasses",
+    "surrogate": "proxy",
+    "template-method-refactoring": "form-template-method",
+    "template-pattern": "template-method",
+    "token": "memento",
+    "transaction": "command",
+    "type-code-to-class": "replace-type-code-with-class",
+    "type-code-to-state": "replace-type-code-with-state-strategy",
+    "type-code-to-strategy": "replace-type-code-with-state-strategy",
+    "use-accessor-internally": "self-encapsulate-field",
+    "value-object-extraction": "replace-data-value-with-object",
+    "value-to-shared-reference": "change-value-to-reference",
+    "virtual-constructor": "factory-method",
+    "wrapper": "decorator",
+    "wrapper-class": "introduce-local-extension"
+  },
+  "by_category": {
+    "architectural": [],
+    "behavioral": [
+      "chain-of-responsibility",
+      "command",
+      "interpreter",
+      "iterator",
+      "mediator",
+      "memento",
+      "observer",
+      "state",
+      "strategy",
+      "template-method",
+      "visitor"
+    ],
+    "creational": [
+      "abstract-factory",
+      "builder",
+      "factory-method",
+      "prototype",
+      "singleton"
+    ],
+    "refactoring": [
+      "add-parameter",
+      "change-bidirectional-association-to-unidirectional",
+      "change-reference-to-value",
+      "change-unidirectional-association-to-bidirectional",
+      "change-value-to-reference",
+      "collapse-hierarchy",
+      "consolidate-conditional-expression",
+      "consolidate-duplicate-conditional-fragments",
+      "decompose-conditional",
+      "duplicate-observed-data",
+      "encapsulate-collection",
+      "encapsulate-field",
+      "extract-class",
+      "extract-interface",
+      "extract-method",
+      "extract-subclass",
+      "extract-superclass",
+      "extract-variable",
+      "form-template-method",
+      "hide-delegate",
+      "hide-method",
+      "inline-class",
+      "inline-method",
+      "inline-variable",
+      "introduce-assertion",
+      "introduce-foreign-method",
+      "introduce-local-extension",
+      "introduce-null-object",
+      "introduce-parameter-object",
+      "move-field",
+      "move-method",
+      "parameterize-method",
+      "preserve-whole-object",
+      "pull-up-constructor-body",
+      "pull-up-field",
+      "pull-up-method",
+      "push-down-field",
+      "push-down-method",
+      "remove-assignments-to-parameters",
+      "remove-control-flag",
+      "remove-middle-man",
+      "remove-parameter",
+      "remove-setting-method",
+      "rename-method",
+      "replace-array-with-object",
+      "replace-conditional-with-polymorphism",
+      "replace-constructor-with-factory-method",
+      "replace-data-value-with-object",
+      "replace-delegation-with-inheritance",
+      "replace-error-code-with-exception",
+      "replace-exception-with-test",
+      "replace-inheritance-with-delegation",
+      "replace-magic-number-with-symbolic-constant",
+      "replace-method-with-method-object",
+      "replace-nested-conditional-with-guard-clauses",
+      "replace-parameter-with-explicit-methods",
+      "replace-parameter-with-method-call",
+      "replace-record-with-data-class",
+      "replace-subclass-with-fields",
+      "replace-temp-with-query",
+      "replace-type-code-with-class",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses",
+      "self-encapsulate-field",
+      "separate-query-from-modifier",
+      "split-temporary-variable",
+      "substitute-algorithm"
+    ],
+    "structural": [
+      "adapter",
+      "bridge",
+      "composite",
+      "decorator",
+      "facade",
+      "flyweight",
+      "proxy"
+    ]
+  },
+  "clashes_with": {
+    "adapter": [
+      "inappropriate-intimacy"
+    ],
+    "add-parameter": [
+      "remove-parameter"
+    ],
+    "bridge": [
+      "template-method"
+    ],
+    "chain-of-responsibility": [
+      "singleton-collaborator-no-di"
+    ],
+    "change-bidirectional-association-to-unidirectional": [
+      "change-unidirectional-association-to-bidirectional"
+    ],
+    "change-reference-to-value": [
+      "change-value-to-reference"
+    ],
+    "change-unidirectional-association-to-bidirectional": [
+      "change-bidirectional-association-to-unidirectional"
+    ],
+    "change-value-to-reference": [
+      "change-reference-to-value"
+    ],
+    "collapse-hierarchy": [
+      "extract-subclass",
+      "extract-superclass"
+    ],
+    "command": [
+      "singleton-collaborator-no-di"
+    ],
+    "composite": [
+      "singleton-collaborator-no-di"
+    ],
+    "decorator": [
+      "template-method"
+    ],
+    "duplicate-observed-data": [
+      "inline-class"
+    ],
+    "encapsulate-collection": [
+      "remove-middle-man"
+    ],
+    "encapsulate-field": [
+      "self-encapsulate-field"
+    ],
+    "extract-class": [
+      "inline-class"
+    ],
+    "extract-method": [
+      "inline-method"
+    ],
+    "extract-subclass": [
+      "replace-inheritance-with-delegation"
+    ],
+    "extract-superclass": [
+      "collapse-hierarchy"
+    ],
+    "extract-variable": [
+      "inline-variable"
+    ],
+    "facade": [
+      "inappropriate-intimacy"
+    ],
+    "factory-method": [
+      "singleton"
+    ],
+    "flyweight": [
+      "prototype"
+    ],
+    "form-template-method": [
+      "replace-inheritance-with-delegation"
+    ],
+    "hide-delegate": [
+      "remove-middle-man"
+    ],
+    "inline-class": [
+      "extract-class"
+    ],
+    "inline-method": [
+      "extract-method"
+    ],
+    "inline-variable": [
+      "extract-variable"
+    ],
+    "interpreter": [
+      "god-class"
+    ],
+    "introduce-foreign-method": [
+      "extract-class"
+    ],
+    "introduce-local-extension": [
+      "inline-class"
+    ],
+    "introduce-null-object": [
+      "replace-nested-conditional-with-guard-clauses"
+    ],
+    "iterator": [
+      "god-class"
+    ],
+    "mediator": [
+      "singleton-collaborator-no-di"
+    ],
+    "memento": [
+      "singleton-collaborator-no-di"
+    ],
+    "move-field": [
+      "inline-class"
+    ],
+    "move-method": [
+      "inline-class"
+    ],
+    "observer": [
+      "singleton-collaborator-no-di"
+    ],
+    "parameterize-method": [
+      "replace-parameter-with-explicit-methods"
+    ],
+    "preserve-whole-object": [
+      "replace-parameter-with-method-call"
+    ],
+    "proxy": [
+      "singleton-collaborator-no-di"
+    ],
+    "pull-up-field": [
+      "push-down-field"
+    ],
+    "pull-up-method": [
+      "push-down-method"
+    ],
+    "push-down-field": [
+      "pull-up-field"
+    ],
+    "push-down-method": [
+      "pull-up-method"
+    ],
+    "remove-middle-man": [
+      "hide-delegate"
+    ],
+    "remove-parameter": [
+      "add-parameter"
+    ],
+    "replace-array-with-object": [
+      "replace-record-with-data-class"
+    ],
+    "replace-conditional-with-polymorphism": [
+      "replace-nested-conditional-with-guard-clauses"
+    ],
+    "replace-data-value-with-object": [
+      "replace-record-with-data-class"
+    ],
+    "replace-delegation-with-inheritance": [
+      "replace-inheritance-with-delegation"
+    ],
+    "replace-error-code-with-exception": [
+      "replace-exception-with-test"
+    ],
+    "replace-exception-with-test": [
+      "replace-error-code-with-exception"
+    ],
+    "replace-inheritance-with-delegation": [
+      "extract-subclass",
+      "form-template-method",
+      "replace-delegation-with-inheritance"
+    ],
+    "replace-method-with-method-object": [
+      "inline-method"
+    ],
+    "replace-nested-conditional-with-guard-clauses": [
+      "consolidate-duplicate-conditional-fragments"
+    ],
+    "replace-parameter-with-explicit-methods": [
+      "parameterize-method"
+    ],
+    "replace-parameter-with-method-call": [
+      "add-parameter"
+    ],
+    "replace-record-with-data-class": [
+      "replace-array-with-object"
+    ],
+    "replace-subclass-with-fields": [
+      "replace-type-code-with-subclasses"
+    ],
+    "replace-temp-with-query": [
+      "inline-variable"
+    ],
+    "replace-type-code-with-class": [
+      "replace-type-code-with-subclasses"
+    ],
+    "replace-type-code-with-state-strategy": [
+      "replace-type-code-with-subclasses"
+    ],
+    "replace-type-code-with-subclasses": [
+      "replace-type-code-with-state-strategy"
+    ],
+    "self-encapsulate-field": [
+      "encapsulate-field"
+    ],
+    "singleton": [
+      "factory-method",
+      "prototype"
+    ],
+    "state": [
+      "god-class"
+    ],
+    "strategy": [
+      "singleton-collaborator-no-di"
+    ],
+    "template-method": [
+      "god-class"
+    ],
+    "visitor": [
+      "god-class"
+    ]
+  },
+  "composes_with": {
+    "abstract-factory": [
+      "factory-method",
+      "prototype",
+      "singleton"
+    ],
+    "adapter": [
+      "bridge",
+      "decorator",
+      "facade"
+    ],
+    "add-parameter": [
+      "introduce-parameter-object",
+      "parameterize-method"
+    ],
+    "bridge": [
+      "abstract-factory",
+      "adapter",
+      "strategy"
+    ],
+    "builder": [
+      "composite",
+      "factory-method"
+    ],
+    "chain-of-responsibility": [
+      "command",
+      "composite",
+      "decorator"
+    ],
+    "change-bidirectional-association-to-unidirectional": [
+      "change-unidirectional-association-to-bidirectional",
+      "remove-middle-man"
+    ],
+    "change-reference-to-value": [
+      "change-value-to-reference",
+      "replace-data-value-with-object"
+    ],
+    "change-unidirectional-association-to-bidirectional": [
+      "change-bidirectional-association-to-unidirectional",
+      "hide-delegate"
+    ],
+    "change-value-to-reference": [
+      "change-reference-to-value",
+      "replace-data-value-with-object"
+    ],
+    "collapse-hierarchy": [
+      "pull-up-field",
+      "pull-up-method"
+    ],
+    "command": [
+      "chain-of-responsibility",
+      "composite",
+      "memento",
+      "observer"
+    ],
+    "composite": [
+      "decorator",
+      "iterator",
+      "visitor"
+    ],
+    "consolidate-conditional-expression": [
+      "decompose-conditional",
+      "extract-method",
+      "remove-control-flag"
+    ],
+    "consolidate-duplicate-conditional-fragments": [
+      "consolidate-conditional-expression",
+      "extract-method"
+    ],
+    "decompose-conditional": [
+      "consolidate-conditional-expression",
+      "extract-method",
+      "extract-variable"
+    ],
+    "decorator": [
+      "chain-of-responsibility",
+      "composite",
+      "strategy"
+    ],
+    "duplicate-observed-data": [
+      "change-value-to-reference",
+      "extract-class"
+    ],
+    "encapsulate-collection": [
+      "encapsulate-field",
+      "hide-delegate",
+      "replace-data-value-with-object"
+    ],
+    "encapsulate-field": [
+      "encapsulate-collection",
+      "replace-data-value-with-object",
+      "self-encapsulate-field"
+    ],
+    "extract-class": [
+      "hide-delegate",
+      "move-field",
+      "move-method"
+    ],
+    "extract-interface": [
+      "extract-superclass",
+      "replace-inheritance-with-delegation"
+    ],
+    "extract-method": [
+      "extract-class",
+      "replace-method-with-method-object",
+      "replace-temp-with-query"
+    ],
+    "extract-subclass": [
+      "extract-superclass",
+      "push-down-field",
+      "push-down-method"
+    ],
+    "extract-superclass": [
+      "extract-interface",
+      "pull-up-field",
+      "pull-up-method"
+    ],
+    "extract-variable": [
+      "decompose-conditional",
+      "extract-method",
+      "replace-temp-with-query"
+    ],
+    "facade": [
+      "abstract-factory",
+      "adapter",
+      "mediator"
+    ],
+    "factory-method": [
+      "abstract-factory",
+      "prototype",
+      "template-method"
+    ],
+    "flyweight": [
+      "composite",
+      "factory-method",
+      "singleton"
+    ],
+    "form-template-method": [
+      "extract-method",
+      "pull-up-method"
+    ],
+    "hide-delegate": [
+      "extract-class",
+      "move-method"
+    ],
+    "hide-method": [
+      "extract-method",
+      "remove-setting-method"
+    ],
+    "inline-class": [
+      "move-field",
+      "move-method"
+    ],
+    "inline-method": [
+      "extract-method",
+      "replace-method-with-method-object"
+    ],
+    "inline-variable": [
+      "inline-method",
+      "replace-temp-with-query"
+    ],
+    "interpreter": [
+      "composite",
+      "flyweight",
+      "iterator",
+      "visitor"
+    ],
+    "introduce-assertion": [
+      "extract-method",
+      "remove-control-flag",
+      "replace-nested-conditional-with-guard-clauses"
+    ],
+    "introduce-foreign-method": [
+      "introduce-local-extension",
+      "move-method"
+    ],
+    "introduce-local-extension": [
+      "extract-class",
+      "introduce-foreign-method",
+      "move-method"
+    ],
+    "introduce-null-object": [
+      "factory-method",
+      "replace-conditional-with-polymorphism",
+      "strategy"
+    ],
+    "introduce-parameter-object": [
+      "extract-method",
+      "preserve-whole-object",
+      "rename-method"
+    ],
+    "iterator": [
+      "composite",
+      "factory-method",
+      "memento",
+      "visitor"
+    ],
+    "mediator": [
+      "command",
+      "facade",
+      "observer"
+    ],
+    "memento": [
+      "command",
+      "iterator",
+      "prototype"
+    ],
+    "move-field": [
+      "extract-class",
+      "move-method",
+      "self-encapsulate-field"
+    ],
+    "move-method": [
+      "extract-class",
+      "extract-method",
+      "move-field"
+    ],
+    "observer": [
+      "command",
+      "mediator",
+      "singleton",
+      "strategy"
+    ],
+    "parameterize-method": [
+      "add-parameter",
+      "replace-parameter-with-explicit-methods"
+    ],
+    "preserve-whole-object": [
+      "introduce-parameter-object",
+      "replace-parameter-with-method-call"
+    ],
+    "prototype": [
+      "abstract-factory",
+      "composite",
+      "decorator",
+      "factory-method"
+    ],
+    "proxy": [
+      "adapter",
+      "decorator",
+      "facade"
+    ],
+    "pull-up-constructor-body": [
+      "pull-up-field",
+      "pull-up-method"
+    ],
+    "pull-up-field": [
+      "pull-up-constructor-body",
+      "pull-up-method"
+    ],
+    "pull-up-method": [
+      "form-template-method",
+      "pull-up-constructor-body",
+      "pull-up-field"
+    ],
+    "push-down-field": [
+      "extract-subclass",
+      "push-down-method"
+    ],
+    "push-down-method": [
+      "extract-subclass",
+      "push-down-field"
+    ],
+    "remove-assignments-to-parameters": [
+      "extract-method",
+      "split-temporary-variable"
+    ],
+    "remove-control-flag": [
+      "consolidate-conditional-expression",
+      "extract-method",
+      "replace-nested-conditional-with-guard-clauses"
+    ],
+    "remove-middle-man": [
+      "inline-class",
+      "move-method"
+    ],
+    "remove-parameter": [
+      "introduce-parameter-object",
+      "rename-method"
+    ],
+    "remove-setting-method": [
+      "replace-constructor-with-factory-method",
+      "separate-query-from-modifier"
+    ],
+    "rename-method": [
+      "extract-method",
+      "introduce-parameter-object"
+    ],
+    "replace-array-with-object": [
+      "extract-class",
+      "replace-data-value-with-object"
+    ],
+    "replace-conditional-with-polymorphism": [
+      "extract-method",
+      "factory-method",
+      "strategy"
+    ],
+    "replace-constructor-with-factory-method": [
+      "extract-subclass",
+      "hide-method",
+      "remove-setting-method"
+    ],
+    "replace-data-value-with-object": [
+      "change-value-to-reference",
+      "extract-class",
+      "self-encapsulate-field"
+    ],
+    "replace-delegation-with-inheritance": [
+      "pull-up-field",
+      "pull-up-method"
+    ],
+    "replace-error-code-with-exception": [
+      "replace-exception-with-test",
+      "separate-query-from-modifier"
+    ],
+    "replace-exception-with-test": [
+      "replace-error-code-with-exception",
+      "separate-query-from-modifier"
+    ],
+    "replace-inheritance-with-delegation": [
+      "extract-interface",
+      "replace-delegation-with-inheritance"
+    ],
+    "replace-magic-number-with-symbolic-constant": [
+      "encapsulate-field",
+      "replace-type-code-with-class"
+    ],
+    "replace-method-with-method-object": [
+      "extract-method",
+      "replace-temp-with-query",
+      "strategy"
+    ],
+    "replace-nested-conditional-with-guard-clauses": [
+      "consolidate-conditional-expression",
+      "extract-method",
+      "remove-control-flag"
+    ],
+    "replace-parameter-with-explicit-methods": [
+      "extract-method",
+      "rename-method"
+    ],
+    "replace-parameter-with-method-call": [
+      "preserve-whole-object",
+      "remove-parameter"
+    ],
+    "replace-record-with-data-class": [
+      "encapsulate-collection",
+      "encapsulate-field",
+      "replace-data-value-with-object"
+    ],
+    "replace-subclass-with-fields": [
+      "inline-class",
+      "replace-type-code-with-class"
+    ],
+    "replace-temp-with-query": [
+      "extract-method",
+      "extract-variable",
+      "replace-method-with-method-object"
+    ],
+    "replace-type-code-with-class": [
+      "replace-magic-number-with-symbolic-constant",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses"
+    ],
+    "replace-type-code-with-state-strategy": [
+      "replace-conditional-with-polymorphism",
+      "replace-type-code-with-subclasses"
+    ],
+    "replace-type-code-with-subclasses": [
+      "replace-conditional-with-polymorphism",
+      "replace-type-code-with-class",
+      "replace-type-code-with-state-strategy"
+    ],
+    "self-encapsulate-field": [
+      "encapsulate-field",
+      "extract-class",
+      "replace-data-value-with-object"
+    ],
+    "separate-query-from-modifier": [
+      "remove-setting-method",
+      "rename-method"
+    ],
+    "singleton": [
+      "abstract-factory",
+      "facade"
+    ],
+    "split-temporary-variable": [
+      "extract-method",
+      "extract-variable",
+      "replace-temp-with-query"
+    ],
+    "state": [
+      "flyweight",
+      "singleton",
+      "strategy"
+    ],
+    "strategy": [
+      "decorator",
+      "factory-method",
+      "observer",
+      "state"
+    ],
+    "substitute-algorithm": [
+      "extract-method",
+      "replace-method-with-method-object"
+    ],
+    "template-method": [
+      "factory-method",
+      "hook-method",
+      "strategy"
+    ],
+    "visitor": [
+      "composite",
+      "interpreter",
+      "iterator"
+    ]
+  },
+  "count": 90,
+  "generated_at": "2026-05-09",
+  "patterns": {
+    "abstract-factory": {
+      "aliases": [
+        "kit"
+      ],
+      "category": "creational",
+      "intent": "Provide an interface for creating families of related objects without specifying their concrete classes",
+      "path": "patterns/creational/abstract-factory.md"
+    },
+    "adapter": {
+      "aliases": [
+        "wrapper"
+      ],
+      "category": "structural",
+      "intent": "Convert the interface of a class into another interface clients expect, enabling incompatible interfaces to work together",
+      "path": "patterns/structural/adapter.md"
+    },
+    "add-parameter": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Add a parameter to a method so it can receive information it currently cannot access",
+      "path": "patterns/refactoring/add-parameter.md"
+    },
+    "bridge": {
+      "aliases": [
+        "handle-body"
+      ],
+      "category": "structural",
+      "intent": "Decouple an abstraction from its implementation so that the two can vary independently",
+      "path": "patterns/structural/bridge.md"
+    },
+    "builder": {
+      "aliases": [],
+      "category": "creational",
+      "intent": "Separate the construction of a complex object from its representation so the same process can create different representations",
+      "path": "patterns/creational/builder.md"
+    },
+    "chain-of-responsibility": {
+      "aliases": [
+        "chain-of-command",
+        "cor"
+      ],
+      "category": "behavioral",
+      "intent": "Pass a request along a chain of handlers; each handler decides to process it or forward it",
+      "path": "patterns/behavioral/chain-of-responsibility.md"
+    },
+    "change-bidirectional-association-to-unidirectional": {
+      "aliases": [
+        "remove-back-pointer"
+      ],
+      "category": "refactoring",
+      "intent": "Remove one direction of a two-way link when only one end needs to navigate to the other",
+      "path": "patterns/refactoring/change-bidirectional-association-to-unidirectional.md"
+    },
+    "change-reference-to-value": {
+      "aliases": [
+        "reference-to-value-object"
+      ],
+      "category": "refactoring",
+      "intent": "Convert a reference object that has no shared-identity requirement into an immutable value object",
+      "path": "patterns/refactoring/change-reference-to-value.md"
+    },
+    "change-unidirectional-association-to-bidirectional": {
+      "aliases": [
+        "add-back-pointer"
+      ],
+      "category": "refactoring",
+      "intent": "Add a reverse pointer to a one-way association when both ends need to navigate to each other",
+      "path": "patterns/refactoring/change-unidirectional-association-to-bidirectional.md"
+    },
+    "change-value-to-reference": {
+      "aliases": [
+        "value-to-shared-reference"
+      ],
+      "category": "refactoring",
+      "intent": "Convert a value object to a reference object so that multiple owners share one instance with consistent identity",
+      "path": "patterns/refactoring/change-value-to-reference.md"
+    },
+    "collapse-hierarchy": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Merge a superclass and subclass that are no longer different enough to justify a two-level hierarchy",
+      "path": "patterns/refactoring/collapse-hierarchy.md"
+    },
+    "command": {
+      "aliases": [
+        "action",
+        "transaction"
+      ],
+      "category": "behavioral",
+      "intent": "Encapsulate a request as an object, enabling parameterization, queuing, logging, and undo/redo",
+      "path": "patterns/behavioral/command.md"
+    },
+    "composite": {
+      "aliases": [
+        "object-tree"
+      ],
+      "category": "structural",
+      "intent": "Compose objects into tree structures to represent part-whole hierarchies and let clients treat individual objects and compositions uniformly",
+      "path": "patterns/structural/composite.md"
+    },
+    "consolidate-conditional-expression": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Merge multiple separate conditionals with the same result into one combined condition, then extract it as a method",
+      "path": "patterns/refactoring/consolidate-conditional-expression.md"
+    },
+    "consolidate-duplicate-conditional-fragments": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move code that appears in every branch of a conditional outside the conditional so it executes unconditionally",
+      "path": "patterns/refactoring/consolidate-duplicate-conditional-fragments.md"
+    },
+    "decompose-conditional": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Extract the condition and each branch of a complex conditional into named methods that reveal their intent",
+      "path": "patterns/refactoring/decompose-conditional.md"
+    },
+    "decorator": {
+      "aliases": [
+        "smart-reference",
+        "wrapper"
+      ],
+      "category": "structural",
+      "intent": "Attach additional responsibilities to an object dynamically by wrapping it, as a flexible alternative to subclassing",
+      "path": "patterns/structural/decorator.md"
+    },
+    "duplicate-observed-data": {
+      "aliases": [
+        "separate-domain-from-ui"
+      ],
+      "category": "refactoring",
+      "intent": "Copy GUI-layer data into a domain object and keep them synchronized, separating domain logic from presentation",
+      "path": "patterns/refactoring/duplicate-observed-data.md"
+    },
+    "encapsulate-collection": {
+      "aliases": [
+        "collection-encapsulation"
+      ],
+      "category": "refactoring",
+      "intent": "Return an unmodifiable view of a collection field and provide explicit add/remove methods so the owning class controls all mutations",
+      "path": "patterns/refactoring/encapsulate-collection.md"
+    },
+    "encapsulate-field": {
+      "aliases": [
+        "add-getter-setter",
+        "privatize-field"
+      ],
+      "category": "refactoring",
+      "intent": "Make a public field private and provide getter/setter methods to control external access",
+      "path": "patterns/refactoring/encapsulate-field.md"
+    },
+    "extract-class": {
+      "aliases": [
+        "split-class"
+      ],
+      "category": "refactoring",
+      "intent": "Split a class doing two jobs into two focused classes, each with a single clear responsibility",
+      "path": "patterns/refactoring/extract-class.md"
+    },
+    "extract-interface": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Extract a subset of a class's interface into a separate interface type so clients depend only on what they use",
+      "path": "patterns/refactoring/extract-interface.md"
+    },
+    "extract-method": {
+      "aliases": [
+        "extract-function"
+      ],
+      "category": "refactoring",
+      "intent": "Pull a code fragment into its own named method/function to improve readability and enable reuse",
+      "path": "patterns/refactoring/extract-method.md"
+    },
+    "extract-subclass": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Create a subclass for a cluster of features that is only used by some instances of the class",
+      "path": "patterns/refactoring/extract-subclass.md"
+    },
+    "extract-superclass": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Create a superclass and move common features of two or more classes into it",
+      "path": "patterns/refactoring/extract-superclass.md"
+    },
+    "extract-variable": {
+      "aliases": [
+        "extract-explaining-variable",
+        "introduce-explaining-variable"
+      ],
+      "category": "refactoring",
+      "intent": "Assign a complex expression to a well-named temporary variable to make the expression's purpose visible",
+      "path": "patterns/refactoring/extract-variable.md"
+    },
+    "facade": {
+      "aliases": [],
+      "category": "structural",
+      "intent": "Provide a simplified interface to a complex subsystem, reducing client coupling to its internals",
+      "path": "patterns/structural/facade.md"
+    },
+    "factory-method": {
+      "aliases": [
+        "virtual-constructor"
+      ],
+      "category": "creational",
+      "intent": "Define an interface for creating an object, but let subclasses decide which class to instantiate",
+      "path": "patterns/creational/factory-method.md"
+    },
+    "flyweight": {
+      "aliases": [
+        "cache",
+        "fine-grained"
+      ],
+      "category": "structural",
+      "intent": "Share fine-grained objects to support large numbers of them efficiently by separating intrinsic from extrinsic state",
+      "path": "patterns/structural/flyweight.md"
+    },
+    "form-template-method": {
+      "aliases": [
+        "template-method-refactoring"
+      ],
+      "category": "refactoring",
+      "intent": "Unify similar algorithms in subclasses by extracting the common skeleton into the superclass and leaving the differing steps as abstract methods",
+      "path": "patterns/refactoring/form-template-method.md"
+    },
+    "hide-delegate": {
+      "aliases": [
+        "introduce-delegation"
+      ],
+      "category": "refactoring",
+      "intent": "Add a delegation method on a server object so clients don't need to know about the server's internal delegates",
+      "path": "patterns/refactoring/hide-delegate.md"
+    },
+    "hide-method": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Reduce a method's visibility to the minimum access level required by its actual callers",
+      "path": "patterns/refactoring/hide-method.md"
+    },
+    "inline-class": {
+      "aliases": [
+        "collapse-class"
+      ],
+      "category": "refactoring",
+      "intent": "Absorb a class that no longer carries enough responsibility into its most frequent collaborator",
+      "path": "patterns/refactoring/inline-class.md"
+    },
+    "inline-method": {
+      "aliases": [
+        "inline-function"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a method call with the method body when the method's name adds no clarity over its content",
+      "path": "patterns/refactoring/inline-method.md"
+    },
+    "inline-variable": {
+      "aliases": [
+        "inline-explaining-variable",
+        "inline-temp"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a temporary variable that is assigned once with the expression it holds when the variable name adds no clarity",
+      "path": "patterns/refactoring/inline-variable.md"
+    },
+    "interpreter": {
+      "aliases": [
+        "expression-evaluator"
+      ],
+      "category": "behavioral",
+      "intent": "Define a grammar for a language and provide an interpreter that uses the grammar to process sentences",
+      "path": "patterns/behavioral/interpreter.md"
+    },
+    "introduce-assertion": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Make an implicit assumption about program state explicit by adding an assertion that documents and enforces the precondition",
+      "path": "patterns/refactoring/introduce-assertion.md"
+    },
+    "introduce-foreign-method": {
+      "aliases": [
+        "client-method-on-foreign-class"
+      ],
+      "category": "refactoring",
+      "intent": "Add a method to a client class that acts as if it belonged to an unmodifiable server class",
+      "path": "patterns/refactoring/introduce-foreign-method.md"
+    },
+    "introduce-local-extension": {
+      "aliases": [
+        "extension-class",
+        "wrapper-class"
+      ],
+      "category": "refactoring",
+      "intent": "Create a subclass or wrapper around an unmodifiable server class to house methods the server should own",
+      "path": "patterns/refactoring/introduce-local-extension.md"
+    },
+    "introduce-null-object": {
+      "aliases": [
+        "null-object-pattern"
+      ],
+      "category": "refactoring",
+      "intent": "Replace null checks with a no-op object that implements the expected interface with safe default behaviour",
+      "path": "patterns/refactoring/introduce-null-object.md"
+    },
+    "introduce-parameter-object": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace a recurring group of parameters with a single object that encapsulates them",
+      "path": "patterns/refactoring/introduce-parameter-object.md"
+    },
+    "iterator": {
+      "aliases": [
+        "cursor"
+      ],
+      "category": "behavioral",
+      "intent": "Provide a way to sequentially access elements of a collection without exposing its underlying representation",
+      "path": "patterns/behavioral/iterator.md"
+    },
+    "mediator": {
+      "aliases": [
+        "controller",
+        "intermediary"
+      ],
+      "category": "behavioral",
+      "intent": "Define an object that encapsulates how a set of objects interact, reducing direct dependencies between them",
+      "path": "patterns/behavioral/mediator.md"
+    },
+    "memento": {
+      "aliases": [
+        "snapshot",
+        "token"
+      ],
+      "category": "behavioral",
+      "intent": "Capture and externalise an object's internal state so it can be restored later without violating encapsulation",
+      "path": "patterns/behavioral/memento.md"
+    },
+    "move-field": {
+      "aliases": [
+        "move-attribute"
+      ],
+      "category": "refactoring",
+      "intent": "Relocate a field to the class that uses it most, so data lives beside the behavior that governs it",
+      "path": "patterns/refactoring/move-field.md"
+    },
+    "move-method": {
+      "aliases": [
+        "move-function"
+      ],
+      "category": "refactoring",
+      "intent": "Move a method to the class that uses it most, eliminating feature envy and placing behavior with its data",
+      "path": "patterns/refactoring/move-method.md"
+    },
+    "observer": {
+      "aliases": [
+        "event-subscriber",
+        "listener",
+        "publish-subscribe"
+      ],
+      "category": "behavioral",
+      "intent": "Define a one-to-many dependency so that when one object changes state, all dependents are notified automatically",
+      "path": "patterns/behavioral/observer.md"
+    },
+    "parameterize-method": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Merge several methods that do similar things by extracting the differing literal values into parameters",
+      "path": "patterns/refactoring/parameterize-method.md"
+    },
+    "preserve-whole-object": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Pass the whole object to a method instead of extracting several values from it before the call",
+      "path": "patterns/refactoring/preserve-whole-object.md"
+    },
+    "prototype": {
+      "aliases": [
+        "clone"
+      ],
+      "category": "creational",
+      "intent": "Specify the kinds of objects to create using a prototypical instance, and create new objects by copying that prototype",
+      "path": "patterns/creational/prototype.md"
+    },
+    "proxy": {
+      "aliases": [
+        "surrogate"
+      ],
+      "category": "structural",
+      "intent": "Provide a substitute object that controls access to another object, adding behaviour before or after the real object is reached",
+      "path": "patterns/structural/proxy.md"
+    },
+    "pull-up-constructor-body": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move common constructor initialization code from subclass constructors into a superclass constructor",
+      "path": "patterns/refactoring/pull-up-constructor-body.md"
+    },
+    "pull-up-field": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move a field that appears identically in two or more subclasses up to the common superclass",
+      "path": "patterns/refactoring/pull-up-field.md"
+    },
+    "pull-up-method": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move methods with identical or equivalent bodies from subclasses up to the superclass to eliminate duplication",
+      "path": "patterns/refactoring/pull-up-method.md"
+    },
+    "push-down-field": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move a field from the superclass to only those subclasses that actually use it",
+      "path": "patterns/refactoring/push-down-field.md"
+    },
+    "push-down-method": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move a method from the superclass to only those subclasses that actually use it",
+      "path": "patterns/refactoring/push-down-method.md"
+    },
+    "remove-assignments-to-parameters": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Introduce a local variable for post-entry mutations instead of reassigning an incoming parameter",
+      "path": "patterns/refactoring/remove-assignments-to-parameters.md"
+    },
+    "remove-control-flag": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace a boolean control-flag variable used to break out of loops or conditionals with break, return, or continue",
+      "path": "patterns/refactoring/remove-control-flag.md"
+    },
+    "remove-middle-man": {
+      "aliases": [
+        "remove-delegation-wrapper"
+      ],
+      "category": "refactoring",
+      "intent": "Delete a class that does nothing but forward calls, letting clients talk directly to the real object",
+      "path": "patterns/refactoring/remove-middle-man.md"
+    },
+    "remove-parameter": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Remove a parameter that is no longer used by the method body to shrink the caller contract",
+      "path": "patterns/refactoring/remove-parameter.md"
+    },
+    "remove-setting-method": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Make a field immutable by removing its setter and initializing it only through the constructor",
+      "path": "patterns/refactoring/remove-setting-method.md"
+    },
+    "rename-method": {
+      "aliases": [
+        "rename-function"
+      ],
+      "category": "refactoring",
+      "intent": "Change a method's name to better communicate its purpose and eliminate the need for comments",
+      "path": "patterns/refactoring/rename-method.md"
+    },
+    "replace-array-with-object": {
+      "aliases": [
+        "array-to-record"
+      ],
+      "category": "refactoring",
+      "intent": "Replace an array used as a heterogeneous record with an object whose named fields make each slot's meaning explicit",
+      "path": "patterns/refactoring/replace-array-with-object.md"
+    },
+    "replace-conditional-with-polymorphism": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Move each conditional branch into an overriding method on a subclass or type-case variant, eliminating the switch/if chain",
+      "path": "patterns/refactoring/replace-conditional-with-polymorphism.md"
+    },
+    "replace-constructor-with-factory-method": {
+      "aliases": [
+        "replace-constructor-with-factory-function"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a constructor call with a named factory method to communicate intent and decouple callers from concrete types",
+      "path": "patterns/refactoring/replace-constructor-with-factory-method.md"
+    },
+    "replace-data-value-with-object": {
+      "aliases": [
+        "value-object-extraction"
+      ],
+      "category": "refactoring",
+      "intent": "Promote a primitive or simple data item to an object so behavior related to it can live alongside the data",
+      "path": "patterns/refactoring/replace-data-value-with-object.md"
+    },
+    "replace-delegation-with-inheritance": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace a field-plus-forwarding-methods pattern with direct inheritance when the class uses the full delegated interface",
+      "path": "patterns/refactoring/replace-delegation-with-inheritance.md"
+    },
+    "replace-error-code-with-exception": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace a special return value that signals failure with an exception so error paths are explicit and unignorable",
+      "path": "patterns/refactoring/replace-error-code-with-exception.md"
+    },
+    "replace-exception-with-test": {
+      "aliases": [
+        "replace-exception-with-conditional"
+      ],
+      "category": "refactoring",
+      "intent": "Replace an exception thrown for an avoidable condition with a guard check that prevents the exceptional state",
+      "path": "patterns/refactoring/replace-exception-with-test.md"
+    },
+    "replace-inheritance-with-delegation": {
+      "aliases": [
+        "favor-composition-over-inheritance"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a subclass relationship with a field holding the former superclass and explicit delegation calls",
+      "path": "patterns/refactoring/replace-inheritance-with-delegation.md"
+    },
+    "replace-magic-number-with-symbolic-constant": {
+      "aliases": [
+        "introduce-symbolic-constant",
+        "named-constant"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a raw numeric literal that has a domain meaning with a named constant that makes the intent explicit",
+      "path": "patterns/refactoring/replace-magic-number-with-symbolic-constant.md"
+    },
+    "replace-method-with-method-object": {
+      "aliases": [
+        "extract-method-object"
+      ],
+      "category": "refactoring",
+      "intent": "Turn a large method with many local variables into its own class where locals become fields and sub-steps become methods",
+      "path": "patterns/refactoring/replace-method-with-method-object.md"
+    },
+    "replace-nested-conditional-with-guard-clauses": {
+      "aliases": [
+        "guard-clause"
+      ],
+      "category": "refactoring",
+      "intent": "Use early returns for special/exceptional cases to eliminate nesting and highlight the main success path",
+      "path": "patterns/refactoring/replace-nested-conditional-with-guard-clauses.md"
+    },
+    "replace-parameter-with-explicit-methods": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Split a method that switches on a parameter value into separate, explicitly named methods for each case",
+      "path": "patterns/refactoring/replace-parameter-with-explicit-methods.md"
+    },
+    "replace-parameter-with-method-call": {
+      "aliases": [
+        "replace-parameter-with-method"
+      ],
+      "category": "refactoring",
+      "intent": "Remove a parameter by having the method invoke the computation itself instead of receiving the result",
+      "path": "patterns/refactoring/replace-parameter-with-method-call.md"
+    },
+    "replace-record-with-data-class": {
+      "aliases": [
+        "dumb-data-class",
+        "record-to-class"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a legacy record or struct with a proper class so behavior can be added to the data over time",
+      "path": "patterns/refactoring/replace-record-with-data-class.md"
+    },
+    "replace-subclass-with-fields": {
+      "aliases": [
+        "collapse-subclass-hierarchy",
+        "inline-subclass"
+      ],
+      "category": "refactoring",
+      "intent": "Collapse subclasses that differ only in constant-returning methods into fields on the parent class",
+      "path": "patterns/refactoring/replace-subclass-with-fields.md"
+    },
+    "replace-temp-with-query": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace a temporary variable that holds a computed value with a call to a query method computing that value",
+      "path": "patterns/refactoring/replace-temp-with-query.md"
+    },
+    "replace-type-code-with-class": {
+      "aliases": [
+        "enum-class",
+        "type-code-to-class"
+      ],
+      "category": "refactoring",
+      "intent": "Replace an integer or string type code with a class so the type system validates legal values at compile time",
+      "path": "patterns/refactoring/replace-type-code-with-class.md"
+    },
+    "replace-type-code-with-state-strategy": {
+      "aliases": [
+        "type-code-to-state",
+        "type-code-to-strategy"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a mutable type code with a pluggable state or strategy object so behavior can change at runtime",
+      "path": "patterns/refactoring/replace-type-code-with-state-strategy.md"
+    },
+    "replace-type-code-with-subclasses": {
+      "aliases": [
+        "subclass-per-type"
+      ],
+      "category": "refactoring",
+      "intent": "Replace a type code that drives conditional behavior with a subclass hierarchy, moving each branch into its own class",
+      "path": "patterns/refactoring/replace-type-code-with-subclasses.md"
+    },
+    "self-encapsulate-field": {
+      "aliases": [
+        "use-accessor-internally"
+      ],
+      "category": "refactoring",
+      "intent": "Access a field only through getter/setter methods even within its own class, enabling subclass override of access",
+      "path": "patterns/refactoring/self-encapsulate-field.md"
+    },
+    "separate-query-from-modifier": {
+      "aliases": [
+        "command-query-separation"
+      ],
+      "category": "refactoring",
+      "intent": "Split a method that both returns a value and changes state into a pure query and a void modifier",
+      "path": "patterns/refactoring/separate-query-from-modifier.md"
+    },
+    "singleton": {
+      "aliases": [],
+      "category": "creational",
+      "intent": "Ensure a class has only one instance and provide a global access point to it",
+      "path": "patterns/creational/singleton.md"
+    },
+    "split-temporary-variable": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Give each distinct usage of a temporary variable its own variable with a name matching its role",
+      "path": "patterns/refactoring/split-temporary-variable.md"
+    },
+    "state": {
+      "aliases": [
+        "objects-for-states"
+      ],
+      "category": "behavioral",
+      "intent": "Allow an object to alter its behavior when its internal state changes, appearing to change its class",
+      "path": "patterns/behavioral/state.md"
+    },
+    "strategy": {
+      "aliases": [
+        "policy"
+      ],
+      "category": "behavioral",
+      "intent": "Define a family of algorithms, encapsulate each one, and make them interchangeable at runtime",
+      "path": "patterns/behavioral/strategy.md"
+    },
+    "substitute-algorithm": {
+      "aliases": [],
+      "category": "refactoring",
+      "intent": "Replace the body of a method with a cleaner algorithm that produces the same results",
+      "path": "patterns/refactoring/substitute-algorithm.md"
+    },
+    "template-method": {
+      "aliases": [
+        "template-pattern"
+      ],
+      "category": "behavioral",
+      "intent": "Define the skeleton of an algorithm in a base class, deferring some steps to subclasses without changing its structure",
+      "path": "patterns/behavioral/template-method.md"
+    },
+    "visitor": {
+      "aliases": [
+        "double-dispatch"
+      ],
+      "category": "behavioral",
+      "intent": "Separate an algorithm from the object structure it operates on, letting new operations be added without modifying elements",
+      "path": "patterns/behavioral/visitor.md"
+    }
+  },
+  "smell_introduced_by": {
+    "accessor-indirection": [
+      "move-field"
+    ],
+    "accessor-noise": [
+      "encapsulate-collection",
+      "encapsulate-field",
+      "hide-delegate",
+      "self-encapsulate-field"
+    ],
+    "bidirectional-dependency": [
+      "change-unidirectional-association-to-bidirectional"
+    ],
+    "comment-as-marker": [
+      "introduce-foreign-method"
+    ],
+    "copy-overhead": [
+      "change-reference-to-value",
+      "encapsulate-collection"
+    ],
+    "data-class": [
+      "replace-record-with-data-class",
+      "replace-subclass-with-fields"
+    ],
+    "divergent-change": [
+      "inline-class"
+    ],
+    "duplicate-algorithm-variants": [
+      "push-down-method",
+      "replace-parameter-with-explicit-methods"
+    ],
+    "duplicate-code": [
+      "inline-method"
+    ],
+    "extra-type": [
+      "introduce-parameter-object"
+    ],
+    "feature-envy": [
+      "replace-parameter-with-method-call"
+    ],
+    "god-class": [
+      "facade",
+      "mediator",
+      "singleton"
+    ],
+    "hidden-dependency": [
+      "singleton"
+    ],
+    "inappropriate-intimacy": [
+      "composite",
+      "preserve-whole-object",
+      "remove-middle-man",
+      "replace-delegation-with-inheritance",
+      "template-method"
+    ],
+    "indirection-overhead": [
+      "extract-class",
+      "replace-type-code-with-state-strategy"
+    ],
+    "inheritance-rigidity": [
+      "replace-type-code-with-subclasses"
+    ],
+    "large-class": [
+      "collapse-hierarchy",
+      "inline-class",
+      "interpreter",
+      "mediator",
+      "memento",
+      "pull-up-constructor-body",
+      "pull-up-field",
+      "pull-up-method",
+      "replace-subclass-with-fields"
+    ],
+    "long-chained-navigation": [
+      "change-bidirectional-association-to-unidirectional",
+      "remove-middle-man"
+    ],
+    "long-method": [
+      "extract-variable",
+      "inline-method"
+    ],
+    "long-parameter-list": [
+      "add-parameter",
+      "parameterize-method"
+    ],
+    "middle-man": [
+      "hide-delegate"
+    ],
+    "mutable-shared-state": [
+      "flyweight",
+      "observer",
+      "prototype",
+      "singleton"
+    ],
+    "observer-complexity": [
+      "duplicate-observed-data"
+    ],
+    "over-abstraction-single-variant": [
+      "abstract-factory",
+      "bridge",
+      "builder",
+      "command",
+      "composite",
+      "decorator",
+      "extract-interface",
+      "facade",
+      "factory-method",
+      "introduce-null-object",
+      "proxy",
+      "replace-conditional-with-polymorphism",
+      "replace-magic-number-with-symbolic-constant",
+      "replace-method-with-method-object",
+      "self-encapsulate-field",
+      "strategy"
+    ],
+    "over-decomposition": [
+      "decompose-conditional",
+      "extract-method"
+    ],
+    "parallel-inheritance-hierarchy": [
+      "extract-subclass"
+    ],
+    "refused-bequest": [
+      "replace-delegation-with-inheritance"
+    ],
+    "repeated-computation": [
+      "replace-temp-with-query"
+    ],
+    "repeated-param-threading": [
+      "replace-inheritance-with-delegation",
+      "separate-query-from-modifier"
+    ],
+    "scattered-delegation": [
+      "introduce-foreign-method",
+      "move-method"
+    ],
+    "shallow-copy-aliasing": [
+      "prototype"
+    ],
+    "shared-mutable-identity": [
+      "change-value-to-reference"
+    ],
+    "shotgun-surgery": [
+      "state",
+      "visitor"
+    ],
+    "small-class-proliferation": [
+      "extract-class",
+      "replace-array-with-object",
+      "replace-data-value-with-object",
+      "replace-record-with-data-class",
+      "replace-type-code-with-class"
+    ],
+    "speculative-generality": [
+      "abstract-factory",
+      "adapter",
+      "bridge",
+      "builder",
+      "chain-of-responsibility",
+      "command",
+      "extract-superclass",
+      "factory-method",
+      "form-template-method",
+      "interpreter",
+      "introduce-null-object",
+      "iterator",
+      "memento",
+      "replace-conditional-with-polymorphism",
+      "replace-constructor-with-factory-method",
+      "replace-method-with-method-object",
+      "singleton",
+      "state",
+      "strategy",
+      "substitute-algorithm",
+      "template-method",
+      "visitor"
+    ],
+    "subclass-proliferation": [
+      "introduce-local-extension",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses"
+    ],
+    "synchronization-coupling": [
+      "change-unidirectional-association-to-bidirectional",
+      "duplicate-observed-data"
+    ],
+    "temporal-coupling": [
+      "chain-of-responsibility",
+      "change-value-to-reference",
+      "decorator",
+      "flyweight",
+      "observer",
+      "proxy",
+      "replace-error-code-with-exception",
+      "singleton"
+    ],
+    "unclear-naming": [
+      "flyweight"
+    ],
+    "wrapping-complexity": [
+      "introduce-local-extension"
+    ]
+  },
+  "smell_to_patterns": {
+    "arrow-code": [
+      "replace-nested-conditional-with-guard-clauses"
+    ],
+    "bidirectional-dependency": [
+      "change-bidirectional-association-to-unidirectional"
+    ],
+    "comments-as-deodorant": [
+      "consolidate-conditional-expression",
+      "decompose-conditional",
+      "extract-method",
+      "extract-variable",
+      "introduce-assertion",
+      "rename-method"
+    ],
+    "data-clump": [
+      "builder",
+      "change-value-to-reference",
+      "extract-class",
+      "flyweight",
+      "introduce-parameter-object",
+      "move-field",
+      "preserve-whole-object",
+      "replace-array-with-object",
+      "replace-data-value-with-object",
+      "replace-record-with-data-class"
+    ],
+    "dead-code": [
+      "inline-class",
+      "remove-middle-man",
+      "remove-parameter",
+      "replace-subclass-with-fields"
+    ],
+    "divergent-change": [
+      "adapter",
+      "bridge",
+      "duplicate-observed-data",
+      "extract-class",
+      "move-method",
+      "visitor"
+    ],
+    "duplicate-algorithm-variants": [
+      "change-value-to-reference",
+      "composite",
+      "decorator",
+      "extract-superclass",
+      "form-template-method",
+      "interpreter",
+      "iterator",
+      "parameterize-method",
+      "pull-up-constructor-body",
+      "pull-up-field",
+      "pull-up-method",
+      "replace-conditional-with-polymorphism",
+      "replace-delegation-with-inheritance",
+      "replace-magic-number-with-symbolic-constant",
+      "strategy",
+      "substitute-algorithm",
+      "template-method"
+    ],
+    "duplicate-code": [
+      "consolidate-conditional-expression",
+      "consolidate-duplicate-conditional-fragments",
+      "extract-method",
+      "replace-temp-with-query"
+    ],
+    "duplicate-error-handling": [
+      "command",
+      "introduce-assertion",
+      "introduce-null-object",
+      "proxy",
+      "replace-error-code-with-exception",
+      "replace-exception-with-test"
+    ],
+    "duplicate-resource-initialisation": [
+      "singleton"
+    ],
+    "feature-envy": [
+      "adapter",
+      "add-parameter",
+      "change-unidirectional-association-to-bidirectional",
+      "facade",
+      "hide-delegate",
+      "introduce-foreign-method",
+      "introduce-local-extension",
+      "iterator",
+      "move-field",
+      "move-method",
+      "observer",
+      "preserve-whole-object",
+      "replace-data-value-with-object",
+      "replace-record-with-data-class"
+    ],
+    "god-class": [
+      "bridge",
+      "chain-of-responsibility",
+      "decorator",
+      "duplicate-observed-data",
+      "extract-class",
+      "extract-interface",
+      "facade",
+      "mediator"
+    ],
+    "inappropriate-intimacy": [
+      "abstract-factory",
+      "adapter",
+      "add-parameter",
+      "change-bidirectional-association-to-unidirectional",
+      "change-reference-to-value",
+      "change-unidirectional-association-to-bidirectional",
+      "command",
+      "duplicate-observed-data",
+      "encapsulate-collection",
+      "encapsulate-field",
+      "extract-interface",
+      "facade",
+      "hide-delegate",
+      "hide-method",
+      "iterator",
+      "mediator",
+      "memento",
+      "move-field",
+      "move-method",
+      "observer",
+      "prototype",
+      "proxy",
+      "replace-constructor-with-factory-method",
+      "replace-inheritance-with-delegation",
+      "self-encapsulate-field",
+      "visitor"
+    ],
+    "large-class": [
+      "decorator",
+      "extract-class",
+      "extract-subclass",
+      "push-down-field",
+      "push-down-method",
+      "state"
+    ],
+    "long-chained-navigation": [
+      "change-unidirectional-association-to-bidirectional",
+      "hide-delegate"
+    ],
+    "long-conditional-chain": [
+      "abstract-factory",
+      "bridge",
+      "chain-of-responsibility",
+      "composite",
+      "consolidate-conditional-expression",
+      "consolidate-duplicate-conditional-fragments",
+      "decompose-conditional",
+      "extract-variable",
+      "factory-method",
+      "interpreter",
+      "introduce-null-object",
+      "replace-conditional-with-polymorphism",
+      "replace-nested-conditional-with-guard-clauses",
+      "replace-parameter-with-explicit-methods",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses",
+      "state",
+      "strategy"
+    ],
+    "long-method": [
+      "decompose-conditional",
+      "extract-method",
+      "parameterize-method",
+      "remove-control-flag",
+      "replace-method-with-method-object",
+      "replace-nested-conditional-with-guard-clauses",
+      "replace-temp-with-query",
+      "split-temporary-variable",
+      "substitute-algorithm",
+      "template-method"
+    ],
+    "long-parameter-list": [
+      "builder",
+      "command",
+      "facade",
+      "introduce-parameter-object",
+      "preserve-whole-object",
+      "remove-parameter",
+      "replace-method-with-method-object",
+      "replace-parameter-with-method-call"
+    ],
+    "magic-number": [
+      "replace-magic-number-with-symbolic-constant",
+      "replace-type-code-with-class"
+    ],
+    "middle-man": [
+      "remove-middle-man"
+    ],
+    "mutable-shared-state": [
+      "change-bidirectional-association-to-unidirectional",
+      "change-reference-to-value",
+      "change-value-to-reference",
+      "encapsulate-collection",
+      "encapsulate-field",
+      "flyweight",
+      "mediator",
+      "memento",
+      "proxy",
+      "remove-assignments-to-parameters",
+      "remove-control-flag",
+      "remove-setting-method",
+      "replace-method-with-method-object",
+      "replace-temp-with-query",
+      "replace-type-code-with-state-strategy",
+      "self-encapsulate-field",
+      "separate-query-from-modifier",
+      "singleton",
+      "split-temporary-variable",
+      "state"
+    ],
+    "over-decomposition": [
+      "inline-method",
+      "inline-variable"
+    ],
+    "parallel-inheritance-hierarchy": [
+      "collapse-hierarchy",
+      "extract-superclass",
+      "form-template-method",
+      "pull-up-field",
+      "pull-up-method",
+      "replace-inheritance-with-delegation"
+    ],
+    "primitive-obsession": [
+      "flyweight",
+      "introduce-foreign-method",
+      "introduce-local-extension",
+      "introduce-null-object",
+      "replace-array-with-object",
+      "replace-data-value-with-object",
+      "replace-record-with-data-class",
+      "replace-type-code-with-class",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses"
+    ],
+    "refused-bequest": [
+      "extract-subclass",
+      "push-down-field",
+      "push-down-method",
+      "replace-inheritance-with-delegation"
+    ],
+    "repeated-construction-ceremony": [
+      "prototype"
+    ],
+    "repeated-param-threading": [
+      "introduce-foreign-method",
+      "introduce-local-extension",
+      "introduce-parameter-object",
+      "replace-delegation-with-inheritance",
+      "replace-parameter-with-method-call"
+    ],
+    "scattered-delegation": [
+      "introduce-local-extension"
+    ],
+    "scattered-platform-variants": [
+      "abstract-factory"
+    ],
+    "shotgun-surgery": [
+      "bridge",
+      "encapsulate-collection",
+      "encapsulate-field",
+      "extract-superclass",
+      "factory-method",
+      "form-template-method",
+      "mediator",
+      "observer",
+      "pull-up-method",
+      "replace-conditional-with-polymorphism",
+      "template-method",
+      "visitor"
+    ],
+    "side-effect-in-query": [
+      "separate-query-from-modifier"
+    ],
+    "small-class-proliferation": [
+      "inline-class"
+    ],
+    "speculative-generality": [
+      "collapse-hierarchy",
+      "decorator",
+      "extract-interface",
+      "extract-subclass",
+      "hide-method",
+      "inline-class",
+      "inline-method",
+      "inline-variable",
+      "push-down-field",
+      "push-down-method",
+      "remove-middle-man",
+      "replace-subclass-with-fields"
+    ],
+    "subclass-proliferation": [
+      "replace-subclass-with-fields"
+    ],
+    "switch-on-type": [
+      "abstract-factory",
+      "chain-of-responsibility",
+      "composite",
+      "factory-method",
+      "interpreter",
+      "prototype",
+      "replace-conditional-with-polymorphism",
+      "replace-parameter-with-explicit-methods",
+      "replace-type-code-with-class",
+      "replace-type-code-with-state-strategy",
+      "replace-type-code-with-subclasses",
+      "state",
+      "strategy",
+      "visitor"
+    ],
+    "telescoping-constructor": [
+      "builder"
+    ],
+    "temporal-coupling": [
+      "builder",
+      "change-reference-to-value",
+      "command",
+      "memento",
+      "observer",
+      "proxy",
+      "remove-setting-method",
+      "separate-query-from-modifier"
+    ],
+    "type-code": [
+      "extract-subclass",
+      "replace-constructor-with-factory-method"
+    ],
+    "unclear-naming": [
+      "extract-method",
+      "extract-variable",
+      "inline-method",
+      "introduce-assertion",
+      "remove-assignments-to-parameters",
+      "remove-control-flag",
+      "rename-method",
+      "replace-array-with-object",
+      "replace-constructor-with-factory-method",
+      "replace-error-code-with-exception",
+      "replace-magic-number-with-symbolic-constant",
+      "replace-parameter-with-explicit-methods",
+      "split-temporary-variable",
+      "substitute-algorithm"
+    ],
+    "uncoordinated-global-access": [
+      "singleton"
+    ]
+  },
+  "version": 1
+}

@@ -77,7 +77,21 @@ These produce zero countable-line reduction and are **never allowed**:
 </phase>
 
 <phase name="research">
-  Before planning, search refactoring.guru for techniques that match the identified smells. Use WebFetch on these URLs based on what you found:
+  Before planning, consult the local pattern catalog first, then fall back to refactoring.guru for any patterns not yet in the catalog.
+
+  **Step 1 — Local catalog (preferred)**
+
+  For each smell identified during the investigate phase:
+  1. Query the catalog by smell tag — either:
+     - **Mode 2 (index lookup)**: read `${CLAUDE_PLUGIN_ROOT}/patterns/_index.json` and look up `smell_to_patterns[<tag>]` to get a list of matching pattern names + categories.
+     - **Mode 3 (grep fallback)**: `grep -lr "smells_it_fixes:.*<tag>" ${CLAUDE_PLUGIN_ROOT}/patterns/`
+  2. Read the matching pattern card(s) from `${CLAUDE_PLUGIN_ROOT}/patterns/refactoring/`.
+  3. Cross-reference with `${CLAUDE_PLUGIN_ROOT}/patterns/structural/` and `${CLAUDE_PLUGIN_ROOT}/patterns/behavioral/` if a structural or behavioral pattern fits the smell.
+  4. Consult `references/line-counting.md` for countable-line measurement rules.
+
+  **Step 2 — Web fallback (only for patterns NOT in the local catalog)**
+
+  If a smell has no matching card in the local catalog, use WebFetch on the relevant refactoring.guru URL:
 
   - Repeated similar functions → `https://refactoring.guru/design-patterns/template-method`
   - Long parameter lists → `https://refactoring.guru/refactoring/techniques/simplifying-method-calls`
@@ -85,8 +99,6 @@ These produce zero countable-line reduction and are **never allowed**:
   - Conditional logic with shared structure → `https://refactoring.guru/design-patterns/strategy`
   - General decomposition → `https://refactoring.guru/refactoring/techniques/composing-methods`
   - Class/module splitting → `https://refactoring.guru/refactoring/techniques/moving-features-between-objects`
-
-  Read `references/pattern-catalog.md` for proven pattern→technique mappings from prior refactors.
 
   Map each smell to a specific technique. For each technique, describe what **logic** it eliminates — not how many lines it saves.
 </phase>

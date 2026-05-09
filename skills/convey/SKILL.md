@@ -141,10 +141,10 @@ description: Decomposes an existing `.tap/tickets/<slug>/ideation.md` into TDD t
           ## Inputs
           Seed files from ideation.md:
           {seed_files}
-          Pattern vocabulary (read this first):
-          {path_to_pattern_catalog}
+          Pattern catalog root:
+          ${CLAUDE_PLUGIN_ROOT}/patterns/
           ## Instructions
-          1. **Read pattern-catalog.md** — internalize the smell → technique mapping. These are the patterns you are looking for.
+          1. **Read `${CLAUDE_PLUGIN_ROOT}/patterns/README.md`** to learn the discovery API. Then query patterns by smell tag using the index (`${CLAUDE_PLUGIN_ROOT}/patterns/_index.json#smell_to_patterns[<tag>]`) or read all `behavioral/` and `refactoring/` cards if doing a broad scan. Internalize the smell → technique mapping — these are the patterns you are looking for.
           2. **For each seed file**, read the neighboring modules:
              - Same directory: sibling files
              - Direct imports: files the seed imports from
@@ -229,7 +229,7 @@ description: Decomposes an existing `.tap/tickets/<slug>/ideation.md` into TDD t
       - Shape the GREEN `### Example` to show code following the pattern shape, not naive implementation.
       When a task has no pattern annotation:
       - No `### Pattern hint` sub-section. GREEN stays vanilla "minimum code that passes."
-      - REFACTOR `### Action` gets a fallback check: "If a pattern from [pattern-catalog.md](../refactor/references/pattern-catalog.md) fits the GREEN output, apply it. Otherwise: no refactoring needed — structure is adequate."
+      - REFACTOR `### Action` gets a fallback check: "Query `${CLAUDE_PLUGIN_ROOT}/patterns/` (see README.md for discovery API) to see if a pattern fits the GREEN output and apply it. Otherwise: no refactoring needed — structure is adequate."
       **REFACTOR concreteness rule**: every REFACTOR `### Action` must name specific operations (extract/rename/inline/deduplicate) with concrete file:symbol targets. If GREEN was pattern-shaped and produced clean code that needs no restructuring, write `No refactoring needed — GREEN followed pattern, structure is adequate.` under `### Action` instead of inventing vague cleanup work. Vague refactor instructions cause agents to burn 40+ turns flailing.
       **One concern per task**: if a task touches more than 2 files across different services, split it. High turn counts correlate with tasks that combine unrelated wiring (e.g. "emit events from runners" that touches TicketRunner + ParallelRunner + runTickets = 3 separate concerns).
       **Code fences in examples**: every `### Example` containing code MUST use a fenced code block with a language tag (```` ```ts ````, ```` ```py ````, ```` ```sh ````). The fence keeps blank lines safe inside code, prevents markdown parsers from interpreting `_`, `*`, `<`, `>` as formatting, and gives renderers syntax highlighting. Never paste raw code without a fence.

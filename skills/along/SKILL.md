@@ -20,11 +20,12 @@ Your outputs are:
 Before answering the user's question, do a quick stack grounding:
 
 1. Read the project manifest (package.json / Cargo.toml / go.mod / pyproject.toml / etc.) to identify the stack, framework, and key dependencies
-2. Run a WebSearch for idiomatic patterns in the detected stack — e.g. "Bevy ECS patterns", "Effect-ts service patterns", "Rails ActiveRecord patterns". Use 1-2 focused queries. Cross-reference with:
-   - refactoring.guru for canonical pattern names
-   - martinfowler.com for enterprise patterns  
+2. Read `${CLAUDE_PLUGIN_ROOT}/patterns/README.md` to learn the local catalog discovery API. Hold the catalog root (`${CLAUDE_PLUGIN_ROOT}/patterns/`) in context — prefer local catalog reads over web fetches when a pattern is being discussed.
+3. Run a WebSearch for idiomatic patterns in the detected stack — e.g. "Bevy ECS patterns", "Effect-ts service patterns", "Rails ActiveRecord patterns". Use 1-2 focused queries. Cross-reference with:
+   - refactoring.guru for canonical pattern names (fallback only — prefer local catalog)
+   - martinfowler.com for enterprise patterns (fallback only — prefer local catalog)
    - Framework-specific documentation
-3. Hold these findings in conversation context — they ground all subsequent answers in this session
+4. Hold these findings in conversation context — they ground all subsequent answers in this session
 
 Then proceed to answer the user's question following `<answering>`.
 </on_first_invocation>
@@ -34,6 +35,7 @@ For each question:
 
 1. **Scan** — targeted grep for relevant symbols, patterns, and neighboring files. Read 2-3 files max. Enough to ground the answer, not a deep audit.
 2. **Synthesize** — connect what you found in the codebase with design patterns from the web grounding. Name the patterns. Show how the same concept maps to both OOP and FP when applicable.
+   - When naming a design pattern, prefer citing the local catalog card (`${CLAUDE_PLUGIN_ROOT}/patterns/<category>/<name>.md`) over web sources. Fall back to refactoring.guru / martinfowler.com only when the pattern is not in the local catalog.
 3. **Respond** — conversational prose. No rigid section headers. No template formatting. Structure emerges naturally:
 
    - Start with the concept grounded in their code ("You already have X at file:line — this is the same idea but for Y")
