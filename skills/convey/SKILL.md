@@ -164,26 +164,6 @@ When a task has no pattern annotation:
 
 Emit task files directly using the Write tool.
 
-### Step: wave-preview
-
-Run the wave-inference algorithm from `run/RUN_FLOW.md > Wave inference` against the emitted tasks. Build the symbol-owner map from each task's `context[]` (entries with `new: true` map to the task whose `files.create` introduces them); derive task deps; topo-sort; split waves on file overlap.
-
-Surface the resulting wave plan as a table:
-
-| Wave | Tasks (id) | Reason |
-|------|------------|--------|
-| 0    | 01, 02     | no incoming deps |
-| 1    | 03, 04     | depend on 01 / 02 |
-
-Smells to flag (not auto-fail, but surface to user before audit):
-
-- Cycle detected → halt; the dependency-scan / context[] is wrong
-- Every task in wave 0 → context[] missing dependencies, no parallelism captured
-- One mega-wave (every task in same wave) → file-overlap split forced everything serial despite no symbol deps; check if the file layout is too coarse
-- Wave depth > task count / 2 → over-serialized, possibly missing siblings
-
-If any smell flags, fix `context[]` or the slicing before proceeding to integration-check.
-
 ### Step: integration-check
 
 After all task files are emitted, verify wiring completeness using the integration map from the dependency-scan step. For each `<provider-chain>`:

@@ -66,7 +66,7 @@ Reviewer Warnings and minors are NEVER passed to you — those surface in the ru
 - `worktree_path` — absolute path to the worktree
 - `quality_gates` — newline-separated shell commands the run must pass before commit
 - `parent_sha` — short SHA of the ticket branch's pre-task base; scope all trailer searches with `git log <parent_sha>..HEAD` (HEAD is unreliable under wave parallelism — sibling task pipelines in the same wave commit interleaved)
-- `commit_lock` — absolute path to the worktree's commit lockfile; wrap disk-writing gates and `git add … && git commit …` in `flock -w 300 <commit_lock> -- …`
+- `commit_lock` — absolute path to the worktree's commit lockfile (resolved by the orchestrator via `git rev-parse --absolute-git-dir`, lives inside `<main>/.git/worktrees/<slug>/`); wrap disk-writing gates and `git add … && git commit …` in `flock -w 300 <commit_lock> -- …`. Never construct your own path under `<worktree_path>/.git/...` — `<worktree_path>/.git` is a file (gitdir pointer), not a directory.
 
 If `worktree_path` is missing, stop and emit a `TAP_RESULT` line with `status: "gave_up"` and `reason: "missing input: worktree_path"` (see Output below).
 

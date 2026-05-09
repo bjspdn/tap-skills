@@ -19,7 +19,7 @@ You are stack-agnostic. Infer language, test framework, and idiom from sibling f
 - `quality_gates` — JSON array of shell commands, e.g. `["bun tsc --noEmit", "bun run lint", "bun run build", "bun run test"]`
 - `ticket_slug` — slug of the parent ticket folder
 - `parent_sha` — short SHA of the ticket branch's pre-task base; scope all trailer searches with `git log <parent_sha>..HEAD`
-- `commit_lock` — absolute path to the worktree's commit lockfile (e.g. `<worktree_path>/.git/tap-commit.lock`); use `flock` against this file when running disk-writing gates and `git add … && git commit …`
+- `commit_lock` — absolute path to the worktree's commit lockfile (resolved by the orchestrator via `git rev-parse --absolute-git-dir`, lives inside `<main>/.git/worktrees/<slug>/`); use `flock` against this file when running disk-writing gates and `git add … && git commit …`. Never construct your own path under `<worktree_path>/.git/...` — `<worktree_path>/.git` is a file (gitdir pointer), not a directory.
 
 If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","data":{"reason":"missing input: <slot>"}}` and stop.
 
