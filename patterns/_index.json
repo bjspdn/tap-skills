@@ -15,6 +15,9 @@
     "controller": "mediator",
     "cor": "chain-of-responsibility",
     "cursor": "iterator",
+    "dao": "repository",
+    "data-access-object": "repository",
+    "di": "dependency-injection",
     "double-dispatch": "visitor",
     "dumb-data-class": "replace-record-with-data-class",
     "enum-class": "replace-type-code-with-class",
@@ -29,6 +32,7 @@
     "guard-clause": "replace-nested-conditional-with-guard-clauses",
     "handle-body": "bridge",
     "inline-explaining-variable": "inline-variable",
+    "inversion-of-control-container": "dependency-injection",
     "inline-function": "inline-method",
     "inline-subclass": "replace-subclass-with-fields",
     "inline-temp": "inline-variable",
@@ -44,7 +48,10 @@
     "null-object-pattern": "introduce-null-object",
     "object-tree": "composite",
     "objects-for-states": "state",
+    "onion-architecture": "clean-architecture",
     "policy": "strategy",
+    "ports-and-adapters": "hexagonal",
+    "process-manager": "saga",
     "privatize-field": "encapsulate-field",
     "publish-subscribe": "observer",
     "record-to-class": "replace-record-with-data-class",
@@ -76,7 +83,15 @@
     "wrapper-class": "introduce-local-extension"
   },
   "by_category": {
-    "architectural": [],
+    "architectural": [
+      "clean-architecture",
+      "cqrs",
+      "dependency-injection",
+      "event-sourcing",
+      "hexagonal",
+      "repository",
+      "saga"
+    ],
     "behavioral": [
       "chain-of-responsibility",
       "command",
@@ -189,6 +204,9 @@
     "chain-of-responsibility": [
       "singleton-collaborator-no-di"
     ],
+    "clean-architecture": [
+      "singleton"
+    ],
     "change-bidirectional-association-to-unidirectional": [
       "change-unidirectional-association-to-bidirectional"
     ],
@@ -213,6 +231,9 @@
     ],
     "decorator": [
       "template-method"
+    ],
+    "dependency-injection": [
+      "singleton"
     ],
     "duplicate-observed-data": [
       "inline-class"
@@ -240,6 +261,9 @@
     ],
     "facade": [
       "inappropriate-intimacy"
+    ],
+    "hexagonal": [
+      "singleton"
     ],
     "factory-method": [
       "singleton"
@@ -376,7 +400,10 @@
       "encapsulate-field"
     ],
     "singleton": [
+      "clean-architecture",
+      "dependency-injection",
       "factory-method",
+      "hexagonal",
       "prototype"
     ],
     "state": [
@@ -394,6 +421,7 @@
   },
   "composes_with": {
     "abstract-factory": [
+      "dependency-injection",
       "factory-method",
       "prototype",
       "singleton"
@@ -401,7 +429,10 @@
     "adapter": [
       "bridge",
       "decorator",
-      "facade"
+      "dependency-injection",
+      "facade",
+      "hexagonal",
+      "repository"
     ],
     "add-parameter": [
       "introduce-parameter-object",
@@ -420,6 +451,12 @@
       "command",
       "composite",
       "decorator"
+    ],
+    "clean-architecture": [
+      "facade",
+      "factory-method",
+      "hexagonal",
+      "strategy"
     ],
     "change-bidirectional-association-to-unidirectional": [
       "change-unidirectional-association-to-bidirectional",
@@ -444,8 +481,18 @@
     "command": [
       "chain-of-responsibility",
       "composite",
+      "cqrs",
+      "event-sourcing",
       "memento",
-      "observer"
+      "observer",
+      "saga"
+    ],
+    "cqrs": [
+      "command",
+      "event-sourcing",
+      "mediator",
+      "observer",
+      "repository"
     ],
     "composite": [
       "decorator",
@@ -471,6 +518,12 @@
       "composite",
       "strategy"
     ],
+    "dependency-injection": [
+      "abstract-factory",
+      "adapter",
+      "factory-method",
+      "strategy"
+    ],
     "duplicate-observed-data": [
       "change-value-to-reference",
       "extract-class"
@@ -484,6 +537,12 @@
       "encapsulate-collection",
       "replace-data-value-with-object",
       "self-encapsulate-field"
+    ],
+    "event-sourcing": [
+      "command",
+      "cqrs",
+      "memento",
+      "observer"
     ],
     "extract-class": [
       "hide-delegate",
@@ -517,11 +576,18 @@
     "facade": [
       "abstract-factory",
       "adapter",
-      "mediator"
+      "clean-architecture",
+      "hexagonal",
+      "mediator",
+      "repository"
     ],
     "factory-method": [
       "abstract-factory",
+      "clean-architecture",
+      "dependency-injection",
+      "hexagonal",
       "prototype",
+      "repository",
       "template-method"
     ],
     "flyweight": [
@@ -540,6 +606,13 @@
     "hide-method": [
       "extract-method",
       "remove-setting-method"
+    ],
+    "hexagonal": [
+      "adapter",
+      "clean-architecture",
+      "facade",
+      "factory-method",
+      "strategy"
     ],
     "inline-class": [
       "move-field",
@@ -591,11 +664,14 @@
     ],
     "mediator": [
       "command",
+      "cqrs",
       "facade",
-      "observer"
+      "observer",
+      "saga"
     ],
     "memento": [
       "command",
+      "event-sourcing",
       "iterator",
       "prototype"
     ],
@@ -611,7 +687,10 @@
     ],
     "observer": [
       "command",
+      "cqrs",
+      "event-sourcing",
       "mediator",
+      "saga",
       "singleton",
       "strategy"
     ],
@@ -679,6 +758,13 @@
     "rename-method": [
       "extract-method",
       "introduce-parameter-object"
+    ],
+    "repository": [
+      "adapter",
+      "cqrs",
+      "facade",
+      "factory-method",
+      "strategy"
     ],
     "replace-array-with-object": [
       "extract-class",
@@ -765,6 +851,12 @@
       "replace-type-code-with-class",
       "replace-type-code-with-state-strategy"
     ],
+    "saga": [
+      "command",
+      "mediator",
+      "observer",
+      "state"
+    ],
     "self-encapsulate-field": [
       "encapsulate-field",
       "extract-class",
@@ -785,13 +877,18 @@
     ],
     "state": [
       "flyweight",
+      "saga",
       "singleton",
       "strategy"
     ],
     "strategy": [
+      "clean-architecture",
       "decorator",
+      "dependency-injection",
       "factory-method",
+      "hexagonal",
       "observer",
+      "repository",
       "state"
     ],
     "substitute-algorithm": [
@@ -809,8 +906,8 @@
       "iterator"
     ]
   },
-  "count": 90,
-  "generated_at": "2026-05-09",
+  "count": 97,
+  "generated_at": "2026-05-10",
   "patterns": {
     "abstract-factory": {
       "aliases": [
@@ -856,6 +953,14 @@
       "category": "behavioral",
       "intent": "Pass a request along a chain of handlers; each handler decides to process it or forward it",
       "path": "patterns/behavioral/chain-of-responsibility.md"
+    },
+    "clean-architecture": {
+      "aliases": [
+        "onion-architecture"
+      ],
+      "category": "architectural",
+      "intent": "Organize code in concentric layers where dependencies point inward, keeping business rules independent of frameworks",
+      "path": "patterns/architectural/clean-architecture.md"
     },
     "change-bidirectional-association-to-unidirectional": {
       "aliases": [
@@ -904,6 +1009,12 @@
       "intent": "Encapsulate a request as an object, enabling parameterization, queuing, logging, and undo/redo",
       "path": "patterns/behavioral/command.md"
     },
+    "cqrs": {
+      "aliases": [],
+      "category": "architectural",
+      "intent": "Separate read and write models so each can be optimised, scaled, and evolved independently",
+      "path": "patterns/architectural/cqrs.md"
+    },
     "composite": {
       "aliases": [
         "object-tree"
@@ -929,6 +1040,15 @@
       "category": "refactoring",
       "intent": "Extract the condition and each branch of a complex conditional into named methods that reveal their intent",
       "path": "patterns/refactoring/decompose-conditional.md"
+    },
+    "dependency-injection": {
+      "aliases": [
+        "di",
+        "inversion-of-control-container"
+      ],
+      "category": "architectural",
+      "intent": "Supply a component's dependencies from the outside rather than letting it construct or locate them itself",
+      "path": "patterns/architectural/dependency-injection.md"
     },
     "decorator": {
       "aliases": [
@@ -963,6 +1083,12 @@
       "category": "refactoring",
       "intent": "Make a public field private and provide getter/setter methods to control external access",
       "path": "patterns/refactoring/encapsulate-field.md"
+    },
+    "event-sourcing": {
+      "aliases": [],
+      "category": "architectural",
+      "intent": "Persist state as an append-only sequence of domain events rather than mutable current-state snapshots",
+      "path": "patterns/architectural/event-sourcing.md"
     },
     "extract-class": {
       "aliases": [
@@ -1051,6 +1177,14 @@
       "category": "refactoring",
       "intent": "Reduce a method's visibility to the minimum access level required by its actual callers",
       "path": "patterns/refactoring/hide-method.md"
+    },
+    "hexagonal": {
+      "aliases": [
+        "ports-and-adapters"
+      ],
+      "category": "architectural",
+      "intent": "Isolate core business logic from external concerns by expressing dependencies as ports and plugging in adapters",
+      "path": "patterns/architectural/hexagonal.md"
     },
     "inline-class": {
       "aliases": [
@@ -1272,6 +1406,15 @@
       "intent": "Change a method's name to better communicate its purpose and eliminate the need for comments",
       "path": "patterns/refactoring/rename-method.md"
     },
+    "repository": {
+      "aliases": [
+        "dao",
+        "data-access-object"
+      ],
+      "category": "architectural",
+      "intent": "Mediate between domain and data-mapping layers using a collection-like interface for accessing domain objects",
+      "path": "patterns/architectural/repository.md"
+    },
     "replace-array-with-object": {
       "aliases": [
         "array-to-record"
@@ -1419,6 +1562,14 @@
       "intent": "Replace a type code that drives conditional behavior with a subclass hierarchy, moving each branch into its own class",
       "path": "patterns/refactoring/replace-type-code-with-subclasses.md"
     },
+    "saga": {
+      "aliases": [
+        "process-manager"
+      ],
+      "category": "architectural",
+      "intent": "Coordinate a multi-step business transaction across services using a sequence of local transactions with compensating actions",
+      "path": "patterns/architectural/saga.md"
+    },
     "self-encapsulate-field": {
       "aliases": [
         "use-accessor-internally"
@@ -1550,6 +1701,7 @@
     ],
     "large-class": [
       "collapse-hierarchy",
+      "event-sourcing",
       "inline-class",
       "interpreter",
       "mediator",
@@ -1587,17 +1739,24 @@
       "abstract-factory",
       "bridge",
       "builder",
+      "clean-architecture",
       "command",
       "composite",
+      "cqrs",
       "decorator",
+      "dependency-injection",
+      "event-sourcing",
       "extract-interface",
       "facade",
       "factory-method",
+      "hexagonal",
       "introduce-null-object",
       "proxy",
       "replace-conditional-with-polymorphism",
       "replace-magic-number-with-symbolic-constant",
       "replace-method-with-method-object",
+      "repository",
+      "saga",
       "self-encapsulate-field",
       "strategy"
     ],
@@ -1633,6 +1792,8 @@
       "visitor"
     ],
     "small-class-proliferation": [
+      "clean-architecture",
+      "cqrs",
       "extract-class",
       "replace-array-with-object",
       "replace-data-value-with-object",
@@ -1645,10 +1806,13 @@
       "bridge",
       "builder",
       "chain-of-responsibility",
+      "clean-architecture",
       "command",
+      "dependency-injection",
       "extract-superclass",
       "factory-method",
       "form-template-method",
+      "hexagonal",
       "interpreter",
       "introduce-null-object",
       "iterator",
@@ -1656,6 +1820,8 @@
       "replace-conditional-with-polymorphism",
       "replace-constructor-with-factory-method",
       "replace-method-with-method-object",
+      "repository",
+      "saga",
       "singleton",
       "state",
       "strategy",
@@ -1725,8 +1891,11 @@
     "divergent-change": [
       "adapter",
       "bridge",
+      "clean-architecture",
+      "cqrs",
       "duplicate-observed-data",
       "extract-class",
+      "hexagonal",
       "move-method",
       "visitor"
     ],
@@ -1753,7 +1922,8 @@
       "consolidate-conditional-expression",
       "consolidate-duplicate-conditional-fragments",
       "extract-method",
-      "replace-temp-with-query"
+      "replace-temp-with-query",
+      "repository"
     ],
     "duplicate-error-handling": [
       "command",
@@ -1761,7 +1931,8 @@
       "introduce-null-object",
       "proxy",
       "replace-error-code-with-exception",
-      "replace-exception-with-test"
+      "replace-exception-with-test",
+      "saga"
     ],
     "duplicate-resource-initialisation": [
       "singleton"
@@ -1771,6 +1942,7 @@
       "add-parameter",
       "change-unidirectional-association-to-bidirectional",
       "facade",
+      "hexagonal",
       "hide-delegate",
       "introduce-foreign-method",
       "introduce-local-extension",
@@ -1780,17 +1952,23 @@
       "observer",
       "preserve-whole-object",
       "replace-data-value-with-object",
-      "replace-record-with-data-class"
+      "replace-record-with-data-class",
+      "repository"
     ],
     "god-class": [
       "bridge",
       "chain-of-responsibility",
+      "cqrs",
       "decorator",
       "duplicate-observed-data",
       "extract-class",
       "extract-interface",
       "facade",
-      "mediator"
+      "mediator",
+      "saga"
+    ],
+    "hidden-dependency": [
+      "dependency-injection"
     ],
     "inappropriate-intimacy": [
       "abstract-factory",
@@ -1799,12 +1977,15 @@
       "change-bidirectional-association-to-unidirectional",
       "change-reference-to-value",
       "change-unidirectional-association-to-bidirectional",
+      "clean-architecture",
       "command",
+      "dependency-injection",
       "duplicate-observed-data",
       "encapsulate-collection",
       "encapsulate-field",
       "extract-interface",
       "facade",
+      "hexagonal",
       "hide-delegate",
       "hide-method",
       "iterator",
@@ -1821,6 +2002,7 @@
       "visitor"
     ],
     "large-class": [
+      "cqrs",
       "decorator",
       "extract-class",
       "extract-subclass",
@@ -1860,6 +2042,7 @@
       "replace-method-with-method-object",
       "replace-nested-conditional-with-guard-clauses",
       "replace-temp-with-query",
+      "saga",
       "split-temporary-variable",
       "substitute-algorithm",
       "template-method"
@@ -1885,8 +2068,10 @@
       "change-bidirectional-association-to-unidirectional",
       "change-reference-to-value",
       "change-value-to-reference",
+      "dependency-injection",
       "encapsulate-collection",
       "encapsulate-field",
+      "event-sourcing",
       "flyweight",
       "mediator",
       "memento",
@@ -1951,15 +2136,19 @@
     ],
     "shotgun-surgery": [
       "bridge",
+      "clean-architecture",
+      "dependency-injection",
       "encapsulate-collection",
       "encapsulate-field",
       "extract-superclass",
       "factory-method",
       "form-template-method",
+      "hexagonal",
       "mediator",
       "observer",
       "pull-up-method",
       "replace-conditional-with-polymorphism",
+      "repository",
       "template-method",
       "visitor"
     ],
@@ -2009,10 +2198,12 @@
       "builder",
       "change-reference-to-value",
       "command",
+      "event-sourcing",
       "memento",
       "observer",
       "proxy",
       "remove-setting-method",
+      "saga",
       "separate-query-from-modifier"
     ],
     "type-code": [
