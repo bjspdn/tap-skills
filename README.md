@@ -41,7 +41,8 @@ Update later:
 
 ## How to use it
 
-The primary way to use this set of skills/agent is to first start with `/tap:into` to get a brainstorming session going. it will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.md will then be used by `/tap:convey` to decompose it into tasks at the same location. Once everything is done and settled, run `/tap:run` to run the TDD cycle.
+The primary way to use this set of skills/agent is to first start with `/tap:into` to get a brainstorming session going. 
+It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.md will then be used by `/tap:convey` to decompose it into tasks at the same location. Once everything is done and settled, run `/tap:run` to run the TDD cycle.
 
 
 ## Versioning + releases
@@ -52,20 +53,12 @@ The primary way to use this set of skills/agent is to first start with `/tap:int
 - Tag the commit: `git tag v0.1.0 && git push --tags`.
 - Cut a GitHub Release with notes drawn from `CHANGELOG.md`.
 
-Update semantics:
-
-- Set `version` explicitly → users update only on a version bump.
-- Omit `version` → commit SHA is the version → every push is a new update for subscribers.
-- Auto-update is opt-in per-marketplace; kill switch is the `DISABLE_AUTOUPDATER` env var.
-
-Reference for release flow: [obra/superpowers](https://github.com/obra/superpowers) — manual semver tags + GitHub Releases. No release-please / semantic-release automation.
-
 
 ## Subagent spawning from skills — how it actually works
 
 A skill is a markdown file at `skills/<name>/SKILL.md`. An agent is a markdown file at `agents/<Name>.md`. To spawn an agent from inside a skill, the skill's body includes a literal `Agent(...)` invocation template that Claude follows when running the skill. Claude is the one issuing the actual tool call; the skill body is the recipe.
 
-**Agent file** (real example, abridged from `agents/TestWriter.md`):
+**Agent file** (from `agents/TestWriter.md`):
 
 ```markdown
 ---
@@ -81,7 +74,7 @@ effort: low
 You write the failing test for one TDD task. You commit the test alone, no implementation. ...
 ```
 
-**Skill template that spawns it** (real pattern from `skills/into/SKILL.md`, simplified):
+**Skill template that spawns it** (from `skills/into/SKILL.md`, simplified):
 
 ````markdown
 Agent(
