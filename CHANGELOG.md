@@ -6,6 +6,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-10
+
 ### Added
 
 - **`/tap:sketch` skill** rapid single-behavior TDD prototype. Lightweight alternative to the full `into → convey → run` pipeline for changes touching ≤3 files. In-memory task spec, no worktree, no tickets on disk. Reuses TestWriter/CodeWriter/Refactorer agents with inline specs. Bounded failure handling (one Debugger retry per phase).
