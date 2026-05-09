@@ -13,6 +13,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Profile contract** (`skills/retro/profile-contract.md`) reference doc defining how skills and agents consume the retro profile. Signals are advisory, never mandatory. Missing profile = no behavior change.
 - **Architectural pattern cards** (7) `hexagonal`, `clean-architecture`, `repository`, `cqrs`, `event-sourcing`, `saga`, `dependency-injection`. All conform to `_schema.md`. Catalog count 90 → 97.
 - **Profile consumer wiring** `into`, `convey`, `sketch`, and `run` skills read established profile signals. TestWriter, CodeWriter, and Refactorer agents accept optional `profile_note` input. PatternsDiscoverer and PatternScanner agents boost/demote patterns based on `clean_green_rate`.
+- **`bump-version.sh`** config-driven release script with three modes: bump (roll changelog + commit + tag), `--check` (drift detection), `--audit` (stale version grep). Guarded by non-empty `[Unreleased]` and clean working tree.
 
 ### Changed
 
