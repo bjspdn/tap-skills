@@ -1,0 +1,18 @@
+{
+  "name": "tap",
+  "description": "TDD-driven development plugin with subagent spawns. Drives red → green → refactor cycle by delegating each phase to a focused subagent.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ben"
+  },
+  "repository": "https://github.com/<owner>/tap",
+  "homepage": "https://github.com/<owner>/tap",
+  "license": "MIT",
+  "keywords": [
+    "tdd",
+    "test-driven-development",
+    "subagents",
+    "red-green-refactor",
+    "claude-code"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "tap",
+  "owner": {
+    "name": "Ben"
+  },
+  "plugins": [
+    {
+      "name": "tap",
+      "source": "./",
+      "description": "TDD-driven development plugin with subagent spawns. Drives red → green → refactor cycle by delegating each phase to a focused subagent.",
+      "author": {
+        "name": "Ben"
+      }
+    }
+  ]
+}
