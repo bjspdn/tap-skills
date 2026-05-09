@@ -14,7 +14,7 @@ Bundles a coordinated pipeline that takes a feature idea from whiteboard to merg
 - **Deep research** into libraries, algorithms, or protocols when a knowledge gap surfaces
 - **Post-run analytics** over collected logs
 
-A 90-card design-pattern catalog (GoF + Fowler refactorings) sits at plugin root and is consumed by every skill that needs to name a structural shape.
+A 97-card design-pattern catalog (GoF + Fowler refactorings) sits at plugin root and is consumed by every skill that needs to name a structural shape.
 
 
 ## Install
@@ -29,7 +29,7 @@ This plugin is **not** on the official Anthropic marketplace. Install directly f
 Pin to a tag:
 
 ```bash
-/plugin marketplace add git@github.com:bjspdn/tap-skills.git#v0.1.0
+/plugin marketplace add git@github.com:bjspdn/tap-skills.git#v0.2.0
 ```
 
 Update later:
@@ -47,11 +47,20 @@ It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.m
 
 ## Versioning + releases
 
-**Manual semver, mirrored by git tag.**
+**Semver, automated via `bump-version.sh`.**
 
-- Bump `version` in `plugin.json`.
-- Tag the commit: `git tag v0.1.0 && git push --tags`.
-- Cut a GitHub Release with notes drawn from `CHANGELOG.md`.
+```bash
+# Full release: bump files, roll changelog, commit, tag, push, GitHub Release
+./scripts/bump-version.sh 0.3.0
+
+# Check version sync across declared files
+./scripts/bump-version.sh --check
+
+# Check + scan repo for stale version strings
+./scripts/bump-version.sh --audit
+```
+
+The script reads `.version-bump.json` for the list of files that carry a version field. It guards against empty changelogs (document changes under `[Unreleased]` in `CHANGELOG.md` before bumping) and dirty working trees.
 
 
 ## Subagent spawning from skills — how it actually works
