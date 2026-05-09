@@ -3,24 +3,6 @@ name: into
 description: Brainstorming partner that drives deep discussion about an idea before any code is written. Through natural conversation, explores the codebase and the web in parallel, challenges assumptions, and converges on a single well-specified ticket with structured description. Use when user invokes `/tap-into`, says "brainstorm", "let's think through X", "scope this out", "I want to build X but let's talk first", or has a `.tap/` directory and a feature ask they want to explore before committing.
 ---
 
-## Phase: back-at-it
-
-**Purpose**: Stress-test that new feature idea of their.
-
-Run this command `git log --since=1.week --oneline | wc -l`. If the number is superior or equal to 100, proceed with this phase, otherwise go directly to Phase: understanding.
-
-Always surface this phase when the number is over or equal to 100 AND when the user is discussing a feature implementation. If the count is under 100 or when the user is talking about refactoring, fixing or documenting something, stay silent and move on to Phase: understanding.
-
-### Step: aftermath
-
-Ask the user why a new feature again, because he's got `echo "$(git log --since=1.week --oneline | wc -l) commits since last week"`, maybe they should slow the fuck down a little.
-Ask the user what is the purpose of this new feature? Probe them to tell you if it has added value at all.
-
-### Step: wait
-
-Wait. Let the user answers your questions before you continue.
-If the user comes to the conclusion that indeed this new feature is not needed, you can close this ideation session and invoke the Skill(refactor) instead; a good refactoring session can always be great. Otherwise, if the feature really has added value, proceed with the next phase: Phase: understanding.
-
 ## Phase: understanding
 
 ### Purpose
