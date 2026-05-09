@@ -9,19 +9,30 @@ Each task file is a single vertical TDD slice — one observable behavior delive
 Every task file is markdown with YAML frontmatter.
 
 - **Frontmatter** holds machine-readable fields: `id`, `files`, `context`. Parsed by the pipeline once via YAML.
-- **Body** holds prose phases as level-2 headings (`## RED`, `## GREEN`, `## REFACTOR`, `## COMMIT`), each phase split into level-3 sub-sections (`### Action`, `### Example`, `### Verify`, `### Done`).
+- **Body** holds prose phases as level-2 headings (`## RED`, `## GREEN`, `## REFACTOR`), each phase split into level-3 sub-sections (`### Action`, `### Example`, `### Verify`, `### Done`).
 - **Code** lives in fenced code blocks (```` ```ts ````, ```` ```sh ````). The fence keeps blank lines safe and lets renderers syntax-highlight.
 
 This format renders cleanly in any CommonMark viewer and parses cleanly with two regex helpers (`sliceH2`, `sliceH3`). Do **not** use HTML/XML tags inside the body — they trigger HTML-block parsing in markdown renderers and desync on blank lines.
 
 ## TDD philosophy
 
-The cycle is **RED → GREEN → REFACTOR → COMMIT**. Each phase has a strict purpose:
+The cycle is **RED → GREEN → REFACTOR**. Each phase has a strict purpose:
 
 - **RED**: write the smallest test that captures *one observable behavior* of the component. Test through the public seam (the interface a caller would actually use), not through private internals. Run the test and verify it fails — and fails for the *right reason*: an assertion mismatch, not a missing module. A test that fails because the file does not yet exist is not a meaningful RED.
 - **GREEN**: write the minimum code that makes the test pass. Do not generalize. Do not handle cases the test does not exercise. Resist the urge to "while I'm here". Hardcoding the right answer is acceptable in GREEN if that is what the test requires; the next task's RED will force the generalization.
-- **REFACTOR**: improve the structure of the code while keeping all tests green. **Refactor never changes behavior.** Adding a new error case, handling new input shapes, extending the contract — those are *new behaviors* and belong in a *new task* (next RED → GREEN cycle), not in REFACTOR. The REFACTOR `### Action` must name **specific operations** with **concrete targets**: extract function X from Y, rename A to B, inline helper C into D, deduplicate pattern across E and F. "Improve structure" or "clean up" is not actionable — if no concrete refactoring is needed, write `No refactoring needed — structure is adequate` and skip to COMMIT.
-- **COMMIT**: only when tests pass. Use Conventional Commits scoped to the task id.
+- **REFACTOR**: improve the structure of the code while keeping all tests green. **Refactor never changes behavior.** Adding a new error case, handling new input shapes, extending the contract — those are *new behaviors* and belong in a *new task* (next RED → GREEN cycle), not in REFACTOR. The REFACTOR `### Action` must name **specific operations** with **concrete targets**: extract function X from Y, rename A to B, inline helper C into D, deduplicate pattern across E and F. "Improve structure" or "clean up" is not actionable — if no concrete refactoring is needed, write `No refactoring needed — structure is adequate` and the executor will skip the REFACTOR commit entirely.
+
+## Per-phase commits
+
+Each phase (RED, GREEN, REFACTOR) commits its own work. There is no separate COMMIT phase. The executor (`run`) enforces the commit format:
+
+- RED   → `test(<task-id>): <subject>` — test gate may be red; tsc / lint / build must pass
+- GREEN → `feat(<task-id>): <subject>` — all four gates must pass
+- REFACTOR → `refactor(<task-id>): <subject>` — all four gates must pass; spec-declared no-op skips entirely (no commit)
+
+Every phase commit carries trailers: `Tap-Task: <task-id>`, `Tap-Phase: RED|GREEN|REFACTOR`, `Tap-Files: <comma-paths>`.
+
+Task files do not include a `## COMMIT` phase. The executor handles staging and committing; phase agents only declare the work.
 
 ## Expand-contract pattern
 
@@ -31,7 +42,7 @@ When a change breaks the public API of a shared module (one with multiple consum
 2. **Migrate** — one task per consumer file, switching from the old API to the new. Each task compiles because both APIs exist.
 3. **Contract** — remove the old API from the shared module. All consumers have already migrated.
 
-Each step is its own task with its own RED → GREEN → REFACTOR → COMMIT cycle. The key property: **every commit leaves the codebase in a compilable, test-passing state**.
+Each step is its own task with its own RED → GREEN → REFACTOR cycle (each phase commits itself per `run`'s commit policy). The key property: **every commit leaves the codebase in a compilable, test-passing state**.
 
 When to use expand-contract:
 - The file being changed is classified `shared` (1-5 dependents) or `high-fanout` (6+ dependents) by the dependency scan
@@ -153,24 +164,6 @@ Improve structure while keeping the test green. No new behavior.
 
 ### Done
 Test still passes; structure improved (rename / extract / inline / deduplicate).
-
-## COMMIT
-
-### Action
-Stage the changed files and commit using `feat(<NN-kebab-slug>): <description>`.
-
-### Example
-```sh
-git add path/to/file path/to/file.test.ext && git commit -m "feat(NN-kebab-slug): one-line description"
-```
-
-### Verify
-```sh
-git status
-```
-
-### Done
-Working tree clean for the relevant paths; commit visible in `git log`.
 ````
 
 The `files` field uses `create:` for new paths and a list of `{ path, anchor }` objects under `modify:` for existing paths. **Anchor modifications by symbol name (function, class, exported binding), not by line number** — line numbers shift on edit and the anchor goes stale before the engineer applies the task.
@@ -190,7 +183,13 @@ Include symbols from the dependency-scan's consumer map and integration map. For
 
 ## Task ordering
 
-Tasks run **sequentially** in the numeric prefix order of the `id` field (`01-…` before `02-…`, etc.). There is no parallelism, no wave scheduling, no `dependency-graph.json`. Order tasks leaves-first per the slicing step — earlier tasks must not depend on files later tasks create.
+Tasks are emitted with numeric `id` prefixes (`01-…`, `02-…`) for human readability and as a tiebreaker, but the executor (`run`) does NOT execute strictly in numeric order. `run` infers waves from `context[]` symbol ownership and runs wave-mates in parallel when their `files.create` ∪ `files.modify` are disjoint.
+
+Convey's job is to:
+1. Order tasks leaves-first per the dependency-scan consumer map (so numeric order is a sensible default if wave inference degenerates).
+2. Populate `context[]` accurately so wave inference produces the intended plan.
+
+See `run/RUN_FLOW.md > Wave inference` for the algorithm.
 
 ## Pattern hints
 
@@ -333,22 +332,4 @@ bun test src/data/CachedUserRepository
 
 ### Done
 Test still passes; structure improved.
-
-## COMMIT
-
-### Action
-Stage the test and implementation files and commit with the conventional format.
-
-### Example
-```sh
-git add src/data/CachedUserRepository/CachedUserRepository.ext src/data/CachedUserRepository/CachedUserRepository.test.ext && git commit -m "feat(01-cache-hit-returns-stored-user): memoize repeated user lookups within TTL"
-```
-
-### Verify
-```sh
-git status
-```
-
-### Done
-Working tree clean for the relevant paths; commit visible in `git log`.
 ````

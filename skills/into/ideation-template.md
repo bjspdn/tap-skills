@@ -33,6 +33,7 @@ title: <feature>
 | Boundaries            | `## Boundaries`        | always      | Explicitly NOT in scope                                                                              | Empty bullets, or duplicates intent in negation                |
 | Open decisions        | `## Open decisions`    | usually     | Open questions surfaced during the tap-into sessions that were deferred                              | None named when the approach has obvious gaps                  |
 | Considered & rejected | `## Considered & rejected` | usually | Approaches discussed during ideation + why losers lost                                               | Single bullet that restates the chosen approach                |
+| Anti-patterns nearby  | `## Anti-patterns nearby` | optional | Shapes from patterns_discovery flagged as smells in neighboring code that this feature must NOT reproduce | Generic "spaghetti code" with no file:line ref |
 | Failure modes         | `## Failure modes`     | optional    | Qualitative scenarios surfaced during discussion                                                     | Generic "unexpected input" with no behavior named              |
 | Sources               | `## Sources`           | optional    | Web and repo refs that grounded the design                                                           | Bare URLs with no annotation                                   |
 
