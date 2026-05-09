@@ -140,7 +140,14 @@ The stub is intentionally minimal — it preserves context from the decompositio
 
 ### Step: questioning
 
-Ask questions one at the time. Prefer multiple choices questions, but free-form questions are alright aswell. If a {topic} needs more exploration, break it into subsequent questions. Focus on understanding: purpose, constrainst, and what "done" should look like.
+Ask questions one at the time. Lead with open, free-form prompts because this phase is a brainstorm, not an interview — the user needs latitude to riff, contradict themselves, surface concerns the schema didn't anticipate. Phrase as discussion: "talk me through X", "what's your gut on Y", "where does this break for you", "what would have to be true for Z to work".
+
+Reserve `AskUserQuestion` (multi-choice) for genuine fork-in-road moments where the option set is finite AND the user benefits from seeing alternatives laid out:
+- Picking among the 2-5 approaches surfaced in Step: approaches
+- Resolving a contradiction surfaced in Step: synthesis
+- Marking a premise verified / contradicted / unverifiable in Step: assumption-audit
+
+Default to free-form prose questions everywhere else. If a {topic} needs more exploration, break into subsequent free-form questions. Focus on understanding: purpose, constraints, and what "done" should look like.
 
 ### Step: approaches
 
@@ -237,7 +244,7 @@ The final state is a fully fledged ticket containing everyting that has been dis
 
 These rules apply accross all phases & steps:
   - Always ask one question at a time because more than one question will overwhelm the user.
-  - Always prefer multi-choice questions over free-from questions because they're easier to answer.
+  - Always prefer free-form questions over multi-choice questions because brainstorming needs latitude — a finite option set constrains the conversation before the user has surfaced their full thinking. Use multi-choice (`AskUserQuestion`) only when the decision is genuinely binary/finite (approach pick, contradiction resolution, premise audit).
   - Always validate incrementally because this is a slow process. A proper laid out design will produce better result than an poorly laid out one.
   - Always value flexibity because the phases & steps can be interchangeable. Structured ideas will surface from chaos. Going back & forth is expecteed.
   - Always value simplicity over over-engineered ideations because elegance emerge from simple & readable code, not over-engineered code. Good code is not measured by how many lines it contains.
