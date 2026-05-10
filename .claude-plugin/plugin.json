@@ -5,6 +5,18 @@
   "author": {
     "name": "Ben"
   },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/context-pressure.sh"
+          }
+        ]
+      }
+    ]
+  },
   "repository": "https://github.com/bjspdn/tap-skills",
   "homepage": "https://github.com/bjspdn/tap-skills",
   "license": "MIT",

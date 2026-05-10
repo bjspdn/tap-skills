@@ -12,6 +12,15 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Cross-task failure intelligence** agent failures captured to `.failure-log.json` during runs; subsequent agent dispatches receive `<failure-context>` with relevant prior failures, preventing repeated mistakes across tasks.
 - **Smell-introduction detection** after GREEN/REFACTOR commits, orchestrator checks the task's pattern hint's `smells_it_introduces` against the phase diff using heuristic rules, writes matches to `.smell-warnings.json`, and injects `<smell-warnings>` into the next phase agent's prompt. Refactorer treats warnings as prescriptive; CodeWriter treats them as informational only.
 
+### Changed
+
+- **Worktree pruning moved to plan approval** stale worktree references are now surfaced in the plan output instead of being silently pruned during preflight. Pruning only happens after engineer approves.
+- **TaskList creation enforced** task tracking via TaskCreate is now a hard constraint (constraint 16) with anti-rationalization entry. TaskList must exist before any worktree opens.
+
+### Fixed
+
+- **Hook registration moved to plugin.json** hooks defined in `hooks/hooks.json` were not being picked up by the plugin runtime. Moved `UserPromptSubmit` hook registration into `.claude-plugin/plugin.json` where the runtime expects it.
+
 ## [0.5.2] - 2026-05-10
 
 ### Added
