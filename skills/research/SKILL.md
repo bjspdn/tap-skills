@@ -23,21 +23,21 @@ Operates in two modes:
 
 ## Constraints (critical)
 
-1. **Scope queries to their context.** When a project context exists, include
-   the detected language, framework, and dependencies. When researching a
-   pure-knowledge topic (algorithms, math, game theory), scope to the domain
-   instead. "Mersenne Twister PRNG properties" not "random number generation".
-   "ECS architecture in Bevy 0.15" not "game architecture".
+1. **Cross-reference sources.** Every claim cross-referenced against at least
+   one other source. When a project context exists, also cross-reference
+   findings against the codebase.
 2. **Surface gaps honestly rather than filling them with fabricated claims.** If
    a search returns nothing authoritative, say so.
 3. **Prioritize authoritative sources.** Official docs > RFCs/specs/papers >
    widely-cited blog posts > community discussions. StackOverflow answers are
    evidence of community practice, not authoritative design guidance.
-4. **Cover new ground with each hop.** If a hop returns information already
+4. **Scope queries to their context.** When a project context exists, include
+   the detected language, framework, and dependencies. When researching a
+   pure-knowledge topic (algorithms, math, game theory), scope to the domain
+   instead. "Mersenne Twister PRNG properties" not "random number generation".
+   "ECS architecture in Bevy 0.15" not "game architecture".
+5. **Cover new ground with each hop.** If a hop returns information already
    captured, that is a convergence signal — stop.
-5. **Cross-reference sources.** Every claim cross-referenced against at least
-   one other source. When a project context exists, also cross-reference
-   findings against the codebase.
 6. **Output a file, not chat.** Standalone mode always emits
    `.tap/research/<topic-slug>.md`. Callable mode returns structured findings
    to the calling agent.
@@ -285,19 +285,19 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 
 ## Constraints (general)
 
-- Scope every search query to its context. Project-bound: include
-  language/framework. Pure-knowledge: include domain terminology.
-  Generic queries waste hops.
-- Prefer fewer, higher-quality sources over many shallow ones. Three
-  authoritative findings beat ten Reddit threads.
-- Judge recency relative to the domain's rate of change. A 2021 blog
-  post about Next.js 12 conventions may be actively harmful for a
-  Next.js 15 project. A 2019 paper on a stable algorithm is fine.
 - Distinguish between fact (verified by multiple sources), convention
   (community consensus), opinion (individual preference), and constraint
   (language/framework/domain limitation). Label each.
 - Present what exists, what the sources say, and what the codebase does
   (when applicable). The user or `tap:into` decides what to adopt.
+- Judge recency relative to the domain's rate of change. A 2021 blog
+  post about Next.js 12 conventions may be actively harmful for a
+  Next.js 15 project. A 2019 paper on a stable algorithm is fine.
+- Scope every search query to its context. Project-bound: include
+  language/framework. Pure-knowledge: include domain terminology.
+  Generic queries waste hops.
+- Prefer fewer, higher-quality sources over many shallow ones. Three
+  authoritative findings beat ten Reddit threads.
 - When research reveals genuine disagreement (e.g., two competing
   approaches, conflicting benchmarks), present both with their tradeoffs.
   Let the caller pick a winner.

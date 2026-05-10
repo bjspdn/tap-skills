@@ -1,6 +1,7 @@
 ---
 name: run
 description: Executes one or more decomposed tickets through a wave-parallel TDD pipeline. One worktree per ticket; tasks group into waves by symbol-dependency inference; tasks within a wave run in parallel when their `files.create` + `files.modify` are disjoint, sequential when they overlap; each task runs three phase agents (TestWriter → CodeWriter → Refactorer) chained via git commit trailers. Orchestrator owns the worktree (create, merge, delete). Use when the user invokes `/tap-run`, says "run the tickets", "execute the pipeline", or has unfinished `.tap/tickets/<slug>/` folders with `task-*.md` files.
+argument-hint: slug
 ---
 
 
@@ -16,18 +17,18 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 
 ## Constraints
 
-1. Orchestrator owns the worktree (create at ticket entry, integrate + delete at ticket exit).
-2. Sub-agents stay inside their assigned worktree.
-3. Tickets run in lex-slug order; tasks inside a ticket group into waves.
-4. Wave-mates run in parallel; wave-mates touch disjoint files.
-5. Phase agents find prior phases by trailer search in `<parent_sha>..HEAD`.
-6. Each phase commits its own work with `Tap-Task`, `Tap-Phase`, `Tap-Files` trailers.
-7. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
-8. Pass all four gates before committing; RED exempts the test gate only.
-9. Wrap disk-writing gates and the `git add … && git commit …` step in `flock -w 300 <commit_lock>`.
-10. Resume by parsing trailers in `<parent_sha>..HEAD`; skip phases already committed.
-11. Fix hook failures at the source via a new commit.
-12. Run Reviewer once per ticket when survivors ≥ 2; only Blockers trigger Debugger Shape B.
+1. Pass all four gates before committing; RED exempts the test gate only.
+2. Each phase commits its own work with `Tap-Task`, `Tap-Phase`, `Tap-Files` trailers.
+3. Wrap disk-writing gates and the `git add … && git commit …` step in `flock -w 300 <commit_lock>`.
+4. Fix hook failures at the source via a new commit.
+5. Resume by parsing trailers in `<parent_sha>..HEAD`; skip phases already committed.
+6. Wave-mates run in parallel; wave-mates touch disjoint files.
+7. Run Reviewer once per ticket when survivors ≥ 2; only Blockers trigger Debugger Shape B.
+8. Orchestrator owns the worktree (create at ticket entry, integrate + delete at ticket exit).
+9. Sub-agents stay inside their assigned worktree.
+10. Phase agents find prior phases by trailer search in `<parent_sha>..HEAD`.
+11. Tickets run in lex-slug order; tasks inside a ticket group into waves.
+12. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
 
 ## Halt paths
 
@@ -48,7 +49,7 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Where              | Rationalization                                                            | Real problem                                                                                      | Correct action                                                                                                          |
 |--------------------|----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | Preflight          | "Working tree is mostly clean, just one untracked file"                    | Dirty state leaks into worktree or corrupts merge. "Mostly clean" is dirty                        | `git status --porcelain` must return empty. Any output = halt                                                           |
-| Planning           | "Plan is straightforward, engineer will obviously approve"                 | Skips `AskUserQuestion`, removes engineer's last checkpoint before execution                      | Always ask. Approval is mandatory even for single-task tickets                                                          |
+| Planning           | "Plan is straightforward, engineer will obviously approve"                 | Skips approval prompt, removes engineer's last checkpoint before execution                        | Always ask. Approval is mandatory even for single-task tickets                                                          |
 | Wave inference     | "These tasks don't really depend on each other, one wave is fine"          | Puts file-overlapping tasks in same wave. Parallel writes corrupt each other                      | Run the algorithm. Two tasks sharing any path NEVER share a wave — no judgment calls                                    |
 | Dispatch           | "I'll dispatch tasks one at a time to be safe"                             | Serializes what should be parallel, wastes wall time, violates wave-parallel contract             | One assistant message per phase per wave. N tasks = N parallel Agent calls                                              |
 | Dispatch           | "I'll fix this failure myself instead of dispatching Debugger"             | Orchestrator does agent work, bypasses Debugger's structured root-cause analysis and trailer      | Always dispatch Debugger Shape A. Orchestrator orchestrates, agents execute                                             |

@@ -225,8 +225,8 @@ Check if the ideation.md + tickets have been commited, if that's not the case: c
 
 ## Constraints
 
-- Scope each task to one observable behavior. Verify behavior, not implementation details.
 - Ensure RED fails for the right reason (assertion mismatch, not missing module).
+- Scope each task to one observable behavior. Verify behavior, not implementation details.
 - Keep REFACTOR behavior-preserving. Route new behavior through a new RED → GREEN cycle in a new task.
 - Fix hook failures at the source; keep verification intact. Commit only when the test passes.
 - Frame tasks language-agnostically; only the test command and commit message format adapt to the consuming repo.

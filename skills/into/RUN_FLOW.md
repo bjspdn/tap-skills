@@ -40,8 +40,8 @@ digraph tap_into {
   fix_inline        [label="fix inline"];
   eng_review        [label="engineer reviews\nticket", shape=diamond];
 
-  /* ── Convey + decomposition loop ── */
-  convey            [label="invoke\nSkill(tap:convey, slug)"];
+  /* ── Handoff + decomposition loop ── */
+  convey            [label="handoff\n• surface ideation.md path\n• prompt to read\n• suggest /tap:convey"];
   next_ticket       [label="more stubs\nto ideate?", shape=diamond];
 
   done              [label="DONE", shape=doublecircle];
@@ -144,15 +144,15 @@ digraph tap_into {
 10. **CP:PRESENTATION — Present design.** Surface each section to engineer, scaled by complexity. Propose design patterns from PatternsDiscoverer output. For each section, ask if it looks right. Architecture, components/modules, data flow, error handling, test cases. Go back and forth until convergence.
 
 11. **Convergence gate.** Two-pass gate:
-    - **Pass 1 — Agent pre-check (mechanical).** Dispatch ConvergenceChecker (see Dispatch shapes). Validates structural presence only:
-      - `## Approach` has `PATTERN:` named (not blank)
-      - `## Approach` has `FLOW:` with ≥3 numbered steps
-      - `## Approach` has `INVARIANTS:` with ≥1 entry
-      - `## Signatures` filled OR explicitly marked N/A in conversation
-      - `## Error design` filled OR explicitly marked N/A in conversation
-      - `## Constraints` has ≥1 bullet
-      - `## Boundaries` has ≥1 bullet
-    - Mechanical failures → loop to step 8 with specific gaps listed.
+    - **Pass 1 — Agent pre-check (mechanical).** Dispatch ConvergenceChecker (see Dispatch shapes). Flags structural absence only:
+      - Flag if `## Approach` is missing `PATTERN:` or value is blank
+      - Flag if `## Approach` is missing `FLOW:` or has fewer than 3 numbered steps
+      - Flag if `## Approach` is missing `INVARIANTS:` or has zero entries
+      - Flag if `## Signatures` is missing and was not marked N/A in conversation
+      - Flag if `## Error design` is missing and was not marked N/A in conversation
+      - Flag if `## Constraints` has zero bullets
+      - Flag if `## Boundaries` has zero bullets
+    - Any flags raised → loop to step 8 with specific gaps listed.
     - **Pass 2 — Human confirm (subjective).** Surface to engineer verbatim:
       - [ ] Two-implementations check passed
       - [ ] Synthesis check passed (no unresolved contradictions)
@@ -164,7 +164,7 @@ digraph tap_into {
 
 14. **Engineer review.** Surface completed ticket. Approved → proceed. Changes requested → loop to step 8 with engineer's feedback.
 
-15. **Convey.** Invoke `Skill(tap:convey, {slug})`.
+15. **Handoff.** Surface emitted ideation path (`.tap/tickets/<slug>/ideation.md`). Prompt engineer to read the file. Suggest running `/tap:convey <slug>` when ready to decompose into tasks. Do not auto-invoke.
 
 16. **Decomposition loop (conditional).** If decomposition produced stubs: ask "continue to next ticket?" If yes → engineer picks next stub, flow resumes at CP:APPROACHES (understanding output carries over). If no → DONE.
 
@@ -244,18 +244,18 @@ Agent(
   subagent_type: "Explore",
   description: "Convergence pre-check for {slug}",
   prompt: "
-    Read .tap/tickets/{slug}/ideation.md and validate against the mechanical
-    convergence checklist:
-    1. ## Approach contains PATTERN: with a non-blank value
-    2. ## Approach contains FLOW: with ≥3 numbered steps
-    3. ## Approach contains INVARIANTS: with ≥1 entry
-    4. ## Signatures is present and filled, OR was marked N/A in conversation
-    5. ## Error design is present and filled, OR was marked N/A in conversation
-    6. ## Constraints has ≥1 bullet
-    7. ## Boundaries has ≥1 bullet
+    Read .tap/tickets/{slug}/ideation.md and flag any missing structural
+    elements from this checklist:
+    1. Flag if ## Approach is missing PATTERN: or value is blank
+    2. Flag if ## Approach is missing FLOW: or has fewer than 3 numbered steps
+    3. Flag if ## Approach is missing INVARIANTS: or has zero entries
+    4. Flag if ## Signatures is missing and was not marked N/A in conversation
+    5. Flag if ## Error design is missing and was not marked N/A in conversation
+    6. Flag if ## Constraints has zero bullets
+    7. Flag if ## Boundaries has zero bullets
 
-    Report: for each row, PASS or FAIL with the specific gap.
-    Do not evaluate subjective quality — only structural presence.
+    Report: for each row, OK or MISSING with the specific gap.
+    Do not evaluate subjective quality — only flag structural absence.
   "
 )
 ```

@@ -6,6 +6,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **`tap:into` handoff** replaced auto-invoke of `Skill(tap:convey)` with engineer prompt to read the emitted ideation.md first, then manually invoke `/tap:convey <slug>`. Updated SKILL.md next-step, RUN_FLOW.md digraph node + runbook step 15.
+- **`AskUserQuestion` banned** across all skills. `tap:into` constraint now requires free-form prose with inline numbered options. `tap:run` anti-rationalization table and RUN_FLOW planning step reworded to use direct engineer dialogue instead of tool invocation.
+- **Constraint ordering by criticality** reordered `## Constraints` sections in 7 skill files (`into`, `run`, `convey`, `sketch`, `research`, `retro`, `health`) so most-violated constraints anchor first. Cross-referenced anti-rationalization tables to identify rationalization targets. Leverages anchoring bias research showing LLMs weight early items disproportionately.
+- **Convergence gate negative framing** flipped ConvergenceChecker dispatch shape and runbook step 11 from positive ("verify X is present") to negative ("flag if X is missing"). Based on ACM CIKM 2025 finding that LLMs find answering "yes" harder than "no" — negative framing yields more reliable structural validation.
+
 ## [0.5.0] - 2026-05-10
 
 ### Added

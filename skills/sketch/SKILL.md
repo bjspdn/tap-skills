@@ -320,12 +320,12 @@ Sketch is complete. Commits are on the current branch at HEAD.
 
 These apply across all phases and steps:
 
-- **Scope each sketch to one behavior.** If the description implies multiple independent behaviors, redirect to `/tap:into`. Sketch is a shortcut for changes that do not need planning, not a shortcut to skip planning.
+- **Maintain full TDD discipline despite speed.** The RED/GREEN/REFACTOR cycle is non-negotiable. The test comes first. The implementation comes second. The refactor comes third (or is explicitly skipped). This is the discipline that makes sketch trustworthy despite being fast.
 - **Ensure RED fails for the right reason.** An assertion mismatch or module-missing error pointing at the file GREEN will create. A test that passes without implementation is too weak — the sketch halts.
+- **Scope each sketch to one behavior.** If the description implies multiple independent behaviors, redirect to `/tap:into`. Sketch is a shortcut for changes that do not need planning, not a shortcut to skip planning.
 - **Keep REFACTOR behavior-preserving.** The RED test stays green after REFACTOR. Route new behavior through a new sketch or a full pipeline run.
 - **Fix hook failures at the source; keep verification intact.** Create a new commit after fixing — amending is off-limits.
+- **Bound failure handling to one retry.** One retry per phase via Debugger Shape A. Second failure reverts the phase and halts.
+- **Follow conventional commit subjects.** `test(sketch): ...` for RED, `feat(sketch): ...` for GREEN, `refactor(sketch): ...` for REFACTOR. Trailers: `Tap-Task: sketch`, `Tap-Phase: RED|GREEN|REFACTOR`, `Tap-Files: <paths>`.
 - **Work on the current branch.** Sketch uses no worktree. Commits land on HEAD.
 - **Keep the spec in context only.** Write nothing to `.tap/tickets/`.
-- **Follow conventional commit subjects.** `test(sketch): ...` for RED, `feat(sketch): ...` for GREEN, `refactor(sketch): ...` for REFACTOR. Trailers: `Tap-Task: sketch`, `Tap-Phase: RED|GREEN|REFACTOR`, `Tap-Files: <paths>`.
-- **Bound failure handling to one retry.** One retry per phase via Debugger Shape A. Second failure reverts the phase and halts.
-- **Maintain full TDD discipline despite speed.** The RED/GREEN/REFACTOR cycle is non-negotiable. The test comes first. The implementation comes second. The refactor comes third (or is explicitly skipped). This is the discipline that makes sketch trustworthy despite being fast.

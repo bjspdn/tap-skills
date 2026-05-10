@@ -313,12 +313,12 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 
 ## Constraints
 
-- Keep retro read-only — analyze source code and task files, modify neither.
 - Treat profile entries with `sample_count < 3` as `tentative` — present them with that qualifier, not as facts.
-- Accept that ephemeral reports go stale — that's by design. The profile is the durable layer.
-- Tie actionable suggestions to specific structural observations with sample counts.
 - Require meaningful sample sizes before drawing correlations. 1 failure is noise, 5 failures in the same pattern is signal.
+- Keep retro read-only — analyze source code and task files, modify neither.
+- Tie actionable suggestions to specific structural observations with sample counts.
+- Limit git operations to read-only commands: `git log`, `git diff`, `git rev-parse`.
 - Skip slugs gracefully when they have no commits with Tap trailers — surface the absence honestly.
+- Accept that ephemeral reports go stale — that's by design. The profile is the durable layer.
 - If `.tap/retros/` doesn't exist, create it. If `_profile.json` doesn't exist, initialize it with `version: 1`, `runs_analyzed: 0`, and empty arrays/objects.
 - Use `YYYY-MM-DD` for all dates.
-- Limit git operations to read-only commands: `git log`, `git diff`, `git rev-parse`.

@@ -123,6 +123,4 @@ MIT
 
 
 TODO:
-- Remove instant spawn of tap:convey -> Probe the user to read the file first.
-- Ban biases toward AskUserQuestion -> disallow the tool entirely. 
 - Probe Claude to find article about psychology applied to LLMs for skills writing and such

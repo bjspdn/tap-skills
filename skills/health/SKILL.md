@@ -237,9 +237,9 @@ Health check complete. Summary delivered, repairs applied (if any).
 ## Constraints
 
 - **Wait for explicit user confirmation before modifying anything.** The diagnostic phase is read-only.
+- **Test lockfiles non-destructively.** `flock -n <file> true` tests without acquiring. If it succeeds, the lock is free. If it fails, a process holds it — leave it alone.
 - **Use `git branch -d` (safe delete) for branch removal.** If deletion fails due to unmerged state, report it and move on.
 - **Only remove worktree directories that `git worktree list` does not reference.**
-- **Test lockfiles non-destructively.** `flock -n <file> true` tests without acquiring. If it succeeds, the lock is free. If it fails, a process holds it — leave it alone.
 - **Keep the entire health check local.** No fetching, no pushing, no network calls.
 - **Produce identical reports on consecutive runs** (minus any repairs applied on the first run).
 

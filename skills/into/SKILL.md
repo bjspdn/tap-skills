@@ -9,10 +9,10 @@ All procedural logic — lifecycle, runbook, checkpoints, dispatch shapes, conve
 ## Constraints
 
 These apply across all phases & steps:
-  - Ask one question at a time. Multiple simultaneous questions overwhelm — the engineer loses focus and answers shallowly.
-  - Default to free-form prose questions. Use multi-choice (`AskUserQuestion`) only when the decision is genuinely finite: approach pick, contradiction resolution, premise audit. Brainstorming needs latitude, not a menu.
   - Surface gaps honestly rather than filling them with fabricated facts — false information compounds downstream when the planner trusts it.
   - Prefer the smallest implementation that satisfies the behavioral spec. If a design can be implemented correctly in 50 lines, do not propose an architecture that requires 200. Fewer moving parts means fewer failure modes, less surface area to test, and less to maintain.
+  - Ask one question at a time. Multiple simultaneous questions overwhelm — the engineer loses focus and answers shallowly.
+  - Always use free-form prose questions. Do not use `AskUserQuestion` — brainstorming needs latitude, not a menu. When a decision is genuinely finite (approach pick, contradiction resolution, premise audit), present numbered options inline.
 
 ## Anti-rationalization table
 
@@ -35,4 +35,4 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 
 ## Next step
 
-Once the RUN_FLOW reaches completion, immediately invoke Skill(tap:convey, {slug}) where `{slug}` is the ticket slug from the ideation just completed.
+Once the RUN_FLOW reaches completion, surface the emitted ideation path (`.tap/tickets/<slug>/ideation.md`) and prompt the engineer to read the file. Then suggest running `/tap:convey <slug>` when ready to decompose into tasks. Do not auto-invoke convey.
