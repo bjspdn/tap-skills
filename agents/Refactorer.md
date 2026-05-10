@@ -34,6 +34,16 @@ If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","da
 
 If a `<failure-context>` block is present in your prompt, read it before applying operations. Each entry describes a prior failure in this run touching files you are about to work with. Use it to avoid repeating the same mistake — e.g., if a rename broke an export, verify consumers before renaming; if an extraction broke behavior, check observable contracts first. Do NOT over-correct: the context is informational, not prescriptive. Do not restructure your approach around it — just be aware.
 
+## Calibration
+
+If a `<calibration>` block is present in your prompt, apply its guidance before applying operations. Calibration adjusts verification intensity, not approach — you still follow the same phases.
+
+- **`<pattern-signal>`**: read `adherence_rate` and `smell_tags`. Low `adherence_rate` (< 0.7) means past refactors on this pattern drifted from the pattern's structure — add an extra behavioral-preservation check: run verify BEFORE and AFTER each named operation to catch regressions incrementally. If `smell_tags` are present, verify your refactoring does not reintroduce those correlated smells.
+- **`<gate-signal>`**: if a gate relevant to your phase (REFACTOR) has a high `failure_rate`, run that gate FIRST in your verification sequence (step 7) before the others.
+- **`<agent-signal>`**: if present for Refactorer, note the `top_failure_type`. Invest an extra self-review pass targeting that failure category before staging.
+
+Calibration is informational. Do not restructure your approach, skip phases, or add phases because of it.
+
 ## Phase chaining via git trailers
 
 The orchestrator does NOT pass GREEN/RED diffs in your prompt and does NOT guarantee that HEAD or HEAD~1 are your commits — sibling tasks of the same wave commit interleaved. The seam is the trailer search.

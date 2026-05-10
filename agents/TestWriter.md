@@ -34,6 +34,16 @@ If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","da
 
 If a `<failure-context>` block is present in your prompt, read it before writing the test. Each entry describes a prior failure in this run touching files you are about to work with. Use it to avoid repeating the same mistake — e.g., if a module wasn't exported, verify exports exist before importing; if a type was wrong, check the actual signature. Do NOT over-correct: the context is informational, not prescriptive. Do not restructure your approach around it — just be aware.
 
+## Calibration
+
+If a `<calibration>` block is present in your prompt, apply its guidance before writing the test. Calibration adjusts verification intensity, not approach — you still follow the same phases.
+
+- **`<pattern-signal>`**: if present, read `clean_green_rate` and any `smell_tags`. Align test invariants with historically proven structures for this pattern. If `smell_tags` lists smells correlated with this pattern, write assertions that would catch those failure modes.
+- **`<gate-signal>`**: if a gate relevant to your phase (RED) has a high `failure_rate`, run that gate FIRST in your verification sequence (step 7) before the others.
+- **`<agent-signal>`**: if present for TestWriter, note the `top_failure_type`. Invest an extra self-review pass targeting that failure category before staging.
+
+Calibration is informational. Do not restructure your approach, skip phases, or add phases because of it.
+
 ## Phase chaining via git trailers
 
 The orchestrator does NOT pass prior-phase context in your prompt and does NOT guarantee that HEAD is the prior phase — sibling tasks of the same wave commit interleaved. The seam is the trailer search. To check whether RED for THIS task already landed:

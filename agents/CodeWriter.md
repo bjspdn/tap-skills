@@ -34,6 +34,17 @@ If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","da
 
 If a `<failure-context>` block is present in your prompt, read it before writing code. Each entry describes a prior failure in this run touching files you are about to work with. Use it to avoid repeating the same mistake — e.g., if a module wasn't exported, verify exports exist before importing; if a type was mismatched, check the actual signature first. Do NOT over-correct: the context is informational, not prescriptive. Do not restructure your approach around it — just be aware.
 
+## Calibration
+
+If a `<calibration>` block is present in your prompt, apply its guidance before writing code. Calibration adjusts verification intensity and effort, not approach — you still follow the same phases.
+
+- **`<pattern-signal>`**: read `clean_green_rate`. High rate (≥ 0.8) — proceed with confidence; the pattern historically succeeds. Low rate (< 0.5) — add an extra verification pass after writing code: re-read the test, re-run verify, confirm the implementation matches the pattern's expected shape before moving to gates. If `smell_tags` are present, check your implementation does not introduce those correlated smells.
+- **`<gate-signal>`**: if a gate relevant to your phase (GREEN) has a high `failure_rate`, run that gate FIRST in your verification sequence (step 7) before the others. Inspect its output carefully.
+- **`<agent-signal>`**: if present for CodeWriter, note the `top_failure_type`. Invest an extra self-review pass targeting that failure category before staging.
+- **`<token-signal>`**: read `complexity` and `avg_tokens`. If the task is `simple` and historical data confirms low token budgets, keep the implementation minimal — do not over-engineer. If `complex`, expect more effort but stay within minimum-code discipline.
+
+Calibration is informational. Do not restructure your approach, skip phases, or add phases because of it.
+
 ## Phase chaining via git trailers
 
 The orchestrator does NOT pass the RED test in your prompt and does NOT guarantee that HEAD is your RED commit — sibling tasks of the same wave commit interleaved. The seam is the trailer search.

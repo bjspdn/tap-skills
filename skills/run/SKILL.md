@@ -30,6 +30,7 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 11. Tickets run in lex-slug order; tasks inside a ticket group into waves.
 12. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
 13. Before each wave dispatch, read `.failure-log.json` from the worktree and inject `<failure-context>` into agent prompts for tasks whose files overlap with prior failures.
+14. Before each agent dispatch, build and inject a `<calibration>` block from established `_profile.json` signals. Only `established` (≥3 samples) signals enter the block; `tentative` signals are never injected.
 
 ## Halt paths
 
@@ -61,6 +62,7 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Reviewer           | "Only two survivors and they're trivial, Reviewer is overkill"             | Survivors ≥ 2 = Reviewer runs. Complexity judgment is not the orchestrator's call                 | Dispatch Reviewer when survivors ≥ 2. No exceptions based on perceived simplicity                                       |
 | Reviewer blockers  | "These blockers are minor, more like warnings really"                      | Downgrades severity to skip Debugger Shape B, lets real issues into the merge                     | Blocker severity is the Reviewer's call, not the orchestrator's. Blockers trigger Shape B, always                       |
 | Retro              | "Run was clean, no failures, retro won't find anything useful"             | Skips data collection. Clean runs are signal too — retro builds the profile from both             | Always invoke `Skill(tap:retro)` as the last action. No conditional skip                                                |
+| Calibration        | "The profile signal is tentative but looks relevant, worth including"      | Acting on tentative data (< 3 samples) is acting on noise. Premature calibration erodes trust     | Only inject `established` signals. Log tentative signals internally; never put them in `<calibration>`                   |
 | TAP_RESULT         | "Agent output looks successful, I can infer the status"                    | Infers instead of parsing. Malformed or missing envelope = halt, not guess                        | Parse the final-line `TAP_RESULT: {...}` JSON. Missing or malformed = halt ticket                                       |
 | Resume             | "Fresh worktree, no prior commits to check"                                | Skips trailer parsing. If a previous run was interrupted, phases get re-run and duplicate work    | Always parse `<parent_sha>..HEAD` trailers. Empty result = fresh, not "skip the check"                                  |
 

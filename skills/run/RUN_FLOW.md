@@ -201,7 +201,37 @@ Agent(
 )
 ```
 
-**Profile enrichment.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If so, read established `agent_performance`, `gate_signals`, and `pattern_signals` entries relevant to the dispatched agent and phase. Include matching signals as a `profile_note` line in the agent's prompt. When the task spec carries a pattern hint (e.g. `pattern: strategy`), look up that pattern's `pattern_signals` entry and include its `clean_green_rate` plus any established sub-signals so the phase agent knows whether this pattern historically succeeds or struggles. Per agent type: **TestWriter** receives the pattern's `test_invariants` signals (e.g. which invariant shapes the pattern demands) so it writes tests aligned with proven structures; **CodeWriter** receives the pattern's `clean_green_rate` (e.g. `"Profile note: pattern 'strategy' has 100% clean GREEN rate across 5 samples."`) so it can calibrate confidence and verification effort; **Refactorer** receives the pattern's refactor-success signals (e.g. historical refactor pass/fail rate for that pattern) so it knows where past refactors tripped. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
+**Profile-driven calibration.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If absent, skip calibration — the pipeline runs identically without it. If present, build a `<calibration>` block for each dispatched agent using the protocol below. Only `established` signals (sample_count ≥ 3) get injected. `tentative` signals are logged to the orchestrator's internal state but NEVER included in the `<calibration>` block. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
+
+**Calibration block format.** The `<calibration>` block is structured XML injected into the agent's prompt after the six standard inputs and after `<failure-context>` (if any). Each signal entry is a self-contained element the agent can parse mechanically:
+
+```
+<calibration>
+  <agent-signal agent="CodeWriter" failure_rate="0.35" tasks="20" top_failure_type="missing-module" />
+  <gate-signal gate="tsc" phase="GREEN" failure_rate="0.15" samples="8" />
+  <pattern-signal pattern="strategy" clean_green_rate="1.0" samples="5" />
+  <token-signal complexity="moderate" avg_tokens="25000" samples="5" />
+</calibration>
+```
+
+Not every element appears every time. Include only elements where an established signal matches the dispatched agent and current context. Empty `<calibration>` blocks are omitted entirely.
+
+**Signal-to-element mapping:**
+
+| Profile signal | Element | Include when | Content |
+|---|---|---|---|
+| `agent_performance[agent].failure_rate` | `<agent-signal>` | `failure_rate > 0.3` AND agent matches the dispatched agent | `agent`, `failure_rate`, `tasks`, `top_failure_type` (first entry of `common_failure_types` if available) |
+| `gate_signals[gate]` | `<gate-signal>` | `failure_rate > 0.1` AND `phase` matches the dispatched phase | `gate`, `phase`, `failure_rate`, `samples` |
+| `pattern_signals[pattern]` | `<pattern-signal>` | task spec carries a `### Pattern hint` naming this pattern | `pattern`, `clean_green_rate`, `adherence_rate`, `samples`. If `smell_correlations` exist, add `smell_tags` (comma-separated) |
+| `token_signals.avg_tokens_per_complexity` | `<token-signal>` | task matches a complexity class (simple: ≤2 files, moderate: 3–4 files, complex: 5+ files) | `complexity`, `avg_tokens`, `samples` |
+
+**Per-agent calibration rules.** Each agent type responds to different signals within the `<calibration>` block:
+
+- **TestWriter**: reads `<pattern-signal>` to align test invariants with historically proven structures. Reads `<gate-signal>` for RED-phase gates to prioritize early verification. Ignores `<token-signal>`.
+- **CodeWriter**: reads `<pattern-signal>` to calibrate confidence — high `clean_green_rate` (≥ 0.8) means proceed with confidence; low `clean_green_rate` (< 0.5) means add an extra verification pass after writing code. Reads `<agent-signal>` (own) to self-adjust on historical failure areas. Reads `<gate-signal>` for GREEN-phase gates — run high-failure gates FIRST. Reads `<token-signal>` to gauge expected effort — simple tasks should not over-engineer.
+- **Refactorer**: reads `<pattern-signal>` to check `adherence_rate` and `smell_tags` — low adherence or correlated smells mean extra behavioral-preservation verification before committing. Reads `<agent-signal>` (own) to identify historical failure tendencies. Reads `<gate-signal>` for REFACTOR-phase gates. Ignores `<token-signal>`.
+
+**Calibration is informational augmentation, not behavioral override.** Agents still follow their core phases unchanged. Calibration adjusts verification intensity and ordering — never approach or architecture.
 
 **Failure-context enrichment.** Before dispatching any phase agent, check if `<worktree_path>/.failure-log.json` exists. If so, read and parse it as a JSON array of failure entries (see [failure log schema](${CLAUDE_PLUGIN_ROOT}/schemas/failure-log.schema.md)). For the current task, compute the file set: all `context[].path` values ∪ `files.create` ∪ `files.modify` from the task spec frontmatter. Filter failure-log entries whose `files_involved[]` shares at least one path with the task's file set. If matches exist, build a `<failure-context>` block and include it in the agent's prompt:
 
@@ -215,7 +245,7 @@ Prior failure in this run touching files you are about to work with:
 </failure-context>
 ```
 
-Include one `- task: ...` stanza per matching entry. Multiple entries are valid. The block goes after the six standard inputs and before any profile_note.
+Include one `- task: ...` stanza per matching entry. Multiple entries are valid. The block goes after the six standard inputs. `<calibration>` (if any) follows `<failure-context>`.
 
 Six structured inputs every phase agent receives:
 

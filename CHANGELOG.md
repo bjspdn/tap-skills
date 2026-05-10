@@ -8,6 +8,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Profile-driven agent calibration** established profile signals actively reshape agent prompts at dispatch time via `<calibration>` blocks, adjusting verification intensity and injecting pattern-specific guidance based on historical performance. Only `established` signals (≥3 samples) are injected; `tentative` signals are never included.
 - **Cross-task failure intelligence** agent failures captured to `.failure-log.json` during runs; subsequent agent dispatches receive `<failure-context>` with relevant prior failures, preventing repeated mistakes across tasks.
 
 ## [0.5.2] - 2026-05-10
