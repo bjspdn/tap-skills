@@ -147,7 +147,7 @@ Agent(
 )
 ```
 
-**Profile enrichment.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If so, read established `agent_performance` and `gate_signals` entries relevant to the dispatched agent and phase. Include matching signals as a `profile_note` line in the agent's prompt. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
+**Profile enrichment.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If so, read established `agent_performance`, `gate_signals`, and `pattern_signals` entries relevant to the dispatched agent and phase. Include matching signals as a `profile_note` line in the agent's prompt. When the task spec carries a pattern hint (e.g. `pattern: strategy`), look up that pattern's `pattern_signals` entry and include its `clean_green_rate` plus any established sub-signals so the phase agent knows whether this pattern historically succeeds or struggles. Per agent type: **TestWriter** receives the pattern's `test_invariants` signals (e.g. which invariant shapes the pattern demands) so it writes tests aligned with proven structures; **CodeWriter** receives the pattern's `clean_green_rate` (e.g. `"Profile note: pattern 'strategy' has 100% clean GREEN rate across 5 samples."`) so it can calibrate confidence and verification effort; **Refactorer** receives the pattern's refactor-success signals (e.g. historical refactor pass/fail rate for that pattern) so it knows where past refactors tripped. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
 
 Six structured inputs every phase agent receives:
 

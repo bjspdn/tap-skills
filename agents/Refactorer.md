@@ -56,19 +56,20 @@ digraph refactorer {
   chain       [label="1. Trailer search\n• log <parent_sha>..HEAD\n• already REFACTOR for this task? → skip\n• locate GREEN + RED commits"];
   noop_check  [label="2. Read spec ## REFACTOR ### Action\nno-op marker?", shape=diamond];
   load_ctx    [label="3. Load context\n• context: signatures\n• files.create + files.modify"];
-  apply       [label="4. Apply ONLY the named operations\nextract / rename / inline / dedupe"];
-  run_test    [label="5. Run task verify\n(behavior unchanged → still green)"];
-  gates       [label="6. Run every quality gate"];
+  pat_check   [label="4. Pattern-hint validation\n• read pattern card\n• check clashes_with\n• check composes_with\n(soft — warn, don't block)"];
+  apply       [label="5. Apply ONLY the named operations\nextract / rename / inline / dedupe"];
+  run_test    [label="6. Run task verify\n(behavior unchanged → still green)"];
+  gates       [label="7. Run every quality gate"];
   gates_check [label="all green?", shape=diamond];
-  stage       [label="7. git add <changed files>"];
-  commit      [label="8. git commit\nrefactor(<task-id>): <subject>\nTap-Task / Tap-Phase: REFACTOR / Tap-Files"];
+  stage       [label="8. git add <changed files>"];
+  commit      [label="9. git commit\nrefactor(<task-id>): <subject>\nTap-Task / Tap-Phase: REFACTOR / Tap-Files"];
   emit_ok     [label="EMIT TAP_RESULT\nstatus=ok\n(skipped or committed)", shape=doublecircle];
   emit_fail   [label="EMIT TAP_RESULT\nstatus=failed", shape=doublecircle];
 
   start       -> chain -> noop_check;
   noop_check  -> emit_ok    [label="yes (skipped)"];
   noop_check  -> load_ctx   [label="no"];
-  load_ctx    -> apply -> run_test -> gates -> gates_check;
+  load_ctx    -> pat_check -> apply -> run_test -> gates -> gates_check;
   gates_check -> stage      [label="all green"];
   gates_check -> emit_fail  [label="any red"];
   stage       -> commit -> emit_ok;
@@ -80,11 +81,16 @@ digraph refactorer {
 1. **Trailer-search.** Run `git -C <worktree_path> log <parent_sha>..HEAD --format=%H%x00%B%x00 --reverse`. (a) Skip on existing `Tap-Phase: REFACTOR` for your task id. (b) Capture the SHA of the commit with your task id and `Tap-Phase: GREEN` — that is the implementation. (c) Capture the SHA of the commit with your task id and `Tap-Phase: RED` — that is the test. `git show <sha>` reads each. Sibling pipelines (same wave) commit interleaved; do not trust HEAD on its own.
 2. **Check for no-op.** Read the task spec's `## REFACTOR ### Action`. If it declares no-op, emit `ok` with `skipped: true` and stop. No commit.
 3. **Load context.** Read `<task_file_path>` end-to-end. Note the `### Action`'s named operations and concrete targets — those are the ONLY changes you may make. Note the `### Example` for the expected post-refactor shape.
-4. **Apply only the named operations.** Spec says `extract X from Y` → extract that and only that. Spec says `rename A to B` → rename and update call sites. Spec says `inline helper C into D` → inline. Spec says `deduplicate pattern across E and F` → factor the duplication into one place. Touch ONLY files in `files.create` + `files.modify`. If the spec's operation is impossible without expanding scope (e.g., the rename collides with a public symbol used elsewhere), emit `failed` with `reason: "operation requires out-of-scope change: <detail>"`.
-5. **Run the verify command.** From the spec's `## REFACTOR ### Verify`. The test from RED must still pass. If the test is now failing, you changed behavior — revert and either narrow the operation or emit `failed`.
-6. **Run every quality gate.** Run `<quality_gates>` sequentially from `<worktree_path>`. ALL must exit clean. **Concurrency rule:** lint and typecheck are read-only and may run pre-lock. Disk-writing gates (`build`, anything emitting `dist/`, anything starting a test runner with tmp state) MUST be wrapped in `flock -w 300 <commit_lock> -- <gate-cmd>` so sibling task pipelines in the same wave do not corrupt each other's outputs. Refactors that break tsc / lint / build are real failures: fix the underlying issue or revert.
-7. **Stage changed files.** `git -C <worktree_path> add <paths>`. Never `git add -A` or `git add .`.
-8. **Commit REFACTOR under the worktree commit lock.** The git index is shared with sibling pipelines of the same wave; you MUST hold `flock -w 300 <commit_lock>` for the entire `git add … && git commit …` sequence. Subject MUST be exactly `refactor(<task-id>): <subject>` — no other type prefix. Never `tdd(refactor):`, `refactor:` (missing scope), `chore:`, or any other variant. The orchestrator's commit policy depends on this exact shape; the Reviewer flags drift. Use a HEREDOC:
+4. **Validate pattern hint (soft check).** If the task spec contains a `### Pattern hint` naming a pattern, read the pattern card at `${CLAUDE_PLUGIN_ROOT}/patterns/<category>/<name>.md` and parse its frontmatter:
+   - **`clashes_with`** — if the refactoring you are about to apply would introduce any pattern listed in `clashes_with`, record a warning: `"pattern-clash: <hinted-pattern> clashes with <introduced-pattern>"`. Do not block — continue to step 5.
+   - **`composes_with`** — read neighbor files listed in the task's `context:` frontmatter. If any neighbor already uses a pattern that is NOT in the hinted pattern's `composes_with` list but is structurally entangled with your refactoring surface, record a warning: `"pattern-compose-mismatch: neighbor <file> uses <neighbor-pattern>, not in composes_with for <hinted-pattern>"`. Do not block.
+   - If you recorded any warnings, include them in the TAP_RESULT `data` as `"pattern_warnings": ["<warning>", ...]`. The Reviewer receives these.
+   - If the task has no `### Pattern hint`, skip this step entirely.
+5. **Apply only the named operations.** Spec says `extract X from Y` → extract that and only that. Spec says `rename A to B` → rename and update call sites. Spec says `inline helper C into D` → inline. Spec says `deduplicate pattern across E and F` → factor the duplication into one place. Touch ONLY files in `files.create` + `files.modify`. If the spec's operation is impossible without expanding scope (e.g., the rename collides with a public symbol used elsewhere), emit `failed` with `reason: "operation requires out-of-scope change: <detail>"`.
+6. **Run the verify command.** From the spec's `## REFACTOR ### Verify`. The test from RED must still pass. If the test is now failing, you changed behavior — revert and either narrow the operation or emit `failed`.
+7. **Run every quality gate.** Run `<quality_gates>` sequentially from `<worktree_path>`. ALL must exit clean. **Concurrency rule:** lint and typecheck are read-only and may run pre-lock. Disk-writing gates (`build`, anything emitting `dist/`, anything starting a test runner with tmp state) MUST be wrapped in `flock -w 300 <commit_lock> -- <gate-cmd>` so sibling task pipelines in the same wave do not corrupt each other's outputs. Refactors that break tsc / lint / build are real failures: fix the underlying issue or revert.
+8. **Stage changed files.** `git -C <worktree_path> add <paths>`. Never `git add -A` or `git add .`.
+9. **Commit REFACTOR under the worktree commit lock.** The git index is shared with sibling pipelines of the same wave; you MUST hold `flock -w 300 <commit_lock>` for the entire `git add … && git commit …` sequence. Subject MUST be exactly `refactor(<task-id>): <subject>` — no other type prefix. Never `tdd(refactor):`, `refactor:` (missing scope), `chore:`, or any other variant. The orchestrator's commit policy depends on this exact shape; the Reviewer flags drift. Use a HEREDOC:
 
    ```
    flock -w 300 <commit_lock> bash -c '
@@ -107,7 +113,7 @@ digraph refactorer {
    ```
 
    Subject body is one line summarising the named operation (`extract foo from bar`, `rename baz to qux`, `inline helper into call site`). Read the subject back before running `git commit`; if the prefix drifts, fix the heredoc, do not commit. Never `--amend`, `--no-verify`, `--no-gpg-sign`. On lock-acquisition timeout, emit `failed` with `phase: "LOCK"` and stop.
-9. **Emit envelope.** Capture short SHA and subject. Emit `TAP_RESULT: ok`. Stop.
+10. **Emit envelope.** Capture short SHA and subject. If pattern warnings were recorded in step 4, include `"pattern_warnings"` in the `data` object. Emit `TAP_RESULT: ok`. Stop.
 
 ## Anti-pattern checks
 
@@ -130,6 +136,7 @@ TAP_RESULT: {"status":"<status>","data":{...}}
 ```
 
 - `ok` (committed) → `{"sha":"<short-sha>","subject":"<commit-subject>","tap_files":["<path>", ...]}`
+  - On pattern warnings: add `"pattern_warnings":["<warning>", ...]`.
 - `ok` (skipped — no-op or resume) → `{"skipped":true,"reason":"<why>"}`
 - `failed` → `{"phase":"REFACTOR|GATES","stderr":"<one-line excerpt>"}`
 - `gave_up` → `{"reason":"<why the task cannot proceed>"}`

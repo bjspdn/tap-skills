@@ -181,6 +181,28 @@ Compute correlations:
 3. "Pattern hint P correlates with clean GREEN at rate Q" — group by pattern name, compute rate of clean GREEN (no DEBUG).
 4. "Gate G fails most often during phase H" — parse failure categories to extract gate names and phases.
 
+### Step: cross-reference-pattern-smells
+
+For each pattern extracted in `extract-pattern-hints`, read its pattern card at `${CLAUDE_PLUGIN_ROOT}/patterns/<category>/<pattern_name>.md` and collect the `smells_it_introduces` frontmatter field (a list of kebab-case smell tags).
+
+Cross-reference those smell tags against the run's failure taxonomy (from `classify-failures`). A failure maps to an introduced smell when the failure's `category` matches or is a sub-string of a smell tag (e.g., failure category `over-abstraction` matches smell tag `over-abstraction-single-variant`), or when the failure `detail` text contains the smell tag verbatim.
+
+For each match, record a `pattern_smell_correlation` entry:
+
+```
+{
+  pattern,          # pattern name from the hint
+  smell_tag,        # the matching smells_it_introduces tag
+  task,             # task id where the failure occurred
+  failure_category, # from classify-failures
+  phase             # phase where the failure occurred
+}
+```
+
+If no matches are found, skip silently -- this step produces zero entries in most clean runs.
+
+These entries feed into `_profile.json`'s `pattern_signals` via the `update-profile` step (as `smell_correlations` sub-entries) to accumulate evidence across runs.
+
 ### Step: update-profile
 
 Load `.tap/retros/_profile.json` if it exists. If not, initialize an empty profile.
@@ -191,7 +213,7 @@ For each structural observation from this run:
 2. **slicing_signals**: for each correlation found in detect-structural-patterns, find or create a matching entry. Increment `sample_count`, update `rate` as a running average, set `last_seen` to today's date. Set `confidence`:
    - `sample_count < 3` → `"tentative"`
    - `sample_count >= 3` → `"established"`
-3. **pattern_signals**: merge pattern adherence and clean-GREEN rates per pattern name.
+3. **pattern_signals**: merge pattern adherence and clean-GREEN rates per pattern name. For each `pattern_smell_correlation` entry from `cross-reference-pattern-smells`, find or create a `smell_correlations` sub-entry on the matching pattern signal; increment `failure_count`, set `last_seen`.
 4. **gate_signals**: merge gate failure rates per gate per phase.
 5. **smell_signals**: if the retro detects recurring failure patterns (same category appearing 3+ times across runs), check the pattern catalog at `${CLAUDE_PLUGIN_ROOT}/patterns/` for matching smell tags. Add entries mapping failure patterns to smell tags.
 
@@ -247,6 +269,14 @@ Phase values: `pass` (clean), `retry` (required DEBUG), `skip` (intentional no-o
 
 _Empty table if no failures occurred._
 
+## Pattern smell correlations
+
+| Pattern | Smell tag | Task | Failure category | Phase |
+|---------|-----------|------|------------------|-------|
+<for each pattern_smell_correlation entry, one row>
+
+_Empty table if no correlations found._
+
 ## Observations
 
 <bulleted list of structural observations from this run>
@@ -295,7 +325,14 @@ The profile conforms to this schema:
       "clean_green_rate": <0.0-1.0>,
       "sample_count": <N>,
       "confidence": "<tentative | established>",
-      "last_seen": "<YYYY-MM-DD>"
+      "last_seen": "<YYYY-MM-DD>",
+      "smell_correlations": [
+        {
+          "smell_tag": "<kebab-case tag from smells_it_introduces>",
+          "failure_count": <N>,
+          "last_seen": "<YYYY-MM-DD>"
+        }
+      ]
     }
   ],
   "gate_signals": [
@@ -324,7 +361,7 @@ When merging into an existing profile:
 
 - **agent_performance**: sum `tasks`, `failures`, `retries`, `skips` into running totals. Recompute rates as `failures / tasks`, etc. Increment `runs`.
 - **slicing_signals**: match on `property` + `outcome`. Update `rate` as weighted average: `(old_rate * old_sample_count + new_rate * new_sample_count) / (old_sample_count + new_sample_count)`. Increment `sample_count`.
-- **pattern_signals**: match on `pattern`. Same weighted-average merge for rates.
+- **pattern_signals**: match on `pattern`. Same weighted-average merge for rates. For `smell_correlations`, match on `smell_tag` within the pattern entry; increment `failure_count`, update `last_seen`.
 - **gate_signals**: match on `gate` + `phase`. Same weighted-average merge.
 - **smell_signals**: match on `failure_pattern`. Increment `occurrences`.
 

@@ -48,17 +48,18 @@ digraph test_writer {
   chain       [label="1. Trailer search\n• log <parent_sha>..HEAD\n• match Tap-Task + Tap-Phase: RED\n• already RED for this task? → skip"];
   load_ctx    [label="2. Read task frontmatter\n• context: array → canonical signatures\n• files.create + files.modify → scope"];
   match_idiom [label="3. Skim 2–3 sibling files\nlanguage, test framework, fixture style"];
-  write       [label="4. Write ONE behavior test\nexercise public seam,\nassert observable behavior"];
-  run         [label="5. Run RED verify command\n(from <worktree_path>)"];
+  invariants  [label="4. Incorporate test invariants\n(if ### Test invariants present)"];
+  write       [label="5. Write ONE behavior test\nexercise public seam,\nassert observable behavior"];
+  run         [label="6. Run RED verify command\n(from <worktree_path>)"];
   check       [label="fails for right reason?\n(assertion or module-missing)", shape=diamond];
-  gates       [label="6. Run RED-exempt gates\n(tsc, lint, build pass;\ntest may fail)"];
-  stage       [label="7. git add <test file>\n(test file only)"];
-  commit      [label="8. git commit\ntest(<task-id>): add failing test\nTap-Task / Tap-Phase: RED / Tap-Files"];
+  gates       [label="7. Run RED-exempt gates\n(tsc, lint, build pass;\ntest may fail)"];
+  stage       [label="8. git add <test file>\n(test file only)"];
+  commit      [label="9. git commit\ntest(<task-id>): add failing test\nTap-Task / Tap-Phase: RED / Tap-Files"];
   emit_ok     [label="EMIT TAP_RESULT\nstatus=ok", shape=doublecircle];
   emit_fail   [label="EMIT TAP_RESULT\nstatus=failed", shape=doublecircle];
   emit_giveup [label="EMIT TAP_RESULT\nstatus=gave_up", shape=doublecircle];
 
-  start       -> chain -> load_ctx -> match_idiom -> write -> run -> check;
+  start       -> chain -> load_ctx -> match_idiom -> invariants -> write -> run -> check;
   check       -> gates       [label="yes"];
   check       -> emit_giveup  [label="passed without code\n(too weak / already exists)"];
   gates       -> stage        [label="non-test gates green"];
@@ -72,11 +73,12 @@ digraph test_writer {
 1. **Inspect git for resume.** Run `git -C <worktree_path> log <parent_sha>..HEAD --format=%H%x00%B%x00 --reverse` and search for a commit whose body carries `Tap-Task: <task-id>` (yours) AND `Tap-Phase: RED`. If found, this phase is done — skip and emit `ok` with `skipped: true`. Never trust HEAD on its own; sibling pipelines of the same wave commit interleaved.
 2. **Load task context.** Read `<task_file_path>` end-to-end. The `context:` array is the canonical symbol catalogue — every entry's `signature` is authoritative. Entries with `new: true` are symbols this task creates; their `signature` is the contract the test asserts against. Do NOT re-explore the codebase to look up symbols already listed.
 3. **Match neighbors.** Skim 2–3 sibling files near `files.create` / `files.modify`. Match the test framework (`bun:test`, `vitest`, `jest`, `pytest`, etc.), the assertion style (`expect(x).toBe(y)`, `assert x == y`), and fixture conventions. Do not introduce a new framework or convention.
-4. **Write ONE behavior test.** Exercise the public seam. Assert on returned values or observable side effects, never on internal state. Touch ONLY files in `files.create` + `files.modify`. The task spec's `## RED ### Example` is your starting shape — port it to the host repo's idiom.
-5. **Run the RED verify command.** From the spec's `## RED ### Verify`. The test must fail for the right reason: an assertion mismatch, or a module-missing error pointing at the file GREEN will create. If it passes without implementation, the assertion is too weak or the behavior already exists — emit `gave_up` with `reason: "RED passed without implementation"`.
-6. **Run RED-exempt gates.** Run `<quality_gates>` from `<worktree_path>` with this exemption: any gate whose command contains `test` MAY fail (it's the failing test you just wrote). Every other gate (`tsc`, `lint`, `build`) MUST pass. Lint failures, type errors, or build breakage in the test file are real failures — fix them. **Concurrency rule:** lint and typecheck are read-only; run them without the lock. Any gate that writes to disk (`build`, anything emitting `dist/`, anything starting a test runner that writes tmp state) MUST be wrapped in `flock <commit_lock> -- <gate-cmd>` (or `flock` -based equivalent for your shell) so sibling task pipelines in the same wave do not corrupt each other's outputs. If a non-test gate fails and you cannot fix it, emit `failed` with the gate output.
-7. **Stage the test file only.** `git -C <worktree_path> add <test-file-path>`. Never `git add -A` or `git add .`. If you accidentally created scaffolding or fixtures, remove them or stage only the test file.
-8. **Commit RED under the worktree commit lock.** The git index is shared with sibling pipelines of the same wave; you MUST hold `flock <commit_lock>` for the entire `git add … && git commit …` sequence. Subject MUST be exactly `test(<task-id>): <subject>` — no other type prefix. Never `tdd(red):`, `test:` (missing scope), `chore:`, or any other variant. The orchestrator's commit policy depends on this exact shape; the Reviewer flags drift. Use a HEREDOC for safe multi-line content:
+4. **Incorporate test invariants.** If the task spec contains a `### Test invariants` section under `## RED`, read each invariant. These are pattern-level behavioral guarantees extracted from the pattern card by the convey skill. Each invariant must be covered by at least one assertion in the test — they define the contract between the pattern and the implementation. Weave them into the test alongside the `### Example` shape; do not treat them as optional.
+5. **Write ONE behavior test.** Exercise the public seam. Assert on returned values or observable side effects, never on internal state. Touch ONLY files in `files.create` + `files.modify`. The task spec's `## RED ### Example` is your starting shape — port it to the host repo's idiom. When `### Test invariants` are present, ensure every invariant has a corresponding assertion.
+6. **Run the RED verify command.** From the spec's `## RED ### Verify`. The test must fail for the right reason: an assertion mismatch, or a module-missing error pointing at the file GREEN will create. If it passes without implementation, the assertion is too weak or the behavior already exists — emit `gave_up` with `reason: "RED passed without implementation"`.
+7. **Run RED-exempt gates.** Run `<quality_gates>` from `<worktree_path>` with this exemption: any gate whose command contains `test` MAY fail (it's the failing test you just wrote). Every other gate (`tsc`, `lint`, `build`) MUST pass. Lint failures, type errors, or build breakage in the test file are real failures — fix them. **Concurrency rule:** lint and typecheck are read-only; run them without the lock. Any gate that writes to disk (`build`, anything emitting `dist/`, anything starting a test runner that writes tmp state) MUST be wrapped in `flock <commit_lock> -- <gate-cmd>` (or `flock` -based equivalent for your shell) so sibling task pipelines in the same wave do not corrupt each other's outputs. If a non-test gate fails and you cannot fix it, emit `failed` with the gate output.
+8. **Stage the test file only.** `git -C <worktree_path> add <test-file-path>`. Never `git add -A` or `git add .`. If you accidentally created scaffolding or fixtures, remove them or stage only the test file.
+9. **Commit RED under the worktree commit lock.** The git index is shared with sibling pipelines of the same wave; you MUST hold `flock <commit_lock>` for the entire `git add … && git commit …` sequence. Subject MUST be exactly `test(<task-id>): <subject>` — no other type prefix. Never `tdd(red):`, `test:` (missing scope), `chore:`, or any other variant. The orchestrator's commit policy depends on this exact shape; the Reviewer flags drift. Use a HEREDOC for safe multi-line content:
 
    ```
    flock <commit_lock> bash -c '
@@ -99,7 +101,7 @@ digraph test_writer {
    ```
 
    Subject body is one line, drawn from the task's `## RED ### Action`. Read the subject back before running `git commit`; if the prefix drifts, fix the heredoc, do not commit. Never `--amend`, `--no-verify`, `--no-gpg-sign`. Pre-commit hook failure → fix the underlying issue and create a new commit (never amend). Bound the lock acquisition with a 5-minute timeout (`flock -w 300 <commit_lock> …`); on timeout, emit `failed` with `phase: "LOCK"` and stop.
-9. **Emit envelope.** Capture short SHA and subject. Emit `TAP_RESULT: ok`. Stop.
+10. **Emit envelope.** Capture short SHA and subject. Emit `TAP_RESULT: ok`. Stop.
 
 ## Anti-pattern checks
 

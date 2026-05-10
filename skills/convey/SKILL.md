@@ -152,11 +152,12 @@ If no enclosing named symbol exists (e.g. top-level imports), use a stable nearb
 - Add a `### Pattern hint` sub-section as the first child of `## GREEN`, naming the pattern and citing the evidence file:line from the pattern-map.
 - Shape the GREEN `### Action` to incorporate the pattern — e.g., "Write minimum code using a descriptor array + executor loop" instead of just "Write minimum code that passes."
 - Shape the GREEN `### Example` to show code following the pattern shape, not naive implementation.
+- If the pattern card defines `test_invariants`, add a `### Test invariants` sub-section under `## RED` (after `### Done`). List each invariant verbatim from the pattern card. TestWriter uses these as behavioral guarantees the RED test must verify.
 
 When a task has no pattern annotation:
 
 - No `### Pattern hint` sub-section. GREEN stays vanilla "minimum code that passes."
-- REFACTOR `### Action` gets a fallback check: "Query `${CLAUDE_PLUGIN_ROOT}/patterns/` (see README.md for discovery API) to see if a pattern fits the GREEN output and apply it. Otherwise: no refactoring needed — structure is adequate."
+- REFACTOR `### Action`: emit the following instruction into the task file so the Refactorer agent checks for applicable patterns: "Check `${CLAUDE_PLUGIN_ROOT}/patterns/` (see README.md for discovery API) for a pattern that fits the GREEN output. If one applies, refactor to match it. Otherwise: no refactoring needed — structure is adequate."
 
 **REFACTOR concreteness rule**: every REFACTOR `### Action` must name specific operations (extract/rename/inline/deduplicate) with concrete file:symbol targets. If GREEN was pattern-shaped and produced clean code that needs no restructuring, write `No refactoring needed — GREEN followed pattern, structure is adequate.` under `### Action` instead of inventing vague cleanup work. Vague refactor instructions cause agents to burn 40+ turns flailing.
 
