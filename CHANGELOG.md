@@ -8,6 +8,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Agent anti-pattern checks** reformatted from prose bullets to 4-column tables (Where / Rationalization / Real problem / Correct action) in TestWriter, CodeWriter, Refactorer, and Debugger for consistency with skill-file format.
 - **Reviewer agent** added spec drift detection step (step 6) that compares the implementation diff against ideation.md design decisions and flags pattern downgrades, constraint violations, scope reductions, and signature divergences as Warnings.
 
 ### Added

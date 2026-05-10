@@ -107,13 +107,15 @@ digraph test_writer {
 
 Before staging, self-review the diff. Reject and rewrite if any of these apply:
 
-- **Internal-state assertion** — the test reads a private field, a mock's `_calls`, or an internal counter. Public seam only. If the seam does not expose what you want to assert, the seam is wrong — emit `gave_up`, do not bend the test to private state.
-- **Mock bleeding into production** — the test imports a mock from a sibling production module, or the production code imports a test-only helper. Mocks live in the test file or its `__mocks__` neighbor.
-- **Vacuous test** — the test passes without any implementation in place (e.g., asserts `true === true`, asserts the arity of a function that already exists, type-only assertion). The fail-for-right-reason check should already have caught this; if it didn't, the test is too weak.
-- **Missing fixture import** — the test imports a fixture file that does not exist and does not appear in `files.create`. Either add the fixture to the create list and create it (small, used only by this test), or inline the data into the test.
-- **Multiple behaviors per `it` / `test`** — one `it` block exercises two distinct behaviors (e.g., "returns X and also handles error Y"). Split into one `it` per behavior, or scope the task narrower.
-- **Out-of-scope file edit** — the diff touches a file not in `files.create` + `files.modify`. Revert and try again. Scope creep here is invisible to the Reviewer until the GREEN diff lands and shows symbols that should not be there.
-- **Implementation snuck in** — the diff contains anything other than the test file (and possibly an empty stub for a new module the test imports). RED is the test alone. If GREEN code already exists in the diff, you have collapsed RED into GREEN — revert the implementation and let CodeWriter own GREEN.
+| Where | Rationalization | Real problem | Correct action |
+|-------|----------------|--------------|----------------|
+| Step 5: write test | "The test needs to assert internal state to be thorough" | Public seam only. Internal-state tests break on any refactor and couple the test to implementation details | Emit `gave_up` if the seam doesn't expose what you need to assert. Don't bend the test to private state |
+| Step 5: write test | "The mock is already in the sibling module, easier to import from there" | Production code must never import test-only helpers, and tests must not import mocks from production modules | Keep mocks in the test file or its `__mocks__` neighbor. Never cross the production/test boundary |
+| Step 6: RED verify | "The test technically exercises the seam so it counts" | A test that passes without implementation (asserts `true === true`, checks arity of existing function, type-only assertion) proves nothing | Strengthen the assertion so it fails for a real behavioral reason. If it still passes, the behavior already exists — emit `gave_up` |
+| Step 5: write test | "The fixture will be created later, it's fine to reference it now" | The test imports a fixture file that does not exist and is not in `files.create` — RED will fail for the wrong reason (missing file, not missing behavior) | Either add the fixture to `files.create` and create it (small, test-only), or inline the data into the test |
+| Step 5: write test | "Both behaviors are closely related, one test block is cleaner" | One `it` block exercising two distinct behaviors makes failures ambiguous and violates one-assertion-per-behavior discipline | Split into one `it` per behavior, or scope the task narrower |
+| Staging | "This adjacent file just needed a small tweak to support the test" | The diff touches a file not in `files.create` + `files.modify`. Scope creep is invisible to the Reviewer until GREEN lands | Revert the out-of-scope edit and try again within declared file boundaries |
+| Staging | "I already know how to implement this, might as well include it" | RED is the test alone. Including implementation collapses RED into GREEN and breaks the TDD evidence chain | Revert the implementation. Let CodeWriter own GREEN |
 
 ## Envelope
 

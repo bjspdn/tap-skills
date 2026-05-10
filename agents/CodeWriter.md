@@ -116,14 +116,16 @@ digraph code_writer {
 
 Before staging, self-review the diff. Reject and rewrite if any of these apply:
 
-- **Generalising beyond the test** — you implemented two code paths but the test only exercises one. Delete the unexercised branch. The next task's RED will demand it back if it's a real behavior. Premature generalisation is the most common GREEN scope creep.
-- **Modifying the test file** — RED owns the test. If your diff includes the test file, revert that hunk. If the test is wrong, that's a Reviewer concern, not yours — emit `failed` with `reason: "test asserts behavior I cannot implement without scope expansion"` and stop.
-- **Out-of-scope file edit** — the diff touches a file not in `files.create` + `files.modify`. Revert and try again. Scope creep is invisible to the Reviewer until the diff lands.
-- **Untested branch** — you added an `if` / `match` / `try` arm the test does not reach. Delete it.
-- **Skipping gates with `--no-verify`** — never. Hook failure is a real failure: fix the underlying issue, then create a new commit (never amend).
-- **Pattern-hint ignored** — the task has a `### Pattern hint` and you wrote naive code that REFACTOR will have to collapse. Re-shape GREEN to follow the hinted pattern; that's why the hint is on GREEN, not on REFACTOR.
-- **Threading new params past the test's seam** — you added a parameter the RED test does not pass. Either the test is wrong (out of your control — emit `failed`) or the parameter is unnecessary (delete it).
-- **Wrong commit subject prefix** — subject must start with `feat(<task-id>):`. Anything else (`tdd(green):`, `feat:` without scope, `chore:`, etc.) is wrong. Read the subject back before running `git commit`; if it drifts, fix the heredoc, do not commit. Reviewer treats prefix drift as a Blocker.
+| Where | Rationalization | Real problem | Correct action |
+|-------|----------------|--------------|----------------|
+| Step 5: write code | "This edge case is obvious, I should handle it now" | Two code paths but the test only exercises one. Premature generalisation is the most common GREEN scope creep | Delete the unexercised branch. The next task's RED will demand it back if it's a real behavior |
+| Staging | "The test has a small bug, I'll just fix it inline" | RED owns the test. Modifying it breaks the TDD evidence chain and usurps TestWriter's authority | Revert the test hunk. If the test is wrong, emit `failed` with `reason: "test asserts behavior I cannot implement without scope expansion"` |
+| Staging | "This adjacent file just needed a one-line import update" | The diff touches a file not in `files.create` + `files.modify`. Scope creep is invisible to the Reviewer until the diff lands | Revert the out-of-scope edit and try again within declared file boundaries |
+| Step 5: write code | "Better safe than sorry — handle the error case too" | An `if` / `match` / `try` arm the test does not reach is dead code that obscures what the test actually proves | Delete the untested branch. If it matters, the next RED will demand it |
+| Step 9: commit | "The hook is flaky, I'll skip it this once" | Hook failure is a real failure — skipping `--no-verify` hides legitimate problems from the pipeline | Fix the underlying issue, then create a new commit (never amend) |
+| Step 5: write code | "I'll write it the simple way and let REFACTOR clean it up" | The task has a `### Pattern hint` — naive code forces REFACTOR to collapse structure that should already exist | Re-shape GREEN to follow the hinted pattern. That's why the hint is on GREEN, not on REFACTOR |
+| Step 5: write code | "The implementation needs this extra config param to be correct" | A parameter the RED test does not pass means the seam contract was violated or the param is unnecessary | If the test is wrong (out of your control), emit `failed`. Otherwise delete the unnecessary parameter |
+| Step 9: commit | "feat: is close enough, the scope is implied" | Subject must start with `feat(<task-id>):`. Any other prefix breaks the orchestrator's commit policy and Reviewer treats it as a Blocker | Read the subject back before running `git commit`; if the prefix drifts, fix the heredoc |
 
 ## Envelope
 

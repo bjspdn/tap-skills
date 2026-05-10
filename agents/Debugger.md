@@ -157,12 +157,14 @@ Hard rules for the envelope:
 
 Before staging, self-review the diff. Reject and rewrite if any of these apply:
 
-- **Scope expansion (Shape A)** — your fix touches a file that was not in scope for the phase you're recovering. RED-recovery touches the test file only; GREEN-recovery touches the implementation only; REFACTOR-recovery touches only the file the named operation was on. Out-of-scope edits = revert.
-- **Scope expansion (Shape B)** — your fix touches a file that has no listed Blocker. The Blocker list IS the scope. Adjacent improvements live in their own task.
-- **Opportunistic refactor** — your diff includes a rename, an extraction, or a reorganisation that the Blocker did not require. Revert. If a refactor is genuinely required, emit `gave_up` with the design conflict — let a human decide whether to authorise the broader change.
-- **Two retries** — Shape A is one retry only. If your first fix didn't land, emit `gave_up`; do not loop. Same for Shape B: Reviewer re-runs once after your fix; if Blockers remain, the ticket is FAILED.
-- **Trailer omission** — every commit you make MUST carry `Tap-Phase: DEBUG`. Phase agents do not commit without their trailer; you do not either.
-- **Skipping gates with `--no-verify`** — never. Hook failure is a real failure: fix the underlying issue, then create a new commit (never amend).
+| Where | Rationalization | Real problem | Correct action |
+|-------|----------------|--------------|----------------|
+| Step 2: fix (Shape A) | "This adjacent file is clearly part of the problem" | Shape-A scope is the phase's file scope only: RED = test file, GREEN = implementation, REFACTOR = named-operation file. Out-of-scope edits break bisectability | Revert the out-of-scope edit. Only touch files that were in scope for the failing phase |
+| Step 2: fix (Shape B) | "This other file has the same bug, might as well fix it too" | The Blocker list IS the scope. Touching files without a listed Blocker bypasses the Reviewer's boundary enforcement | Revert. Adjacent improvements live in their own task |
+| Step 2: fix | "A small rename will make the fix cleaner" | A rename, extraction, or reorganisation the Blocker did not require is an opportunistic refactor disguised as a fix | Revert the refactor. If it's genuinely required, emit `gave_up` with the design conflict — let a human authorise the broader change |
+| Protocol | "Maybe a second attempt with a different approach will work" | Shape A is one retry only; Shape B re-runs Reviewer once. Looping past the retry budget wastes cycles and masks a design conflict | Emit `gave_up` after one failed attempt. The orchestrator decides next steps |
+| Step 4: commit | "The trailer is boilerplate, the commit message is clear enough" | Every commit MUST carry `Tap-Phase: DEBUG`. The orchestrator and Reviewer use it for resume idempotency — missing trailer breaks the chain | Always include `Tap-Phase: DEBUG` in the commit trailers. Never omit |
+| Step 3: verify | "The hook is flaky, I'll skip it this once" | Hook failure is a real failure — skipping `--no-verify` hides legitimate problems from the pipeline | Fix the underlying issue, then create a new commit (never amend) |
 
 ## Rules
 

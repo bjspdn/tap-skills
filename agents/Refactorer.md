@@ -119,13 +119,15 @@ digraph refactorer {
 
 Before staging, self-review the diff. Reject and rewrite if any of these apply:
 
-- **Behavior change** — the test from RED now needs adjustment, an assertion changes meaning, an error type narrows or widens, an output format shifts. REFACTOR is structure-only. New behavior belongs in a new task.
-- **Operation not in the spec** — the spec named `extract` and `rename`; you also reordered fields, swapped a `for` loop for `map`, or moved a constant to another file. Apply ONLY listed operations. Removing the unrequested ops is the right move.
-- **Scope creep into adjacent files** — the spec named one file; you "improved" three. Adjacent improvements live in their own task. Revert the unrelated changes.
-- **Public API rename without authorisation** — the spec authorises an internal rename; you renamed an exported symbol that has external consumers. Either the spec under-specified (emit `failed` with the conflict, do not invent the consumer migration) or the rename is internal-only — verify with grep before renaming exports.
-- **Vague cleanup** — "improved naming", "cleaned up imports", "simplified logic" appearing in the diff with no spec backing. The no-op clause exists for this. If the spec is silent, do nothing structural.
-- **Dead-code addition** — a refactor that introduces a new helper used only by one call site is not a refactor, it's an indirection. Inline back unless the spec explicitly asked for the extraction.
-- **Test file edits** — REFACTOR may rename a private symbol the test imported, in which case the test import line updates with it. But the test's assertions, fixtures, and structure stay identical. If the test's logic changes, you changed behavior.
+| Where | Rationalization | Real problem | Correct action |
+|-------|----------------|--------------|----------------|
+| Step 6: verify | "The test just needs a tiny tweak to match the new structure" | If the RED test needs adjustment, an assertion changes meaning, or an error type shifts, you changed behavior. REFACTOR is structure-only | Revert. New behavior belongs in a new task — not a refactor commit |
+| Step 5: apply | "While I'm here, this loop is better as a map" | The spec named specific operations; unrequested changes (field reorder, loop swap, constant relocation) are not authorised | Apply ONLY listed operations. Remove the unrequested ops |
+| Step 5: apply | "These adjacent files have the same problem, fixing them together is cleaner" | The spec named one file; improving three is scope creep that bypasses the Reviewer | Revert the unrelated changes. Adjacent improvements live in their own task |
+| Step 5: apply | "The rename is straightforward, external consumers will adapt" | An exported symbol with external consumers cannot be renamed without authorised consumer migration | Verify with grep before renaming exports. If external consumers exist, emit `failed` with the conflict — don't invent the migration |
+| Step 5: apply | "The naming is inconsistent, I'll clean it up" | Vague cleanup with no spec backing ("improved naming", "simplified logic") violates the named-operations-only rule | If the spec is silent, do nothing structural. The no-op clause exists for this |
+| Step 5: apply | "Extracting this helper will make the code more readable" | A new helper used by only one call site is indirection, not a refactor | Inline back unless the spec explicitly asked for the extraction |
+| Step 8: stage | "The test import changed because I renamed the symbol — that's fine" | REFACTOR may update a test import line for a renamed private symbol, but the test's assertions, fixtures, and structure must stay identical | If the test's logic changes, you changed behavior — revert the structural change that caused it |
 
 ## Envelope
 
