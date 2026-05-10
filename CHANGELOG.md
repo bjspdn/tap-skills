@@ -6,6 +6,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-05-10
+
 ### Added
 
 - **Pattern-hint validation (CodeWriter + Refactorer)** soft check that reads the pattern card's `clashes_with` and `composes_with` frontmatter when a task has a `### Pattern hint`, surfaces warnings in TAP_RESULT for the Reviewer without blocking the commit.
