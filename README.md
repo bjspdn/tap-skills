@@ -74,15 +74,15 @@ The script reads `.version-bump.json` for the list of files that carry a version
 
 ## Skills
 
-| Skill        | Command         | What it does                                                                                                                                                   |
-| --------------| -----------------| ----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **into**     | `/tap:into`     | Brainstorming partner. Explores codebase + web in parallel, challenges assumptions, converges on a well-specified ticket at `.tap/tickets/<slug>/ideation.md`. |
-| **convey**   | `/tap:convey`   | Decomposes an `ideation.md` into vertical-slice TDD task files (`task-NN-*.md`) ready for execution.                                                           |
-| **run**      | `/tap:run`      | Executes decomposed tasks through a wave-parallel TDD pipeline — worktree per ticket, RED/GREEN/REFACTOR phase agents, commit trailers, auto-retry on failure. |
-| **sketch**   | `/tap:sketch`   | Rapid single-behavior TDD prototype. No tickets, no worktree — runs RED/GREEN/REFACTOR directly on current branch for changes touching 1–3 files.              |
-| **research** | `/tap:research` | Deep multi-hop research on any technical topic. Cross-references sources, emits structured artifact at `.tap/research/<topic-slug>.md`.                        |
-| **refactor** | `/tap:refactor` | Aggressive structural refactoring targeting 80% reduction in countable lines without behavior change. Splits monoliths into focused submodules.                |
-| **retro**    | `/tap:retro`    | Post-mortem of completed runs. Extracts commit trailers, classifies failures, computes per-agent metrics, builds rolling aggregate profile.                    |
+| Skill        | Command         | What it does                                                                                                                                                                                                                |
+| --------------| -----------------| -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **into**     | `/tap:into`     | Brainstorming partner. Explores codebase + web in parallel, challenges assumptions, converges on a well-specified ticket at `.tap/tickets/<slug>/ideation.md`.                                                              |
+| **convey**   | `/tap:convey`   | Decomposes an `ideation.md` into vertical-slice TDD task files (`task-NN-*.md`) ready for execution.                                                                                                                        |
+| **run**      | `/tap:run`      | Executes decomposed tasks through a wave-parallel TDD pipeline — worktree per ticket, RED/GREEN/REFACTOR phase agents, commit trailers, auto-retry on failure.                                                              |
+| **sketch**   | `/tap:sketch`   | Rapid single-behavior TDD prototype. No tickets, no worktree — runs RED/GREEN/REFACTOR directly on current branch for changes touching 1–3 files.                                                                           |
+| **research** | `/tap:research` | Deep multi-hop research on any technical topic. Cross-references sources, emits structured artifact at `.tap/research/<topic-slug>.md`.                                                                                     |
+| **refactor** | `/tap:refactor` | Aggressive structural refactoring targeting 80% reduction in countable lines without behavior change. Splits monoliths into focused submodules.                                                                             |
+| **retro**    | `/tap:retro`    | Post-mortem of completed runs. Extracts commit trailers, classifies failures, computes per-agent metrics, builds rolling aggregate profile.                                                                                 |
 | **health**   | `/tap:health`   | Validates `.tap/` directory integrity: detects stale worktrees, orphaned lockfiles, incomplete tickets, stale branches, and profile corruption. Reports a summary table and offers safe auto-repair with user confirmation. |
 
 
@@ -119,3 +119,10 @@ Run validation manually:
 ## License
 
 MIT
+
+
+
+TODO:
+- Remove instant spawn of tap:convey -> Probe the user to read the file first.
+- Ban biases toward AskUserQuestion -> disallow the tool entirely. 
+- Probe Claude to find article about psychology applied to LLMs for skills writing and such
