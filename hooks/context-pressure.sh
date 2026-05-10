@@ -3,6 +3,9 @@
 # Reads last assistant turn's token usage from transcript.
 # Thresholds grounded on 200K effective budget regardless of model window.
 
+# Only fire in repos with an active .tap/ directory
+[ -d ".tap" ] || exit 0
+
 INPUT=$(cat)
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path')
 

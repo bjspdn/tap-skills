@@ -10,8 +10,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **Ambient stub detection** `tap:into` now picks up tangential ideas during any brainstorming phase. When engineer mentions a related feature or "we should also handle X," orchestrator offers to stub it as a deferred ticket. On confirmation, dispatches StubWriter subagent in background — no context bloat, no flow interruption. Constraint, anti-rationalization row, and dispatch shape added.
 
+### Changed
+
+- Moved `IndependentAuditor` effort from medium to high.
+
 ### Fixed
 
+- **Context pressure hook scoped to tap repos** added `.tap/` directory guard so the hook exits early in repos without an active tap workspace. Prevents unintended injection when the plugin is installed globally.
 - **Decomposition stub enforcement** added stub verification gate to `tap:into` RUN_FLOW step 6 — `ls .tap/tickets/` must match full decomposition roadmap before advancing to approach selection. Added anti-rationalization row for "I'll stub the other tickets later" to prevent deferred tickets from existing only in conversation memory.
 
 ## [0.5.1] - 2026-05-10

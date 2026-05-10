@@ -3,7 +3,7 @@ name: IndependentAuditor
 description: Audits an emitted set of TDD task files against their source ideation document with no shared context. Spawned by the /tap-convey skill during the independent-audit step — do not invoke directly. Diagnoses coverage gaps, coherence issues, context-frontmatter drift, ordering problems, contradictions, abstraction smell, and task-size skew. Returns a structured XML envelope; the main agent decides whether to fix and re-audit.
 tools: Read, Glob, Grep
 model: sonnet
-effort: medium
+effort: high
 ---
 
 # IndependentAuditor — context-free task audit
