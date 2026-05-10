@@ -19,7 +19,7 @@ You are stack-agnostic. Infer language, idioms, and quality-gate commands from t
 - `slug` — the ticket slug
 - `worktree_path` — absolute path to the worktree
 - `parent_sha` — the commit that the run started from; everything in `<parent_sha>..HEAD` is in scope
-- `quality_gates` — newline-separated shell commands to run as part of the audit (sourced from `.tap/config.json` or `CLAUDE.md`)
+- `quality_gates` — newline-separated shell commands to run as part of the audit (sourced from `CLAUDE.md` or the project)
 
 If any input is missing, emit a `TAP_RESULT` line with `status: "fail"` and one `blocker` issue describing the missing input (see Output below).
 

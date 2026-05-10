@@ -40,13 +40,6 @@ Confirm the change is small enough for sketch. Sketch handles ONE behavior touch
 
    If no manifest matches, ask: "What command runs the test suite scoped to a single file?"
 
-5. **Resolve quality gates.** Check in order:
-   - `.tap/config.json` → `qualityGates` array
-   - `CLAUDE.md` → `## Quality gates` section
-   - If neither exists, ask the user: "What quality gate commands should pass before each commit? (e.g., typecheck, lint, build, test)"
-
-   Capture as `$QUALITY_GATES` (JSON array of shell commands).
-
 ### Done
 
 Scope is validated: one behavior, at most 3 files, test command resolved, quality gates resolved.

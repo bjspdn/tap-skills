@@ -77,8 +77,7 @@ For each projected change (new param, new injectable, new service dependency), t
     <hop n='2' file='TicketRunner.ts'
          role='has loadTapConfig in scope but result is not threaded to ctx'
          has-access='partial' />
-    <data-source file='loadTapConfig.ts'
-                 role='loads config.json — origin of qualityGates array' />
+
   </provider-chain>
 </integration-map>
 <warnings>

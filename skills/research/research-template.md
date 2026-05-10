@@ -54,12 +54,12 @@ Areas where sources have not converged — multiple valid approaches coexist.
 
 ### [Approach A] vs [Approach B]
 
-| Dimension | [Approach A] | [Approach B] |
-|-----------|-------------|-------------|
-| When to use | | |
-| Tradeoff | | |
-| Adoption signal | | |
-| Key advocate/source | | |
+| Dimension           | [Approach A] | [Approach B] |
+|---------------------|--------------|--------------|
+| When to use         |              |              |
+| Tradeoff            |              |              |
+| Adoption signal     |              |              |
+| Key advocate/source |              |              |
 
 [Brief analysis of when each approach fits. No recommendation — present the
 decision factors.]
@@ -74,20 +74,20 @@ How the current project relates to research findings.
 
 ### Follows
 
-| Finding | Evidence |
-|---------|---------|
+| Finding        | Evidence                     |
+|----------------|------------------------------|
 | [Finding name] | `file:line` — [what it does] |
 
 ### Diverges
 
-| Finding | Current Approach | Evidence |
-|---------|-----------------|---------|
+| Finding        | Current Approach                 | Evidence    |
+|----------------|----------------------------------|-------------|
 | [Finding name] | [What the codebase does instead] | `file:line` |
 
 ### Absent
 
-| Finding | Where It Would Apply |
-|---------|---------------------|
+| Finding        | Where It Would Apply                             |
+|----------------|--------------------------------------------------|
 | [Finding name] | [Which part of the codebase this is relevant to] |
 
 ### Local Conventions
@@ -105,29 +105,29 @@ How sources relate to each other on key claims.
 
 ### Consensus
 
-| Finding | Agreeing Sources |
-|---------|-----------------|
+| Finding        | Agreeing Sources     |
+|----------------|----------------------|
 | [Finding name] | [source1], [source2] |
 
 ### Contradictions
 
-| Finding | Source A says | Source B says | Likely reason |
-|---------|-------------|-------------|---------------|
-| [Claim] | [Position] | [Position] | [version diff, context diff, etc.] |
+| Finding | Source A says | Source B says | Likely reason                      |
+|---------|---------------|---------------|------------------------------------|
+| [Claim] | [Position]    | [Position]    | [version diff, context diff, etc.] |
 
 ### Single-source claims
 
-| Finding | Source | Note |
-|---------|--------|------|
-| [Claim] | [URL] | Confidence capped at Probable |
+| Finding | Source | Note                          |
+|---------|--------|-------------------------------|
+| [Claim] | [URL]  | Confidence capped at Probable |
 
 ---
 
 ## Confidence Map
 
-| Claim | Confidence | Source Count | Recency |
-|-------|-----------|-------------|---------|
-| [Claim summary] | Established / Probable / Uncertain | [N] | [newest source year] |
+| Claim           | Confidence                         | Source Count | Recency              |
+|-----------------|------------------------------------|--------------|----------------------|
+| [Claim summary] | Established / Probable / Uncertain | [N]          | [newest source year] |
 
 ---
 
@@ -143,9 +143,9 @@ new for consensus, or answer depends on context only the user can provide.]
 
 ## Sources
 
-| Source | Type | Relevance |
-|--------|------|-----------|
-| [URL] | docs / RFC / paper / spec / blog / discussion / repo / wiki | [one-line why it mattered] |
+| Source | Type                                                        | Relevance                  |
+|--------|-------------------------------------------------------------|----------------------------|
+| [URL]  | docs / RFC / paper / spec / blog / discussion / repo / wiki | [one-line why it mattered] |
 ```
 
 ---

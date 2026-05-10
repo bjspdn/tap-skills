@@ -6,6 +6,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Removed trace of old `config.json` file.
+- Removed `/tap:along` skill.
+
 ## [0.2.0] - 2026-05-10
 
 ### Added

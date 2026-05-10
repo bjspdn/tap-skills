@@ -9,7 +9,7 @@ WebSearch uses the **Brave Search API**, not Google. Most Google dork operators 
 ## Operator reference
 
 | Operator             | Status | Notes                                                |
-|----------------------|--------|------------------------------------------------------|
+| ----------------------| --------| ------------------------------------------------------|
 | `site:domain.com`    | works  | With plain keywords. Don't stack with exact phrases. |
 | `"exact phrase"`     | works  |                                                      |
 | `-term`              | works  |                                                      |

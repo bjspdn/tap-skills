@@ -1,6 +1,6 @@
 # tap
 
-Claude Code plugin for **TDD-driven, design-pattern-aware development with subagent spawning**.
+Claude Code plugin for **TDD/Subagent-driven, design-pattern-aware development**.
 
 Bundles a coordinated pipeline that takes a feature idea from whiteboard to merged-and-reviewed code:
 
@@ -8,18 +8,14 @@ Bundles a coordinated pipeline that takes a feature idea from whiteboard to merg
 - **Decomposition** of the ticket into vertical-slice TDD tasks
 - **Wave-parallel execution** of those tasks via dedicated phase agents (RED → GREEN → REFACTOR)
 - **Independent review** of the final diff against the spec
-- **Recovery** when phases fail or the reviewer finds blockers
-- **Aggressive structural refactoring** as a separate, opt-in pass
-- **Whiteboard-style guidance** when the human is the one writing code
-- **Deep research** into libraries, algorithms, or protocols when a knowledge gap surfaces
+- **Debugging** when phases fail or the reviewer finds blockers
 - **Post-run analytics** over collected logs
 
 A 97-card design-pattern catalog (GoF + Fowler refactorings) sits at plugin root and is consumed by every skill that needs to name a structural shape.
 
-
 ## Install
 
-This plugin is **not** on the official Anthropic marketplace. Install directly from the GitHub repo:
+Install directly from the GitHub repo:
 
 ```bash
 /plugin marketplace add bjspdn/tap-skills
@@ -41,7 +37,7 @@ Update later:
 
 ## How to use it
 
-The primary way to use this set of skills/agent is to first start with `/tap:into` to get a brainstorming session going. 
+The primary way to use this set of skills/agents is to first start with `/tap:into` to get a brainstorming session going. 
 It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.md will then be used by `/tap:convey` to decompose it into tasks at the same location. Once everything is done and settled, run `/tap:run` to run the TDD cycle.
 
 
@@ -63,53 +59,6 @@ It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.m
 The script reads `.version-bump.json` for the list of files that carry a version field. It guards against empty changelogs (document changes under `[Unreleased]` in `CHANGELOG.md` before bumping) and dirty working trees.
 
 
-## Subagent spawning from skills — how it actually works
-
-A skill is a markdown file at `skills/<name>/SKILL.md`. An agent is a markdown file at `agents/<Name>.md`. To spawn an agent from inside a skill, the skill's body includes a literal `Agent(...)` invocation template that Claude follows when running the skill. Claude is the one issuing the actual tool call; the skill body is the recipe.
-
-**Agent file** (from `agents/TestWriter.md`):
-
-```markdown
----
-name: TestWriter
-description: Writes the failing test for one TDD task — RED phase. Spawned by the /tap-run skill — do not invoke directly.
-tools: Read, Edit, Write, Bash, Glob, Grep
-model: sonnet
-effort: low
----
-
-# TestWriter — RED phase
-
-You write the failing test for one TDD task. You commit the test alone, no implementation. ...
-```
-
-**Skill template that spawns it** (from `skills/into/SKILL.md`, simplified):
-
-````markdown
-Agent(
-  subagent_type: "Explore",
-  description: "<3-5 word task summary>",
-  prompt: "Research <topic> for <reason> with the WebSearch & WebFetch tools.
-           Use the [dorks](dorks.md) for query construction.
-           Cross-reference findings across sources.
-           ---
-           Return your findings following this structure: ..."
-)
-````
-
-When Claude runs the skill, it parses that template, substitutes the slots, and emits an actual `Agent` tool call with the same shape. The agent file's frontmatter `name` field is what `subagent_type` matches against.
-
-This pattern is used throughout the plugin:
-
-- `skills/into/SKILL.md` — spawns multiple `Explore` and `general-purpose` agents in parallel during ideation
-- `skills/convey/SKILL.md` — spawns dependency-scan + pattern-scan + independent-audit agents
-- `skills/research/SKILL.md` — spawns 1–3 hop agents per research iteration
-- `skills/run/SKILL.md` — orchestrates `TestWriter`, `CodeWriter`, `Refactorer`, `Reviewer`, `Debugger` per task per wave (orchestration logic in the colocated `RUN_FLOW.md`)
-
-The fan-out + fan-in pattern (parallel `Agent` tool uses in a single message, then join on results) is how the wave-parallel execution actually achieves parallelism.
-
----
-
 ## Local dev
 
 ```bash
@@ -127,25 +76,17 @@ claude --plugin-dir ./tap-skills --plugin-dir ./other-plugin
 ```
 
 
-## Distribution
+## Skills
 
-Three install paths users can choose between:
-
-```bash
-# GitHub shorthand (requires marketplace.json in the repo)
-/plugin marketplace add owner/repo
-
-# Any git URL, optional tag pin
-/plugin marketplace add https://gitlab.com/co/plugins.git
-/plugin marketplace add git@github.com:user/repo.git#v1.0.0
-
-# Hosted marketplace.json
-/plugin marketplace add https://example.com/marketplace.json
-```
-
-Then: `/plugin install <plugin-name>@<marketplace-name>`.
-
-For this repo: `/plugin marketplace add bjspdn/tap-skills` then `/plugin install tap@tap`.
+| Skill        | Command         | What it does                                                                                                                                                   |
+|--------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **into**     | `/tap:into`     | Brainstorming partner. Explores codebase + web in parallel, challenges assumptions, converges on a well-specified ticket at `.tap/tickets/<slug>/ideation.md`. |
+| **convey**   | `/tap:convey`   | Decomposes an `ideation.md` into vertical-slice TDD task files (`task-NN-*.md`) ready for execution.                                                           |
+| **run**      | `/tap:run`      | Executes decomposed tasks through a wave-parallel TDD pipeline — worktree per ticket, RED/GREEN/REFACTOR phase agents, commit trailers, auto-retry on failure. |
+| **sketch**   | `/tap:sketch`   | Rapid single-behavior TDD prototype. No tickets, no worktree — runs RED/GREEN/REFACTOR directly on current branch for changes touching 1–3 files.              |
+| **research** | `/tap:research` | Deep multi-hop research on any technical topic. Cross-references sources, emits structured artifact at `.tap/research/<topic-slug>.md`.                        |
+| **refactor** | `/tap:refactor` | Aggressive structural refactoring targeting 80% reduction in countable lines without behavior change. Splits monoliths into focused submodules.                |
+| **retro**    | `/tap:retro`    | Post-mortem of completed runs. Extracts commit trailers, classifies failures, computes per-agent metrics, builds rolling aggregate profile.                    |
 
 
 ## Pattern catalog API
