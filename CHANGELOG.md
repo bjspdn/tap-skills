@@ -6,6 +6,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-05-10
+
 ### Changed
 
 - **`tap:into` handoff** replaced auto-invoke of `Skill(tap:convey)` with engineer prompt to read the emitted ideation.md first, then manually invoke `/tap:convey <slug>`. Updated SKILL.md next-step, RUN_FLOW.md digraph node + runbook step 15.
