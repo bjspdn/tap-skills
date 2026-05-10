@@ -15,6 +15,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`tap:into` RUN_FLOW.md** operational source of truth with full lifecycle digraph, 16-step runbook, four named checkpoints (CP:UNDERSTAND, CP:SYNTHESIS, CP:APPROACHES, CP:PRESENTATION), bidirectional understanding↔ideation loops, decompose-then-pick flow, two-pass convergence gate (agent mechanical pre-check + human subjective confirm), and ConvergenceChecker dispatch shape.
 - **`tap:into` anti-rationalization table** 12 named lazy shortcuts the agent must not produce, each with the real problem and correct action.
 - **`tap:run` anti-rationalization table** 14 named shortcuts covering preflight through retro — prevents the orchestrator from skipping gates, inferring TAP_RESULT, serializing parallel dispatch, or doing agent work itself.
+- **`tap:convey` anti-rationalization table** 14 named shortcuts covering ingestion through emission — prevents skipping dependency/pattern scans, horizontal slicing, vague REFACTOR actions, placeholder tokens, and skipping the independent audit.
 
 ### Changed
 
