@@ -219,7 +219,7 @@ Wait for user's approval before committing anything. Probe the user to tell you,
 
 Check if the ideation.md + tickets have been commited, if that's not the case: commit the tickets created + ideation.md under `docs({slug}): {description}`.
 
-**Done when**: All tasks emitted, self-review passed, summary surfaced to the user & tickets committed.
+**Done when**: All tasks emitted, self-review passed, tickets committed, summary surfaced to the user.
 
 ## General rules
 
@@ -233,4 +233,9 @@ Check if the ideation.md + tickets have been commited, if that's not the case: c
 
 The planning phase is now over. Every tickets have been created under `.tap/tickets/{slug}/*`.
 
-Surface to the user that he can now can launch the command `tap run {slug}` in a separate terminal to let the agents pick up the work.
+Surface the two paths ahead of the user and wait for them to choose
+- A: Invoke the tap run skill directly within this session.
+- B: Invoke the tap run skill in a separate session. 
+
+If A: Spawn the Skill(tap:run) immediately.
+If B: instruct the user to run `/tap:run <slug>` in a separate session 

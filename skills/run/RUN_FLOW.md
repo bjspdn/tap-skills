@@ -39,7 +39,9 @@ digraph tap_run {
 
   merge      [label="orchestrator: integrate\n• rebase onto parent\n• ff-merge into parent\n• git mv slug → done/\n• delete worktree + branch"];
 
-  finish     [label="summary table\nDONE", shape=doublecircle];
+  summary    [label="summary table"];
+  retro      [label="Skill(tap:retro)"];
+  finish     [label="DONE", shape=doublecircle];
 
   start     -> preflight -> discovery -> planning;
   planning  -> finish     [label="reject"];
@@ -67,7 +69,9 @@ digraph tap_run {
   debug_b   -> review     [label="ok\n(rerun Reviewer once)"];
   debug_b   -> finish     [label="gave_up\n(ticket FAILED)"];
   merge     -> ticket_in  [label="next ticket"];
-  ticket_in -> finish     [label="all tickets done"];
+  ticket_in -> summary    [label="all tickets done"];
+  summary   -> retro      [label="summary surfaced"];
+  retro     -> finish;
 }
 ```
 
@@ -81,7 +85,8 @@ digraph tap_run {
 6. **Phase failure handling.** Any `TAP_RESULT.status == "failed"` → dispatch Debugger Shape A once for that task (same phase). On Shape A `ok`, re-dispatch the original phase. On Shape A `gave_up`, branch via the Phase failure branches table.
 7. **After all waves.** If survivors ≥ 2, dispatch Reviewer once. On `pass` (or `fail` with only `Warning`/`minor`) → step 8. On `fail` with ≥1 `Blocker`, dispatch Debugger Shape B with the blocker list, then rerun Reviewer ONCE. If Reviewer still returns Blockers → ticket FAILED, leave worktree, advance to next ticket. Survivors < 2 → skip Reviewer.
 8. **Integrate.** `git -C <wt> rebase <parent_sha>` onto the main branch's tip; `git -C <main> merge --ff-only tap-<slug>`; `git -C <main> mv .tap/tickets/<slug> .tap/tickets/done/<slug>`; `git -C <main> commit -m "docs: move <slug> to done"`; `git -C <main> merge --ff-only tap-<slug>` again to keep parity; `git -C <main> worktree remove .tap/worktrees/<slug>`; `git -C <main> branch -D tap-<slug>`. Rebase conflict → halt ticket, leave worktree, advance.
-9. **Next ticket.** After every ticket: render summary table — per-ticket OK/FAILED/SKIPPED, total commits, elapsed wall time. Stop.
+9. **Next ticket.** After every ticket: render summary table — per-ticket OK/FAILED/SKIPPED, total commits, elapsed wall time.
+10. **Retro.** After the summary table has been surfaced to the user and all commits are final, invoke `Skill(tap:retro)`. This is the last action of the run — nothing follows it.
 
 ## Wave inference
 

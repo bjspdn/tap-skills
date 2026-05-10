@@ -1,15 +1,13 @@
 ---
 name: into
-description: Brainstorming partner that drives deep discussion about an idea before any code is written. Through natural conversation, explores the codebase and the web in parallel, challenges assumptions, and converges on a single well-specified ticket with structured description. Use when user invokes `/tap-into`, says "brainstorm", "let's think through X", "scope this out", "I want to build X but let's talk first", or has a `.tap/` directory and a feature ask they want to explore before committing.
+description: Brainstorming partner that drives deep discussion about an idea before any code is written. Through natural conversation, explores the codebase and the web in parallel, challenges assumptions, and converges on a single well-specified ticket with structured description. Use when engineer invokes `/tap-into`, says "brainstorm", "let's think through X", "scope this out", "I want to build X but let's talk first", or has a `.tap/` directory and a feature ask they want to explore before committing.
 ---
 
 ## Phase: understanding
 
-### Purpose
+**Purpose:** Understand the current project's context. First, follow the steps, wait for each Agent to finish their explorations, then ask questions to the engineer one at the time to refine the idea provided.
 
-Understand the current project's context. First, follow the steps, wait for each Agent to finish their explorations, then ask questions to the user one at the time to refine the idea provided.
-
-Once you understand what you're building, present the design intent & wait for the user's approval before continuing to the Phase: ideation.
+Once you understand what you're building, present the design intent & wait for the engineer's approval before continuing to the Phase: ideation.
 
 You can spawn as many Agents of each of these types as you want: Step: websearch, Step: codebase_exploration & Step: patterns_discovery, depending on the complexity. If for example you need 2 "codebase_exploration" agents, 2 "patterns_discovery" agents & 2 "websearch" agents for a feature, that's fine. It doesn't have to be locked at specifically 3 agents.
 Each and everyone of them should be contained to their own tasks:
@@ -62,18 +60,18 @@ After all websearch / codebase_exploration / patterns_discovery agents return, c
 
 - patterns_discovery recommends pattern X; codebase_exploration shows pattern X is not used in repo
 - websearch finds community recommends approach A; codebase_exploration shows neighbors use approach B
-- patterns_discovery surfaces an anti-pattern in the topic area; the user's stated approach reproduces it
+- patterns_discovery surfaces an anti-pattern in the topic area; the engineer's stated approach reproduces it
 
-For each contradiction, surface to the user as a multi-choice question: "Agents disagree on {topic}. Source X says <claim X>, source Y says <claim Y>. Which holds for this feature?" Resolve before moving to Phase: ideation.
+For each contradiction, surface to the engineer as a multi-choice question: "Agents disagree on {topic}. Source X says <claim X>, source Y says <claim Y>. Which holds for this feature?" Resolve before moving to Phase: ideation.
 
 If zero contradictions found, state that explicitly and proceed.
 
 ### Step: assumption-audit
 
-List every premise the user stated during the back-at-it / understanding conversation as a bullet. For each premise, mark one of:
+List every premise the engineer stated during the understanding conversation as a bullet. For each premise, mark one of:
 - `verified` — codebase or web findings confirm it
-- `contradicted` — findings show it is false (surface to user, force re-evaluation)
-- `unverifiable` — no source either way (surface to user, ask if a quick spike is needed before ideation)
+- `contradicted` — findings show it is false (surface to engineer, force re-evaluation)
+- `unverifiable` — no source either way (surface to engineer, ask if a quick spike is needed before ideation)
 
 Examples of premises to audit: "X is impossible without Y", "we already use pattern Z", "library W doesn't support this", "the team agreed to constraint C".
 
@@ -85,10 +83,12 @@ This phase ends when every agent has returned consistent data across all three s
 
 ## Phase: ideation
 
-**Purpose**: Deep conversation & collaboration with the user to create a ideation.md file that crystallize every decision made.
+**Purpose**: Deep conversation & collaboration with the engineer to create a ideation.md file that crystallize every decision made.
 
 Based on the findings returned by Step: websearch, Step: codebase_exploration & Step: patterns_discovery, proceed with the ideation by writing a new ticket following the [ideation template](ideation-template.md) at `.tap/tickets/{slug}/ideation.md`. You don't have all the information yet, that is to be expected. The ideation will help filling in the gaps.
-Do not invent informations that you don't yet have because false information is worse than no information at all. Do no rush convergence on this phase.
+Do not invent informations that you don't yet have because false information is worse than no information at all. 
+
+**Critical**: Do no rush convergence, let the engineer drive the conversation but help them along the way. You're thinking partners. The engineer doesn't know what he wants quite yet, the purpose of this phase is to fix that.
 
 ### Step: assess
 
@@ -96,9 +96,9 @@ Assess the scope first before asking any questions because if a description maps
 
 ### Step: decomposition
 
-If a scope is too large for a single ticket, help the user decompose into sub-tickets through the normal Ideation flow. Each scope gets its own ticket & tap run lifecycle.
+If a scope is too large for a single ticket, help the engineer decompose into sub-tickets through the normal Ideation flow. Each scope gets its own ticket & tap run lifecycle.
 
-**Stub deferred tickets immediately.** Once the user confirms the decomposition, create a minimal `ideation.md` for each deferred ticket BEFORE diving into the first ticket's full ideation. This ensures nothing falls through the cracks — `ls .tap/tickets/` always shows the full roadmap.
+**Stub deferred tickets immediately.** Once the engineer confirms the decomposition, create a minimal `ideation.md` for each deferred ticket BEFORE diving into the first ticket's full ideation. This ensures nothing falls through the cracks — `ls .tap/tickets/` always shows the full roadmap.
 
 Stub format:
 ```markdown
@@ -122,9 +122,9 @@ The stub is intentionally minimal — it preserves context from the decompositio
 
 ### Step: questioning
 
-Ask questions one at the time. Lead with open, free-form prompts because this phase is a brainstorm, not an interview — the user needs latitude to riff, contradict themselves, surface concerns the schema didn't anticipate. Phrase as discussion: "talk me through X", "what's your gut on Y", "where does this break for you", "what would have to be true for Z to work".
+Ask questions one at the time. Lead with open, free-form prompts because this phase is a brainstorm, not an interview — the engineer needs latitude to riff, contradict themselves, surface concerns the schema didn't anticipate. Phrase as discussion: "talk me through X", "what's your gut on Y", "where does this break for you", "what would have to be true for Z to work".
 
-Reserve `AskUserQuestion` (multi-choice) for genuine fork-in-road moments where the option set is finite AND the user benefits from seeing alternatives laid out:
+Reserve `AskUserQuestion` (multi-choice) for genuine fork-in-road moments where the option set is finite AND the engineer benefits from seeing alternatives laid out:
 - Picking among the 2-5 approaches surfaced in Step: approaches
 - Resolving a contradiction surfaced in Step: synthesis
 - Marking a premise verified / contradicted / unverifiable in Step: assumption-audit
@@ -149,18 +149,18 @@ Present them like the following:
 
 ### Step: two-impl-check
 
-After the user picks an approach, ask yourself: could two engineers reading this approach produce two materially different implementations that both satisfy the description? If yes, the approach has a hole. Walk through the FLOW step-by-step and identify which step admits multiple valid interpretations. Tighten the wording, pin the choice, or surface as an `OPEN:` decision. Repeat until the approach reads as one implementation, not a family.
+After the engineer picks an approach, ask yourself: could two engineers reading this approach produce two materially different implementations that both satisfy the description? If yes, the approach has a hole. Walk through the FLOW step-by-step and identify which step admits multiple valid interpretations. Tighten the wording, pin the choice, or surface as an `OPEN:` decision. Repeat until the approach reads as one implementation, not a family.
 
 ### Step: presentation
 
-Once you believe that you understand the design, surface it to the user. for each section, scale the explanation based on its complexity and propose design patterns surfaced in Step: patterns_discovery that could match.
+Once you believe that you understand the design, surface it to the engineer. for each section, scale the explanation based on its complexity and propose design patterns surfaced in Step: patterns_discovery that could match.
 For each section, ask if its looks right or not.
 Each section should cover architecture, components and/or modules, data flow, how errors are handled and test cases.
-This is the step where you have to be ready to go back and forth with the user until you've converged.  That's to be expected.
+This is the step where you have to be ready to go back and forth with the engineer until you've converged.  That's to be expected.
 
 #### Done
 
-Before invoking Next step, run the convergence check. Surface this checklist to the user verbatim and require explicit "yes" on each row before emitting the final ticket:
+Before invoking Next step, run the convergence check. Surface this checklist to the engineer verbatim and require explicit "yes" on each row before emitting the final ticket:
 
 - [ ] `## Approach` — `PATTERN:` named (not blank)
 - [ ] `## Approach` — `FLOW:` has ≥3 numbered steps
@@ -186,17 +186,17 @@ General flow of the ideation process:
     "Gaps in required sections?" [shape=diamond];
     "Ask clarifying questions\n" [shape=box];
     "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" [shape=box];
-    "User picks approach?" [shape=diamond];
+    "Engineer picks approach?" [shape=diamond];
     "Fill ## Intent, ## Context,\n## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries" [shape=box];
     "Two-implementations test\n(can two valid builds satisfy?)" [shape=diamond];
     "Tighten ambiguity\n(pin the choice)" [shape=box];
     "Present design sections" [shape=box];
-    "User approves design?" [shape=diamond];
+    "Engineer approves design?" [shape=diamond];
     "Emit ticket to\n.tap/tickets/<slug>/ideation.md" [shape=box];
     "ticket self-review\n(schema + ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources)" [shape=box];
     "Issues found?" [shape=diamond];
     "Fix inline" [shape=box];
-    "User reviews ticket?" [shape=diamond];
+    "Engineer reviews ticket?" [shape=diamond];
     "Emit final ticket emission following the [ideation template](ideation-template.md)" [shape=doublecircle];
     "Synthesize Explore results\n(websearch + codebase + patterns)"
       -> "Draft ticket skeleton\n(known sections only,\nno invented info)"
@@ -204,21 +204,21 @@ General flow of the ideation process:
     "Gaps in required sections?" -> "Ask clarifying questions\n" [label="yes"];
     "Ask clarifying questions\n" -> "Gaps in required sections?";
     "Gaps in required sections?" -> "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" [label="no"];
-    "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" -> "User picks approach?";
-    "User picks approach?" -> "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" [label="reject all,\nmore options"];
-    "User picks approach?" -> "Fill ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources" [label="picks one"];
+    "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" -> "Engineer picks approach?";
+    "Engineer picks approach?" -> "Propose 2-3 approaches\n(grounded in patterns scan +\nneighboring conventions)" [label="reject all,\nmore options"];
+    "Engineer picks approach?" -> "Fill ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources" [label="picks one"];
     "Fill ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries" -> "Two-implementations test\n(can two valid builds satisfy?)";
-    "Present design sections" -> "User approves design?";
-    "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Emit ticket to\n.tap/tickets/<slug>/ideation.md" [label="yes"];
+    "Present design sections" -> "Engineer approves design?";
+    "Engineer approves design?" -> "Present design sections" [label="no, revise"];
+    "Engineer approves design?" -> "Emit ticket to\n.tap/tickets/<slug>/ideation.md" [label="yes"];
     "Emit ticket to\n.tap/tickets/<slug>/ideation.md"
       -> "ticket self-review\n(schema + ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources)"
       -> "Issues found?";
     "Issues found?" -> "Fix inline" [label="yes"];
     "Fix inline" -> "ticket self-review\n(schema + ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources)";
-    "Issues found?" -> "User reviews ticket?" [label="no"];
-    "User reviews ticket?" -> "Fill ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources" [label="changes requested"];
-    "User reviews ticket?" -> "Emit final ticket emission following the [ideation template](ideation-template.md)" [label="approved"];
+    "Issues found?" -> "Engineer reviews ticket?" [label="no"];
+    "Engineer reviews ticket?" -> "Fill ## Approach, ## Signatures,\n## Error design, ## Constraints,\n## Boundaries, ## Open decisions,\n## Considered & rejected, ## Failure modes,\n## Sources" [label="changes requested"];
+    "Engineer reviews ticket?" -> "Emit final ticket emission following the [ideation template](ideation-template.md)" [label="approved"];
   }
 ```
 
@@ -227,8 +227,8 @@ The final state is a fully fledged ticket containing everyting that has been dis
 ## General rules
 
 These rules apply accross all phases & steps:
-  - Always ask one question at a time because more than one question will overwhelm the user.
-  - Always prefer free-form questions over multi-choice questions because brainstorming needs latitude — a finite option set constrains the conversation before the user has surfaced their full thinking. Use multi-choice (`AskUserQuestion`) only when the decision is genuinely binary/finite (approach pick, contradiction resolution, premise audit).
+  - Always ask one question at a time because more than one question will overwhelm the engineer.
+  - Always prefer free-form questions over multi-choice questions because brainstorming needs latitude — a finite option set constrains the conversation before the engineer has surfaced their full thinking. Use multi-choice (`AskUserQuestion`) only when the decision is genuinely binary/finite (approach pick, contradiction resolution, premise audit).
   - Always validate incrementally because this is a slow process. A proper laid out design will produce better result than an poorly laid out one.
   - Always value flexibity because the phases & steps can be interchangeable. Structured ideas will surface from chaos. Going back & forth is expecteed.
   - Always value simplicity over over-engineered ideations because elegance emerge from simple & readable code, not over-engineered code. Good code is not measured by how many lines it contains.

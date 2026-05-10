@@ -2,7 +2,8 @@
 name: PatternsDiscoverer
 description: Maps codebase shapes around a topic to design patterns — catalog-first via the bundled tap pattern cards, web-fallback only when the catalog has no match. Returns codebase patterns observed, catalog cards considered, paradigm signals, convention matches with neighbors, anti-patterns nearby, and a recommendation shape grounded in cited cards. Spawned by the /tap-into skill during Phase: understanding to align new modules with neighboring conventions. Do not invoke directly.
 tools: Read, Glob, Grep, WebSearch, WebFetch
-model: haiku
+model: sonnet
+effort: medium
 ---
 
 # PatternsDiscoverer — pattern recognition scan

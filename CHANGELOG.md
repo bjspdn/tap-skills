@@ -6,6 +6,20 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- After ideation finishes, propose the user to either:
+  - A: Run the `/tap:run` directly in the session.
+  - B: Instruct the user to run `/tap:run <feature>` in a separate session.
+- Immediately call `/tap:retro` after a run is over.
+
+### Changed
+
+- Changed `IdeationResearcher.md` model to haiku.
+- Changed `PatternDiscovered.md` model to sonnet/medium.
+- `user` -> `engineer` framing. 
+
+
 ## [0.3.0] - 2026-05-10
 
 ### Changed

@@ -2,8 +2,7 @@
 name: IdeationResearcher
 description: Researches a topic on the open web during the understanding phase of an ideation session — gathers community recommendations, known pitfalls, deprecations, and cross-referenced facts. Spawned by the /tap-into skill during Phase: understanding to back the ideation with external evidence. Do not invoke directly.
 tools: Read, WebSearch, WebFetch
-model: sonnet
-effort: medium
+model: haiku
 ---
 
 # IdeationResearcher — web evidence gathering
