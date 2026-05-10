@@ -3,10 +3,6 @@ name: run
 description: Executes one or more decomposed tickets through a wave-parallel TDD pipeline. One worktree per ticket; tasks group into waves by symbol-dependency inference; tasks within a wave run in parallel when their `files.create` + `files.modify` are disjoint, sequential when they overlap; each task runs three phase agents (TestWriter → CodeWriter → Refactorer) chained via git commit trailers. Orchestrator owns the worktree (create, merge, delete). Use when the user invokes `/tap-run`, says "run the tickets", "execute the pipeline", or has unfinished `.tap/tickets/<slug>/` folders with `task-*.md` files.
 ---
 
-## Context pressure
-
-Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
-Default posture when no signal present: **high**
 
 # tap-run
 

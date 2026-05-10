@@ -3,10 +3,6 @@ name: sketch
 description: Rapid TDD prototype for small, single-behavior changes — lighter than the full into/convey/run pipeline. Generates an in-memory task spec, then executes RED/GREEN/REFACTOR immediately on the current branch using the same phase agents. No worktree, no tickets on disk, no decomposition. Use when user invokes `/tap-sketch`, says "sketch this", "quick prototype", "small TDD change", "just do it TDD-style", "sketch a fix for X", or describes a change that is clearly a single behavior touching 1-3 files.
 ---
 
-## Context pressure
-
-Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
-Default posture when no signal present: **moderate**
 
 # tap-sketch
 

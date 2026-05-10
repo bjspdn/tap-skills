@@ -3,10 +3,6 @@ name: convey
 description: Decomposes an existing `.tap/tickets/<slug>/ideation.md` into TDD task files in the same slug folder. Each task is a thin vertical slice (RED → GREEN → REFACTOR; the executor commits each phase itself). Use when an ideation.md exists and the user wants it broken into actionable engineering tasks — invoked via `/tap-convey`, "convey this", "decompose this into tasks", "break it into TDD steps".
 ---
 
-## Context pressure
-
-Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
-Default posture when no signal present: **moderate**
 
 ## Phase: writing
 

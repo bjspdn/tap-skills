@@ -3,10 +3,6 @@ name: research
 description: "Deep, multi-hop research on any technical topic — libraries, frameworks, algorithms, game systems, protocols, math, or software patterns. Cross-references sources and emits a structured research artifact at `.tap/research/<topic-slug>-<YYYY-MM-DD>.md`"
 ---
 
-## Context pressure
-
-Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
-Default posture when no signal present: **nominal** (standalone) / **moderate** (callable)
 
 # Deep Research
 

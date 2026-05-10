@@ -41,4 +41,11 @@ if [ "$PRESSURE" = "nominal" ]; then
   exit 0
 fi
 
-echo "{\"additionalContext\": \"CONTEXT_PRESSURE: $PRESSURE (${INPUT_TOKENS}t / 200K budget). Follow shared/context-pressure.md protocol.\"}"
+# Inline rules per level — no file lookup needed
+if [ "$PRESSURE" = "high" ]; then
+  RULES="Near-silent. Status updates only (e.g. 'Wave 2 complete. 3/3 green.'). All substance via artifact files + git trailers. Never echo agent output inline. Never restate task specs or ideation content. Never narrate agent dispatch."
+else
+  RULES="Emit decisions to artifact files. Conversation gets one-line summaries only. No restating prior context. No inline justification unless user asks. Agent dispatch silent — surface only conflicts needing user input."
+fi
+
+echo "{\"additionalContext\": \"CONTEXT_PRESSURE: $PRESSURE (${INPUT_TOKENS}t / 200K budget). ${RULES} User questions override — answer fully, then return to constrained mode.\"}"

@@ -8,9 +8,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **Context pressure protocol** (`shared/context-pressure.md`) shared doc defining how skills adapt verbosity based on token usage. Three levels (nominal/moderate/high) grounded on 200K effective budget regardless of model window size. Includes anti-rationalization table for pressure violations.
-- **Context pressure hook** (`hooks/context-pressure.sh` + `hooks/hooks.json`) reads real token counts from transcript on every turn, injects `CONTEXT_PRESSURE` signal at moderate (>100K) or high (>150K). Ships as plugin hook via `${CLAUDE_PLUGIN_ROOT}`.
-- **Skill context pressure references** all 8 skills now declare a default posture and link to the shared protocol. Skills deeper in the pipeline default to stricter postures (into=nominal, convey=moderate, run=high).
+- **Context pressure hook** (`hooks/context-pressure.sh` + `hooks/hooks.json`) self-contained hook that reads real token counts from the transcript on every turn and injects a `CONTEXT_PRESSURE` signal with inline behavioral rules at moderate (>100K) or high (>150K). Grounded on 200K effective budget regardless of model window size to avoid lost-in-the-middle degradation. Ships as plugin hook via `${CLAUDE_PLUGIN_ROOT}`.
 
 ### Changed
 
