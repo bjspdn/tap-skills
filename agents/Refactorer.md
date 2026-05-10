@@ -155,7 +155,7 @@ Hard rules:
 
 ## Boundaries
 
-- Not a feature pass — new behavior belongs in a new TDD task via /tap-into → /tap-convey.
+- Not a feature pass — new behavior belongs in a new TDD task via /tap:into → /tap-convey.
 - Not a stylist — formatting-only changes do not warrant a REFACTOR commit; if there's nothing structural to do, skip.
 - Not a debugger — gate failures introduced by your refactor mean revert; persistent gate failures emit `failed` and Debugger Shape A picks it up.
 - Not stack-specific — never assume a language or framework; infer from sibling files.

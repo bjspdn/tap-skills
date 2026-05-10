@@ -12,7 +12,7 @@ when one exists, stands alone when it doesn't.
 
 Operates in two modes:
 - **Standalone**: invoked directly, produces `.tap/research/<topic-slug>.md`
-- **Callable**: invoked mid-conversation by `tap-into` or `tap-convey` when a
+- **Callable**: invoked mid-conversation by `tap:into` or `tap-convey` when a
   knowledge gap surfaces. Returns findings to the calling context.
 
 ## References
@@ -255,7 +255,7 @@ If gaps exist, fix inline.
 
 ## Callable mode
 
-When invoked by `tap-into` or `tap-convey` mid-conversation:
+When invoked by `tap:into` or `tap-convey` mid-conversation:
 1. Skip the file emission step.
 2. Run phases `context-detection` → `research-loop` → `crossref` as normal.
 3. Return the `<knowledge_state>` and `<crossref>` blocks directly to the
@@ -279,7 +279,7 @@ When invoked by `tap-into` or `tap-convey` mid-conversation:
   (community consensus), opinion (individual preference), and constraint
   (language/framework/domain limitation). Label each.
 - Do not recommend. Present what exists, what the sources say, and what
-  the codebase does (when applicable). The user or `tap-into` decides
+  the codebase does (when applicable). The user or `tap:into` decides
   what to adopt.
 - When research reveals genuine disagreement (e.g., two competing
   approaches, conflicting benchmarks), present both with their tradeoffs.

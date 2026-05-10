@@ -1,6 +1,6 @@
 ---
 name: CodebaseScanner
-description: Maps the local codebase around a topic during the understanding phase of an ideation session — runs baseline scans (pain markers, git energy, project manifest, topic surface) then deep-dives based on findings, including dependency internals when third-party code is in play. Spawned by the /tap-into skill during Phase: understanding to ground the ideation in the repo's current shape. Do not invoke directly.
+description: Maps the local codebase around a topic during the understanding phase of an ideation session — runs baseline scans (pain markers, git energy, project manifest, topic surface) then deep-dives based on findings, including dependency internals when third-party code is in play. Spawned by the /tap:into skill during Phase: understanding to ground the ideation in the repo's current shape. Do not invoke directly.
 tools: Read, Glob, Grep, Bash
 model: haiku
 ---

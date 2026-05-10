@@ -34,6 +34,16 @@ Update later:
 /plugin update tap
 ```
 
+### Install locally
+
+```bash
+# Load plugin without installing — point at the cloned repo
+claude --plugin-dir /path/to/tap-skills
+
+# Reload after edits
+/reload-plugins
+```
+
 
 ## How to use it
 
@@ -58,28 +68,10 @@ It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.m
 
 The script reads `.version-bump.json` for the list of files that carry a version field. It guards against empty changelogs (document changes under `[Unreleased]` in `CHANGELOG.md` before bumping) and dirty working trees.
 
-
-## Local dev
-
-```bash
-# Load plugin without installing — point at the cloned repo
-claude --plugin-dir /path/to/tap-skills
-
-# Reload after edits
-/reload-plugins
-```
-
-Multi-plugin local load:
-
-```bash
-claude --plugin-dir ./tap-skills --plugin-dir ./other-plugin
-```
-
-
 ## Skills
 
 | Skill        | Command         | What it does                                                                                                                                                   |
-|--------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------| -----------------| ----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **into**     | `/tap:into`     | Brainstorming partner. Explores codebase + web in parallel, challenges assumptions, converges on a well-specified ticket at `.tap/tickets/<slug>/ideation.md`. |
 | **convey**   | `/tap:convey`   | Decomposes an `ideation.md` into vertical-slice TDD task files (`task-NN-*.md`) ready for execution.                                                           |
 | **run**      | `/tap:run`      | Executes decomposed tasks through a wave-parallel TDD pipeline — worktree per ticket, RED/GREEN/REFACTOR phase agents, commit trailers, auto-retry on failure. |

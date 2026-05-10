@@ -125,7 +125,7 @@ When the change is internal (no public API break), a single task on the seed fil
 - Dangling injectables: if a provider chain has no data source within 4 hops, halt emission and ask the user via multi-choice:
   (a) Add a new config entry to thread the data — surface concrete file path
   (b) Add a factory or DI container — surface where it should live
-  (c) Reject the feature scope as currently designed — return to /tap-into for re-ideation
+  (c) Reject the feature scope as currently designed — return to /tap:into for re-ideation
   Resume emission only after the user picks.
 - Deep provider chains (4+ hops): flag as architectural signal — the data is threading through too many intermediaries, consider a context/service pattern.
 

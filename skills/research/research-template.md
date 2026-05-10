@@ -152,7 +152,7 @@ new for consensus, or answer depends on context only the user can provide.]
 
 ## Template Notes
 
-- **TL;DR is mandatory.** The research artifact may be consumed by `tap-into`
+- **TL;DR is mandatory.** The research artifact may be consumed by `tap:into`
   mid-ideation — the TL;DR lets it extract the essentials without reading the
   full document.
 - **Confidence grading is mandatory per finding.** Established = 2+ authoritative
@@ -167,7 +167,7 @@ new for consensus, or answer depends on context only the user can provide.]
 - **Never include both Codebase Alignment and Source Agreement.** They are mutually
   exclusive based on mode.
 - **No recommendations.** The artifact presents what exists and what sources say.
-  Design decisions happen in `tap-into`, not here.
+  Design decisions happen in `tap:into`, not here.
 - **Line count target:** 150-400 lines. Under 150 suggests shallow research.
   Over 400 suggests scope creep — split into multiple research artifacts.
 - **Competing Approaches section is conditional.** Only include when genuine

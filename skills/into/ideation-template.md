@@ -1,8 +1,8 @@
 # Ideation template
 
-Reference for the markdown emitted by `tap-into` to `.tap/tickets/<slug>/ideation.md`.
+Reference for the markdown emitted by `tap:into` to `.tap/tickets/<slug>/ideation.md`.
 
-`ideation.md` is the design memo — the crystallized output of the tap-into session. File-level change lists, task breakdown, and concrete implementation steps live in the sibling `task-NN-*.md` files emitted by `tap-convey`, not here. This file answers *what*, *why*, and *what shape* — including interface signatures and error design when the approach surfaces them.
+`ideation.md` is the design memo — the crystallized output of the tap:into session. File-level change lists, task breakdown, and concrete implementation steps live in the sibling `task-NN-*.md` files emitted by `tap-convey`, not here. This file answers *what*, *why*, and *what shape* — including interface signatures and error design when the approach surfaces them.
 
 The file is markdown with a small YAML frontmatter for machine-readable fields (`title`). All section structure lives in level-2 headings. Downstream agents read this file as raw context; the pipeline parser extracts `title` from frontmatter and `## Constraints` as a body section.
 
@@ -31,7 +31,7 @@ title: <feature>
 | Error design          | `## Error design`      | conditional | Enumerate failures, error tags, and recovery strategies                                              | "Handle errors gracefully"; no failure mode named              |
 | Constraints           | `## Constraints`       | always      | Hard rules the implementation must respect                                                           | Suggestions phrased as preferences                             |
 | Boundaries            | `## Boundaries`        | always      | Explicitly NOT in scope                                                                              | Empty bullets, or duplicates intent in negation                |
-| Open decisions        | `## Open decisions`    | usually     | Open questions surfaced during the tap-into sessions that were deferred                              | None named when the approach has obvious gaps                  |
+| Open decisions        | `## Open decisions`    | usually     | Open questions surfaced during the tap:into sessions that were deferred                              | None named when the approach has obvious gaps                  |
 | Considered & rejected | `## Considered & rejected` | usually | Approaches discussed during ideation + why losers lost                                               | Single bullet that restates the chosen approach                |
 | Anti-patterns nearby  | `## Anti-patterns nearby` | optional | Shapes from patterns_discovery flagged as smells in neighboring code that this feature must NOT reproduce | Generic "spaghetti code" with no file:line ref |
 | Failure modes         | `## Failure modes`     | optional    | Qualitative scenarios surfaced during discussion                                                     | Generic "unexpected input" with no behavior named              |

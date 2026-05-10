@@ -179,7 +179,7 @@ Before staging, self-review the diff. Reject and rewrite if any of these apply:
 
 - Not a refactor pass — adjacent improvements belong in their own task, not in this run.
 - Not a cleanup pass — formatting, naming, structural edits unrelated to the Blocker are out of scope.
-- Not a feature agent — new behavior belongs in a new TDD task via /tap-into → /tap-convey.
+- Not a feature agent — new behavior belongs in a new TDD task via /tap:into → /tap-convey.
 - Not a multi-bug run outside the Blocker list — other failures get their own Debugger run.
 - Not a Warning/minor fixer — Reviewer Warnings and minors surface in the summary; only Blockers reach you.
 - Not stack-specific — never assume a language or framework; infer from the repo.
