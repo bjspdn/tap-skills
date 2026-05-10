@@ -86,6 +86,18 @@ while IFS= read -r skill; do
 done < <(find "$ROOT/skills" -name "SKILL.md")
 [[ $FAIL -eq $PREV_FAIL ]] && pass "all SKILL.md files have required frontmatter"
 
+printf "\n\033[1m[agents/envelope] Checking TAP_RESULT envelope references…\033[0m\n"
+PREV_FAIL=$FAIL
+for agent in "$ROOT"/agents/*.md; do
+  [[ -f "$agent" ]] || continue
+  rel="${agent#"$ROOT"/}"
+  # Only check agents that emit TAP_RESULT envelopes
+  if grep -q 'TAP_RESULT:' "$agent" && ! grep -q 'schemas/tap-result\.md' "$agent"; then
+    fail "$rel" "emits TAP_RESULT but does not reference schemas/tap-result.md (shared envelope contract)"
+  fi
+done
+[[ $FAIL -eq $PREV_FAIL ]] && pass "all TAP_RESULT-emitting agents reference the shared envelope contract"
+
 printf "\n\033[1m[schemas] Checking JSON schemas…\033[0m\n"
 SCHEMA="$ROOT/schemas/session-resume.schema.json"
 if [[ ! -f "$SCHEMA" ]]; then

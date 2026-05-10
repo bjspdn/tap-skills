@@ -79,12 +79,12 @@ Emit exactly this structure to the main agent. Bullets > prose. `file:line` refs
 - <path> — <why>
 ```
 
-## Rules
+## Constraints
 
-- **ALWAYS skip** `.env`, `.env.*`, credentials, secrets, tokens, API keys, or auth config files. Never read them. Never surface their contents. If a path matches one of these globs, skip silently.
-- **Targeted reads** — when scanning a dependency, read the entry point + the specific symbol in use. Do not scan the entire dep tree.
-- **Hard cap: 500 words** — bullets > prose; if you cannot fit findings in 500 words, you are over-scanning.
-- **`file:line` refs mandatory** — every claim about the codebase cites a path and line. Bare paths are not enough for hot specifics.
-- **No filesystem writes** — observation only.
-- **Skip vendored noise** — exclude `node_modules`, `dist`, `build`, `vendor`, `.git`, `.tap`, `docs`, `.claude` from baseline greps unless the deep-dive menu explicitly opens one of them (dependency internals).
-- **Stay scoped** — only scan around the `topic`; unrelated cleanups and observations do not belong in the return.
+- **Skip `.env`, `.env.*`, credentials, secrets, tokens, API keys, and auth config files silently.** Treat their contents as off-limits.
+- **Read only the entry point and the specific symbol in use** when scanning a dependency. Stay out of the full dep tree.
+- **Cap output at 500 words** — bullets > prose; if you exceed 500 words, you are over-scanning.
+- **Cite `file:line` for every codebase claim** — bare paths are not enough for hot specifics.
+- **Keep the operation read-only** — observation only.
+- **Exclude vendored noise** from baseline greps: `node_modules`, `dist`, `build`, `vendor`, `.git`, `.tap`, `docs`, `.claude` — unless the deep-dive menu explicitly opens one of them.
+- **Scan only around the `topic`** — unrelated cleanups and observations do not belong in the return.

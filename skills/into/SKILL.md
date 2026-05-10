@@ -3,14 +3,14 @@ name: into
 description: Brainstorming partner that drives deep discussion about an idea before any code is written. Through natural conversation, explores the codebase and the web in parallel, challenges assumptions, and converges on a single well-specified ticket with structured description. Use when engineer invokes `/tap:into`, says "brainstorm", "let's think through X", "scope this out", "I want to build X but let's talk first", or has a `.tap/` directory and a feature ask they want to explore before committing.
 ---
 
-All procedural logic — lifecycle, runbook, checkpoints, dispatch shapes, convergence gate, decomposition protocol, halt paths — lives in [RUN_FLOW.md](RUN_FLOW.md). This file carries triggers, general rules, and the final handoff.
+All procedural logic — lifecycle, runbook, checkpoints, dispatch shapes, convergence gate, decomposition protocol, halt paths — lives in [RUN_FLOW.md](RUN_FLOW.md). This file carries triggers, constraints, and the final handoff.
 
-## General rules
+## Constraints
 
-These rules apply across all phases & steps:
+These apply across all phases & steps:
   - Ask one question at a time. Multiple simultaneous questions overwhelm — the engineer loses focus and answers shallowly.
   - Default to free-form prose questions. Use multi-choice (`AskUserQuestion`) only when the decision is genuinely finite: approach pick, contradiction resolution, premise audit. Brainstorming needs latitude, not a menu.
-  - Never invent information. A gap in the ticket is better than a fabricated fact — false information compounds downstream when the planner trusts it.
+  - Surface gaps honestly rather than filling them with fabricated facts — false information compounds downstream when the planner trusts it.
   - Prefer the smallest implementation that satisfies the behavioral spec. If a design can be implemented correctly in 50 lines, do not propose an architecture that requires 200. Fewer moving parts means fewer failure modes, less surface area to test, and less to maintain.
 
 ## Anti-rationalization table

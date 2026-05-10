@@ -118,10 +118,10 @@ If the file does not exist, skip all profile-informed adjustments — the pipeli
 
 **Token data may be unavailable** for older runs, sketch-mode executions, or interrupted sessions. When `token_signals` is absent or `sample_count == 0`, skip all token-informed adjustments silently.
 
-## Hard rules
+## Constraints
 
-- **Never halt on missing profile.** The profile is optional enrichment. Every skill and agent must function identically without it.
-- **Never act on tentative data.** Only `established` entries (sample_count ≥ 3) drive behavior adjustments.
-- **Surface, don't override.** Profile signals are advisory. They inform decisions — they don't make them. A pattern with 100% clean GREEN rate is a good sign, not a mandate.
-- **Cite the data.** When surfacing a profile signal, include the rate and sample count so the human can judge relevance.
-- **No circular writes.** Consumers read the profile. Only `retro` writes it. No skill or agent modifies `_profile.json`.
+- **Continue gracefully when the profile is missing.** The profile is optional enrichment. Every skill and agent must function identically without it.
+- **Act only on established data** (sample_count ≥ 3). Tentative entries are for display, not behavior adjustments.
+- **Treat profile signals as advisory.** They inform decisions — they don't make them. A pattern with 100% clean GREEN rate is a good sign, not a mandate.
+- **Include rate and sample count when surfacing a profile signal** so the human can judge relevance.
+- **Reserve profile writes for `retro` only.** Consumers read the profile; no skill or agent modifies `_profile.json`.

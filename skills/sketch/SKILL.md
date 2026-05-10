@@ -315,16 +315,16 @@ All quality gates passed.
 
 Sketch is complete. Commits are on the current branch at HEAD.
 
-## General rules
+## Constraints
 
-These rules apply across all phases and steps:
+These apply across all phases and steps:
 
-- **One behavior per sketch.** If the description implies multiple independent behaviors, redirect to `/tap:into`. No exceptions. Sketch is not a shortcut to skip planning — it is a shortcut for changes that do not need planning.
-- **RED must fail for the right reason.** An assertion mismatch or module-missing error pointing at the file GREEN will create. A test that passes without implementation is too weak — the sketch halts.
-- **REFACTOR never changes behavior.** The RED test stays green after REFACTOR. New behavior requires a new sketch or a full pipeline run.
-- **Never `--no-verify`, never `--amend`.** Hook failures are real failures. Fix the underlying issue, create a new commit.
-- **No worktree.** Sketch works on the current branch. Commits land on HEAD.
-- **No task files on disk.** The spec lives in context. Nothing is written to `.tap/tickets/`.
-- **Commit subjects follow conventional format.** `test(sketch): ...` for RED, `feat(sketch): ...` for GREEN, `refactor(sketch): ...` for REFACTOR. Trailers: `Tap-Task: sketch`, `Tap-Phase: RED|GREEN|REFACTOR`, `Tap-Files: <paths>`.
-- **Failure handling is bounded.** One retry per phase via Debugger Shape A. Second failure reverts the phase and halts. No infinite loops.
-- **Sketch is for speed, not for cutting corners on TDD.** The RED/GREEN/REFACTOR cycle is non-negotiable. The test comes first. The implementation comes second. The refactor comes third (or is explicitly skipped). This is the discipline that makes sketch trustworthy despite being fast.
+- **Scope each sketch to one behavior.** If the description implies multiple independent behaviors, redirect to `/tap:into`. Sketch is a shortcut for changes that do not need planning, not a shortcut to skip planning.
+- **Ensure RED fails for the right reason.** An assertion mismatch or module-missing error pointing at the file GREEN will create. A test that passes without implementation is too weak — the sketch halts.
+- **Keep REFACTOR behavior-preserving.** The RED test stays green after REFACTOR. Route new behavior through a new sketch or a full pipeline run.
+- **Fix hook failures at the source; keep verification intact.** Create a new commit after fixing — amending is off-limits.
+- **Work on the current branch.** Sketch uses no worktree. Commits land on HEAD.
+- **Keep the spec in context only.** Write nothing to `.tap/tickets/`.
+- **Follow conventional commit subjects.** `test(sketch): ...` for RED, `feat(sketch): ...` for GREEN, `refactor(sketch): ...` for REFACTOR. Trailers: `Tap-Task: sketch`, `Tap-Phase: RED|GREEN|REFACTOR`, `Tap-Files: <paths>`.
+- **Bound failure handling to one retry.** One retry per phase via Debugger Shape A. Second failure reverts the phase and halts.
+- **Maintain full TDD discipline despite speed.** The RED/GREEN/REFACTOR cycle is non-negotiable. The test comes first. The implementation comes second. The refactor comes third (or is explicitly skipped). This is the discipline that makes sketch trustworthy despite being fast.

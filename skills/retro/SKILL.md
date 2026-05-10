@@ -310,14 +310,14 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Token analysis | "Token data isn't available, skip the whole section" | Omits the section entirely instead of recording unavailability. Future retros need to know the data gap exists | Always emit the token section. If data is unavailable, write `"token_data": "unavailable"` and state "Token data unavailable for this run" in the report. The absence is itself data |
 | Token analysis | "This task used a lot of tokens because it was complex" | Rationalizes high consumption without checking whether it's actually an outlier relative to the run average | Apply the 3x threshold mechanically. A task is an outlier if `total_tokens > 3 * run_average` — not because it "seems complex" |
 
-## General rules
+## Constraints
 
-- Retro never modifies source code or task files — read-only analysis only.
-- Profile entries with `sample_count < 3` are `tentative` — don't present them as facts to the user.
-- Ephemeral reports go stale — that's by design. The profile is the durable layer.
-- When surfacing actionable suggestions, tie them to specific structural observations with sample counts.
-- Don't invent correlations from small samples. 1 failure is noise, 5 failures in the same pattern is signal.
-- When a slug has no commits with Tap trailers, skip it gracefully — don't fabricate data.
+- Keep retro read-only — analyze source code and task files, modify neither.
+- Treat profile entries with `sample_count < 3` as `tentative` — present them with that qualifier, not as facts.
+- Accept that ephemeral reports go stale — that's by design. The profile is the durable layer.
+- Tie actionable suggestions to specific structural observations with sample counts.
+- Require meaningful sample sizes before drawing correlations. 1 failure is noise, 5 failures in the same pattern is signal.
+- Skip slugs gracefully when they have no commits with Tap trailers — surface the absence honestly.
 - If `.tap/retros/` doesn't exist, create it. If `_profile.json` doesn't exist, initialize it with `version: 1`, `runs_analyzed: 0`, and empty arrays/objects.
-- Date format is always `YYYY-MM-DD`.
-- All git operations are read-only: `git log`, `git diff`, `git rev-parse`. Never `git commit`, `git checkout`, `git reset`.
+- Use `YYYY-MM-DD` for all dates.
+- Limit git operations to read-only commands: `git log`, `git diff`, `git rev-parse`.

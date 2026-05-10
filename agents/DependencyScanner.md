@@ -95,11 +95,11 @@ For each projected change (new param, new injectable, new service dependency), t
 </signals>
 ```
 
-## Rules
+## Constraints
 
-- Do NOT read entire files — scan exports, import lines, and function signatures only.
-- Do NOT follow dependencies into `node_modules`, `vendor/`, or any third-party code.
-- Do NOT recurse past one hop on the consumer side.
-- DO follow provider chains as deep as needed until you find the data source or hit the application boundary.
-- If an import pattern is unreadable (dynamic, generated), log it in `<warnings>` and move on.
-- **Hard cap**: return the maps, nothing else. No recommendations, no task ordering — that is the main agent's job.
+- Scan exports, import lines, and function signatures only — skip full file reads.
+- Stay within first-party code — stop at `node_modules`, `vendor/`, and third-party boundaries.
+- Limit consumer-side recursion to one hop.
+- Follow provider chains as deep as needed until you find the data source or hit the application boundary.
+- Log unreadable import patterns (dynamic, generated) in `<warnings>` and move on.
+- **Return only the maps.** Keep recommendations and task ordering for the main agent.

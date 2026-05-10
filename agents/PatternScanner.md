@@ -63,10 +63,10 @@ You are stack-agnostic. The catalog at `${CLAUDE_PLUGIN_ROOT}/patterns/` is your
 </pattern-map>
 ```
 
-## Rules
+## Constraints
 
-- Only recommend patterns with `strong` confidence (pattern exists in a neighbor) or a clear smell prediction.
-- Never force a pattern where none fits — `No pattern recommendation` is a valid output.
-- Every pattern claim must cite `file:line` evidence.
-- Do NOT recommend patterns from the catalog that have no neighbor evidence AND no predicted smell — the catalog is vocabulary, not a checklist.
-- **Hard cap**: return the pattern-map, nothing else. No task ordering, no implementation advice.
+- Recommend only patterns with `strong` confidence (pattern exists in a neighbor) or a clear smell prediction.
+- Accept `No pattern recommendation` as a valid output — forcing patterns where none fits adds noise.
+- Cite `file:line` evidence for every pattern claim.
+- Require neighbor evidence OR a predicted smell before recommending a catalog pattern — the catalog is vocabulary, not a checklist.
+- **Return only the pattern-map.** Keep task ordering and implementation advice for the main agent.

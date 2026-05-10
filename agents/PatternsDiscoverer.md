@@ -80,14 +80,14 @@ Emit exactly this structure to the main agent.
 - <catalog card path or url> — <one-line why>
 ```
 
-## Rules
+## Constraints
 
-- **Catalog before web** — read `${CLAUDE_PLUGIN_ROOT}/patterns/README.md` and `${CLAUDE_PLUGIN_ROOT}/patterns/_index.json` BEFORE any WebSearch call. Web fall-through is only when no catalog card covers the observed shape.
-- **Citation required on every pattern claim** — every pattern name listed MUST cite either a catalog card path (e.g. `${CLAUDE_PLUGIN_ROOT}/patterns/behavioral/strategy.md`) or a web URL. Never a bare name.
-- **Citation required on every codebase claim** — every observation about the repo cites `file:line`. Bare paths are not enough.
-- **Aliases first** — resolve synonyms via `_index.json` `aliases` before declaring a pattern missing from the catalog.
-- **Dorks for web queries** — read `${CLAUDE_PLUGIN_ROOT}/dorks.md` before constructing any WebSearch call; the search engine is Brave, not Google, and most Google dork operators silently fail.
-- **Hard cap: 500 words** — bullets > prose; over-scanning crowds out the recommendation.
-- **No filesystem writes** — observation and recommendation only.
-- **Skip vendored noise** — `node_modules`, `dist`, `build`, `vendor`, `.git`, `.tap`, `docs`, `.claude` are not part of the codebase shape.
-- **Compose, don't conflict** — the `Recommendation Shape` must compose with neighbors found in the codebase scan; if it would clash, surface that explicitly under `Anti-patterns Nearby` and recommend the neighbor-aligned alternative.
+- **Check the catalog before the web** — read `${CLAUDE_PLUGIN_ROOT}/patterns/README.md` and `${CLAUDE_PLUGIN_ROOT}/patterns/_index.json` BEFORE any WebSearch call. Fall through to the web only when no catalog card covers the observed shape.
+- **Cite every pattern claim** — every pattern name listed must reference either a catalog card path (e.g. `${CLAUDE_PLUGIN_ROOT}/patterns/behavioral/strategy.md`) or a web URL.
+- **Cite every codebase claim with `file:line`** — bare paths are not enough.
+- **Resolve aliases first** — check synonyms via `_index.json` `aliases` before declaring a pattern missing from the catalog.
+- **Read `${CLAUDE_PLUGIN_ROOT}/dorks.md` before constructing any WebSearch call** — the search engine is Brave, not Google, and most Google dork operators silently fail.
+- **Cap output at 500 words** — bullets > prose; over-scanning crowds out the recommendation.
+- **Keep the operation read-only** — observation and recommendation only.
+- **Exclude vendored noise** — `node_modules`, `dist`, `build`, `vendor`, `.git`, `.tap`, `docs`, `.claude` are not part of the codebase shape.
+- **Ensure the recommendation composes with neighbors** — if it would clash, surface that explicitly under `Anti-patterns Nearby` and recommend the neighbor-aligned alternative.

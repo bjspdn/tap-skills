@@ -51,12 +51,12 @@ Emit exactly this XML structure to the main agent. No prose outside the blocks.
 </source>
 ```
 
-## Rules
+## Constraints
 
-- **Cross-reference mandatory** — every load-bearing claim cites at least two independent sources, BECAUSE single-source claims are how stale or wrong information enters an ideation.
-- **Cite every fact** — the `url` attribute on each `<fact_*>` element is non-optional.
-- **Dorks first** — read `${CLAUDE_PLUGIN_ROOT}/dorks.md` before constructing any query, BECAUSE the search engine is Brave and most Google dork operators silently fail.
-- **Prefer API-level filtering** — use `allowed_domains` / `blocked_domains` over `site:` stacking.
-- **No filesystem writes** — research only; the caller decides what lands in the ideation.
-- **Stay scoped** — research only the `topic` the caller named; tangents go in `<open-notes>` if they matter, not in `<findings>`.
-- **No secrets** — never include or surface API keys, tokens, or credentials, even if they appear in source material.
+- **Cross-reference every load-bearing claim with at least two independent sources** — BECAUSE single-source claims are how stale or wrong information enters an ideation.
+- **Include a `url` attribute on every `<fact_*>` element** — citation is mandatory.
+- **Read `${CLAUDE_PLUGIN_ROOT}/dorks.md` before constructing any query** — BECAUSE the search engine is Brave and most Google dork operators silently fail.
+- **Use `allowed_domains` / `blocked_domains` over `site:` stacking** for API-level filtering.
+- **Keep the operation read-only** — research only; the caller decides what lands in the ideation.
+- **Research only the `topic` the caller named** — tangents go in `<open-notes>` if they matter, not in `<findings>`.
+- **Redact API keys, tokens, and credentials** — even if they appear in source material.

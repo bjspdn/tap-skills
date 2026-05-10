@@ -66,11 +66,11 @@ Return XML in this exact shape:
 </sources>
 ```
 
-## Rules
+## Constraints
 
-- **Authoritative first.** Official docs > RFCs/specs/papers > widely-cited blog posts > community discussions.
-- **Two sources per claim.** Single-source findings drop to `confidence='low'` or are demoted to `<gaps>`.
-- **Recency matters relative to domain.** A 2021 Next.js 12 post is harmful for Next.js 15; a 2019 paper on a stable algorithm is fine.
-- **Each hop covers new ground.** Repetition of `prior_findings` is a convergence signal — emit it.
-- **Distinguish fact from convention from opinion.** Label each in the `<evidence>` line.
-- **No recommendations.** Present what sources say; the calling skill decides what to do with it.
+- **Prioritize authoritative sources.** Official docs > RFCs/specs/papers > widely-cited blog posts > community discussions.
+- **Back every claim with two sources.** Single-source findings drop to `confidence='low'` or are demoted to `<gaps>`.
+- **Judge recency relative to the domain.** A 2021 Next.js 12 post is harmful for Next.js 15; a 2019 paper on a stable algorithm is fine.
+- **Cover new ground with each hop.** Repetition of `prior_findings` is a convergence signal — emit it.
+- **Label each finding as fact, convention, or opinion** in the `<evidence>` line.
+- **Present findings without recommendations.** The calling skill decides what to do with them.

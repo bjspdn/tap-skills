@@ -13,7 +13,7 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 2. Re-skim `RUN_FLOW.md`'s `## Runbook` and `## Phase failure branches` before each wave dispatch — keeps mid-run drift out.
 3. Phase agent files at `agents/{TestWriter,CodeWriter,Refactorer,Debugger,Reviewer}.md` are the contract for each subagent's behavior; do not embed their logic here.
 
-## Hard rules
+## Constraints
 
 1. Orchestrator owns the worktree (create at ticket entry, integrate + delete at ticket exit).
 2. Sub-agents stay inside their assigned worktree.
@@ -22,11 +22,11 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 5. Phase agents find prior phases by trailer search in `<parent_sha>..HEAD`.
 6. Each phase commits its own work with `Tap-Task`, `Tap-Phase`, `Tap-Files` trailers.
 7. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
-8. All four gates green before commit; RED exempts the test gate only.
-9. Disk-writing gates and the `git add … && git commit …` step run under `flock -w 300 <commit_lock>`.
-10. Resume by parsing trailers in `<parent_sha>..HEAD`; phases already committed are skipped.
-11. Hook failures get fixed at root cause via a new commit.
-12. Reviewer runs once per ticket when survivors ≥ 2; only Blockers trigger Debugger Shape B.
+8. Pass all four gates before committing; RED exempts the test gate only.
+9. Wrap disk-writing gates and the `git add … && git commit …` step in `flock -w 300 <commit_lock>`.
+10. Resume by parsing trailers in `<parent_sha>..HEAD`; skip phases already committed.
+11. Fix hook failures at the source via a new commit.
+12. Run Reviewer once per ticket when survivors ≥ 2; only Blockers trigger Debugger Shape B.
 
 ## Halt paths
 

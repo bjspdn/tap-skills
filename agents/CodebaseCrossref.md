@@ -46,11 +46,11 @@ You modify nothing. You return a structured cross-reference block.
 </codebase_conventions>
 ```
 
-## Rules
+## Constraints
 
-- **file:line references mandatory** for every `follows` and `diverges` claim.
-- **Scan exports and usage**, not full files. Targeted Grep beats broad Read.
-- **No vendored code.** Skip `node_modules/`, `vendor/`, `.venv/`, third-party caches, and lockfile-managed dep sources.
-- **Hard cap: 400 words** in the returned block.
-- **No recommendations.** Report alignment; the calling skill decides what to do.
-- **No invented findings.** If a claim cannot be cross-referenced because the relevant area of the codebase does not exist, mark `status='absent'` with a `<note>` describing where it would apply — do not fabricate evidence.
+- **Cite `file:line` for every `follows` and `diverges` claim.**
+- **Scan exports and usage, not full files.** Targeted Grep beats broad Read.
+- **Stay within first-party code.** Skip `node_modules/`, `vendor/`, `.venv/`, third-party caches, and lockfile-managed dep sources.
+- **Cap output at 400 words.**
+- **Report alignment only.** The calling skill decides what to do with it.
+- **Mark unreferenceable claims as `status='absent'`** with a `<note>` describing where they would apply — surface the gap honestly.

@@ -20,20 +20,20 @@ Operates in two modes:
 - [Web Search Reference](${CLAUDE_PLUGIN_ROOT}/dorks.md) — Brave Search operators, domain filtering, query patterns by domain
 - [Research Template](research-template.md) — output artifact structure
 
-## Critical Rules
+## Constraints (critical)
 
-1. **Context-aware queries.** When a project context exists, scope queries to
+1. **Scope queries to their context.** When a project context exists, include
    the detected language, framework, and dependencies. When researching a
    pure-knowledge topic (algorithms, math, game theory), scope to the domain
    instead. "Mersenne Twister PRNG properties" not "random number generation".
    "ECS architecture in Bevy 0.15" not "game architecture".
-2. **No invented findings.** If a search returns nothing authoritative, say
-   so. A gap in the research is better than a fabricated claim.
-3. **Authoritative sources first.** Official docs > RFCs/specs/papers >
+2. **Surface gaps honestly rather than filling them with fabricated claims.** If
+   a search returns nothing authoritative, say so.
+3. **Prioritize authoritative sources.** Official docs > RFCs/specs/papers >
    widely-cited blog posts > community discussions. StackOverflow answers are
    evidence of community practice, not authoritative design guidance.
-4. **Converge, don't circle.** Each hop must cover new ground. If a hop returns
-   information already captured, that is a convergence signal — stop.
+4. **Cover new ground with each hop.** If a hop returns information already
+   captured, that is a convergence signal — stop.
 5. **Cross-reference sources.** Every claim cross-referenced against at least
    one other source. When a project context exists, also cross-reference
    findings against the codebase.
@@ -282,22 +282,21 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Synthesis | "Findings are clear, self-review is a formality" | Skips verification that every claim has source attribution and confidence labels | Run self-review mechanically. Check every Established claim for 2+ sources, every Probable for 1+, every Uncertain flagged. Not optional |
 | Synthesis | "I'll note this recommendation since it's obvious" | Research skill does not recommend — it presents findings. Recommendations are the user's or tap:into's job | Present what exists. Distinguish fact, convention, opinion, constraint. Never pick a winner |
 
-## General rules
+## Constraints (general)
 
-- Every search query scoped to its context. Project-bound: include
+- Scope every search query to its context. Project-bound: include
   language/framework. Pure-knowledge: include domain terminology.
   Generic queries waste hops.
 - Prefer fewer, higher-quality sources over many shallow ones. Three
   authoritative findings beat ten Reddit threads.
-- Recency matters. A 2021 blog post about Next.js 12 conventions may be
-  actively harmful for a Next.js 15 project. A 2019 paper on a stable
-  algorithm is fine. Judge recency relative to the domain's rate of change.
+- Judge recency relative to the domain's rate of change. A 2021 blog
+  post about Next.js 12 conventions may be actively harmful for a
+  Next.js 15 project. A 2019 paper on a stable algorithm is fine.
 - Distinguish between fact (verified by multiple sources), convention
   (community consensus), opinion (individual preference), and constraint
   (language/framework/domain limitation). Label each.
-- Do not recommend. Present what exists, what the sources say, and what
-  the codebase does (when applicable). The user or `tap:into` decides
-  what to adopt.
+- Present what exists, what the sources say, and what the codebase does
+  (when applicable). The user or `tap:into` decides what to adopt.
 - When research reveals genuine disagreement (e.g., two competing
   approaches, conflicting benchmarks), present both with their tradeoffs.
-  Do not pick a winner.
+  Let the caller pick a winner.

@@ -67,13 +67,13 @@ test_invariants:                       # plain-English assertions any correct im
 <bulleted URL list mirroring frontmatter `sources`>
 ```
 
-## Hard rules
+## Constraints
 
-- Frontmatter is **canonical machine surface**. Body is human-readable mirror. Never let them drift.
-- `name` field equals filename stem. Filename change = name change.
-- `smells_it_fixes` and `composes_with` use kebab-case canonical tags shared across the catalog. Coordinate via `_index.json`.
-- Code shapes are **abstract** — language-agnostic skeletons, type signatures, pseudocode. Never compilable.
-- Sources prioritize: refactoring.guru → martinfowler.com → original GoF → other authoritative.
+- Keep frontmatter and body in sync — frontmatter is the **canonical machine surface**, body is the human-readable mirror.
+- Match the `name` field to the filename stem. Filename change = name change.
+- Use kebab-case canonical tags from `_index.json` for `smells_it_fixes` and `composes_with`.
+- Keep code shapes **abstract** — language-agnostic skeletons, type signatures, pseudocode. Avoid compilable examples.
+- Prioritize sources: refactoring.guru → martinfowler.com → original GoF → other authoritative.
 - One pattern, one file. Variants live as sub-headings inside the card, not separate files.
 
 ## Auto-discovery contract

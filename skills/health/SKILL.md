@@ -233,14 +233,14 @@ After all repairs, re-run only the affected checks to confirm resolution. Surfac
 
 Health check complete. Summary delivered, repairs applied (if any).
 
-## General rules
+## Constraints
 
-- **Read-only by default.** Never modify anything without explicit user confirmation. The diagnostic phase touches nothing.
-- **Never delete unmerged branches.** Use `git branch -d` (safe delete), never `-D`. If deletion fails due to unmerged state, report it and move on.
-- **Never remove worktree directories that git still tracks.** Only remove directories that `git worktree list` does not reference.
-- **Lockfile test is non-destructive.** `flock -n <file> true` tests without acquiring. If it succeeds, the lock is free. If it fails, a process holds it — leave it alone.
-- **No network calls.** Health check is entirely local. No fetching, no pushing.
-- **Idempotent.** Running health twice in a row with no intervening changes produces the same report (minus any repairs applied on the first run).
+- **Wait for explicit user confirmation before modifying anything.** The diagnostic phase is read-only.
+- **Use `git branch -d` (safe delete) for branch removal.** If deletion fails due to unmerged state, report it and move on.
+- **Only remove worktree directories that `git worktree list` does not reference.**
+- **Test lockfiles non-destructively.** `flock -n <file> true` tests without acquiring. If it succeeds, the lock is free. If it fails, a process holds it — leave it alone.
+- **Keep the entire health check local.** No fetching, no pushing, no network calls.
+- **Produce identical reports on consecutive runs** (minus any repairs applied on the first run).
 
 ## Anti-rationalization table
 

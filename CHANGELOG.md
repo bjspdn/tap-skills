@@ -8,6 +8,9 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Rule/constraint section naming** unified across all agents, skills, and shared schemas. "Hard rules", "Rules", "General rules", and "Critical Rules" all renamed to `## Constraints` with positive framing (e.g. "Stage only named files" instead of "Never `git add -A`"). Anti-rationalization tables kept as-is. BECAUSE clauses preserved where they existed.
+- **TAP_RESULT envelope contract** extracted from 5 inline definitions (TestWriter, CodeWriter, Refactorer, Reviewer, Debugger) into `schemas/tap-result.md`. Agents now reference the shared schema and keep only their agent-specific `data` shapes inline. `scripts/validate.sh` checks that every agent file references the shared contract.
+- **Agent input contracts** converted prose-bullet input descriptions to structured tables (Slot / Type / Required / Source) in TestWriter, CodeWriter, Refactorer, Reviewer, and Debugger. Critical usage notes retained below each table.
 - **Agent anti-pattern checks** reformatted from prose bullets to 4-column tables (Where / Rationalization / Real problem / Correct action) in TestWriter, CodeWriter, Refactorer, and Debugger for consistency with skill-file format.
 - **Reviewer agent** added spec drift detection step (step 6) that compares the implementation diff against ideation.md design decisions and flags pattern downgrades, constraint violations, scope reductions, and signature divergences as Warnings.
 
