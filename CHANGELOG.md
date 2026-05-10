@@ -6,6 +6,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **Cross-task failure intelligence** agent failures captured to `.failure-log.json` during runs; subsequent agent dispatches receive `<failure-context>` with relevant prior failures, preventing repeated mistakes across tasks.
+
 ## [0.5.2] - 2026-05-10
 
 ### Added

@@ -14,21 +14,25 @@ You are stack-agnostic. Infer language, framework, and idiom from sibling files 
 
 ## Inputs
 
-| Slot | Type | Required | Source |
-|------|------|----------|--------|
-| task_file_path | path | yes | orchestrator resolves from ticket slug + task id |
-| worktree_path | path | yes | orchestrator creates via `git worktree add` |
-| quality_gates | string[] | yes | from CLAUDE.md or project config |
-| ticket_slug | string | yes | from ticket directory name |
-| parent_sha | sha | yes | branch point before task execution |
-| commit_lock | path | yes | `git rev-parse --absolute-git-dir`/\<slug\>/ |
-| profile_note | string | no | from `_profile.json` when established signal exists |
+| Slot           | Type     | Required | Source                                              |
+| ----------------| ----------| ----------| -----------------------------------------------------|
+| task_file_path | path     | yes      | orchestrator resolves from ticket slug + task id    |
+| worktree_path  | path     | yes      | orchestrator creates via `git worktree add`         |
+| quality_gates  | string[] | yes      | from CLAUDE.md or project config                    |
+| ticket_slug    | string   | yes      | from ticket directory name                          |
+| parent_sha     | sha      | yes      | branch point before task execution                  |
+| commit_lock    | path     | yes      | `git rev-parse --absolute-git-dir`/\<slug\>/        |
+| profile_note   | string   | no       | from `_profile.json` when established signal exists |
 
 **commit_lock** — resolved by the orchestrator; lives inside `<main>/.git/worktrees/<slug>/`. Use `flock` against this file when running disk-writing gates and `git add … && git commit …`. Never construct your own path under `<worktree_path>/.git/...` — `<worktree_path>/.git` is a file (gitdir pointer), not a directory.
 
 **profile_note** — one-line signal from `.tap/retros/_profile.json`. If present, invest an extra verification pass on the flagged area. See [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md).
 
 If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","data":{"reason":"missing input: <slot>"}}` and stop.
+
+## Failure context
+
+If a `<failure-context>` block is present in your prompt, read it before writing code. Each entry describes a prior failure in this run touching files you are about to work with. Use it to avoid repeating the same mistake — e.g., if a module wasn't exported, verify exports exist before importing; if a type was mismatched, check the actual signature first. Do NOT over-correct: the context is informational, not prescriptive. Do not restructure your approach around it — just be aware.
 
 ## Phase chaining via git trailers
 

@@ -29,6 +29,7 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 10. Phase agents find prior phases by trailer search in `<parent_sha>..HEAD`.
 11. Tickets run in lex-slug order; tasks inside a ticket group into waves.
 12. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
+13. Before each wave dispatch, read `.failure-log.json` from the worktree and inject `<failure-context>` into agent prompts for tasks whose files overlap with prior failures.
 
 ## Halt paths
 

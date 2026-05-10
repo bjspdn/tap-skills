@@ -114,7 +114,25 @@ Work through Blockers sequentially, one concern per change.
 
 Once all Blockers are addressed, run **every** quality gate sequentially (with the Shape-A RED exemption: test gate may fail when recovering RED). Every required gate must exit clean before you commit. If a gate is still red, return to step 2 — do NOT commit on a red gate, ever.
 
-### 4. Commit
+### 4. Persist failure signature
+
+After diagnosis (whether the fix succeeds or not), append an entry to `<worktree_path>/.failure-log.json`. This enables the orchestrator to warn subsequent agents about prior failures touching the same files.
+
+1. Read `<worktree_path>/.failure-log.json` if it exists; parse as JSON array. If missing or empty, start with `[]`.
+2. Build an entry from your diagnosis:
+   - `task_id` — from the task spec (Shape A) or `"reviewer"` (Shape B).
+   - `phase` — `RED` | `GREEN` | `REFACTOR` (Shape A) or `REVIEW` (Shape B).
+   - `failure_type` — classify using the retro taxonomy: `missing-module`, `assertion-mismatch`, `compilation-error`, `logic-error`, `type-error`, `broke-behavior`, `gate-failure`, `wiring-gap`, `scope-violation`.
+   - `files_involved` — paths implicated in the failure (from the failure trace and your fix).
+   - `root_cause` — one-line summary of what went wrong.
+   - `resolution` — what you changed to fix it, or `"saga-isolated"` if you emitted `gave_up`.
+   - `timestamp` — current ISO 8601.
+3. Append the entry to the array and write atomically (write `.failure-log.json.tmp`, then `mv`).
+4. This step runs regardless of fix outcome — `gave_up` entries are valuable signal for later tasks.
+
+See [failure log schema](${CLAUDE_PLUGIN_ROOT}/schemas/failure-log.schema.md) for the full field contract.
+
+### 5. Commit
 
 Stage and commit with the conventional message:
 
@@ -161,8 +179,9 @@ Before staging, self-review the diff. Reject and rewrite if any of these apply:
 | Step 2: fix (Shape B) | "This other file has the same bug, might as well fix it too" | The Blocker list IS the scope. Touching files without a listed Blocker bypasses the Reviewer's boundary enforcement | Revert. Adjacent improvements live in their own task |
 | Step 2: fix | "A small rename will make the fix cleaner" | A rename, extraction, or reorganisation the Blocker did not require is an opportunistic refactor disguised as a fix | Revert the refactor. If it's genuinely required, emit `gave_up` with the design conflict — let a human authorise the broader change |
 | Protocol | "Maybe a second attempt with a different approach will work" | Shape A is one retry only; Shape B re-runs Reviewer once. Looping past the retry budget wastes cycles and masks a design conflict | Emit `gave_up` after one failed attempt. The orchestrator decides next steps |
-| Step 4: commit | "The trailer is boilerplate, the commit message is clear enough" | Every commit MUST carry `Tap-Phase: DEBUG`. The orchestrator and Reviewer use it for resume idempotency — missing trailer breaks the chain | Always include `Tap-Phase: DEBUG` in the commit trailers. Never omit |
+| Step 5: commit | "The trailer is boilerplate, the commit message is clear enough" | Every commit MUST carry `Tap-Phase: DEBUG`. The orchestrator and Reviewer use it for resume idempotency — missing trailer breaks the chain | Always include `Tap-Phase: DEBUG` in the commit trailers. Never omit |
 | Step 3: verify | "The hook is flaky, I'll skip it this once" | Hook failure is a real failure — skipping `--no-verify` hides legitimate problems from the pipeline | Fix the underlying issue, then create a new commit (never amend) |
+| Step 4: failure log | "The fix was trivial, no need to log it" | Every failure is signal for downstream tasks. Skipping the log means the next agent may repeat the same mistake | Always persist the failure entry — trivial fixes are the most useful warnings |
 
 ## Constraints
 
@@ -174,6 +193,7 @@ Before staging, self-review the diff. Reject and rewrite if any of these apply:
 - **Pass every required gate before committing** — BECAUSE a red gate at commit time poisons the next run.
 - **Fix hook failures at the source; keep verification intact** — pre-commit failures mean the underlying issue needs fixing.
 - **Stop after one retry** — Shape A is one attempt; Shape B is one attempt. Repeated failure = `gave_up` and the orchestrator decides.
+- **Always persist the failure signature** — BECAUSE downstream agents in the same run need to know what went wrong and where, even if the fix succeeded.
 
 ## Boundaries
 

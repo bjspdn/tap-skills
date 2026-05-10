@@ -21,6 +21,7 @@ digraph tap_run {
   waves      [label="infer waves\n• context[] symbol ownership\n• topo-sort tasks\n• split wave on file overlap"];
 
   wave_in    [label="for each wave\nin order", shape=diamond];
+  fail_ctx   [label="read .failure-log.json\nfilter by file overlap\nbuild <failure-context>"];
   fanout     [label="parallel dispatch\nper task in wave\n(each task = its own RED→GREEN→REFACTOR pipeline)"];
   task_pipe  [label="task pipeline\nRED → GREEN → REFACTOR\n(sequential within task,\nparallel across tasks of wave)"];
 
@@ -47,7 +48,8 @@ digraph tap_run {
   planning  -> finish     [label="reject"];
   planning  -> ticket_in  [label="approve"];
   ticket_in -> wt_create  -> resume -> waves -> wave_in;
-  wave_in   -> fanout     [label="next wave"];
+  wave_in   -> fail_ctx   [label="next wave"];
+  fail_ctx  -> fanout;
   fanout    -> task_pipe;
   task_pipe -> red        -> phase_ok;
   phase_ok  -> green      [label="ok / skipped"];
@@ -131,7 +133,9 @@ If all tickets complete successfully (reaching step 10 — Retro), the checkpoin
 2. **Discovery.** List `.tap/tickets/<slug>/` containing ≥1 `task-*.md` AND no `.tap/tickets/done/<slug>`. Lex-sort slugs. If user passed args (`/tap-run a b`), filter to those slugs in lex order.
 3. **Planning.** For each ticket, read every `task-NN-*.md` frontmatter (`id`, `files.create`, `files.modify`, `context[]`); skip bodies. Infer waves (see Wave inference). Render plan (ticket order, per-ticket waves, gate commands; surface any pair forced into a later wave by file overlap). Seed TaskList nested ticket → wave → task → phase via `TaskCreate`; wire cross-wave deps with `TaskUpdate(addBlockedBy=…)`. Present plan and ask engineer to approve. Reject → halt.
 4. **Per ticket — open worktree.** `git -C <main> worktree add .tap/worktrees/<slug> -b tap-<slug>`. Capture `parent_sha = git -C <wt> rev-parse --short HEAD`. Set `commit_lock = "$(git -C <wt> rev-parse --absolute-git-dir)/tap-commit.lock"` — resolves the linked worktree's real gitdir (`<main>/.git/worktrees/<slug>/`); never write to `<wt>/.git/...` directly because `<wt>/.git` is a gitdir-pointer file in linked worktrees, not a directory, and `flock` will hit `ENOTDIR` and fall back to creating stray lockfiles in cwd. Parse trailers — `git -C <wt> log <parent_sha>..HEAD --format=%B` — and build the resume-skip set keyed on `(Tap-Task, Tap-Phase)`.
-5. **For each wave (in order).** Dispatch all RED tasks in ONE assistant message (N parallel `Agent` tool uses, one per task). Join on every `TAP_RESULT`. Then dispatch all GREEN in one message; join. Then dispatch all REFACTOR in one message (skip per task whose spec declares `## REFACTOR ### Action` no-op or that saga-isolated); join. Skip any phase whose `(task, phase)` is already in the resume-skip set.
+5. **For each wave (in order).**
+   - **5a. Failure-context injection.** Before dispatching any phase in this wave, check if `<worktree_path>/.failure-log.json` exists. If so, read and parse it. For each task in the wave, compute the task's file set (`context[].path` ∪ `files.create` ∪ `files.modify`). Filter failure-log entries where any `files_involved[]` path overlaps with the task's file set. If matches exist, build a `<failure-context>` block for that task's agent prompt containing: `task_id` (of the failed task), `phase`, `failure_type`, `root_cause`, `resolution`, and the overlapping files. Include this block in every phase dispatch for that task within this wave.
+   - **5b. Dispatch.** Dispatch all RED tasks in ONE assistant message (N parallel `Agent` tool uses, one per task). Join on every `TAP_RESULT`. Then dispatch all GREEN in one message; join. Then dispatch all REFACTOR in one message (skip per task whose spec declares `## REFACTOR ### Action` no-op or that saga-isolated); join. Skip any phase whose `(task, phase)` is already in the resume-skip set.
 6. **Phase failure handling.** Any `TAP_RESULT.status == "failed"` → dispatch Debugger Shape A once for that task (same phase). On Shape A `ok`, re-dispatch the original phase. On Shape A `gave_up`, branch via the Phase failure branches table.
 7. **After all waves.** If survivors ≥ 2, dispatch Reviewer once. On `pass` (or `fail` with only `Warning`/`minor`) → step 8. On `fail` with ≥1 `Blocker`, dispatch Debugger Shape B with the blocker list, then rerun Reviewer ONCE. If Reviewer still returns Blockers → ticket FAILED, leave worktree, advance to next ticket. Survivors < 2 → skip Reviewer.
 8. **Integrate.** `git -C <wt> rebase <parent_sha>` onto the main branch's tip; `git -C <main> merge --ff-only tap-<slug>`; `git -C <main> mv .tap/tickets/<slug> .tap/tickets/done/<slug>`; `git -C <main> commit -m "docs: move <slug> to done"`; `git -C <main> merge --ff-only tap-<slug>` again to keep parity; `git -C <main> worktree remove .tap/worktrees/<slug>`; `git -C <main> branch -D tap-<slug>`. Rebase conflict → halt ticket, leave worktree, advance.
@@ -198,6 +202,20 @@ Agent(
 ```
 
 **Profile enrichment.** Before dispatching any phase agent, check if `.tap/retros/_profile.json` exists. If so, read established `agent_performance`, `gate_signals`, and `pattern_signals` entries relevant to the dispatched agent and phase. Include matching signals as a `profile_note` line in the agent's prompt. When the task spec carries a pattern hint (e.g. `pattern: strategy`), look up that pattern's `pattern_signals` entry and include its `clean_green_rate` plus any established sub-signals so the phase agent knows whether this pattern historically succeeds or struggles. Per agent type: **TestWriter** receives the pattern's `test_invariants` signals (e.g. which invariant shapes the pattern demands) so it writes tests aligned with proven structures; **CodeWriter** receives the pattern's `clean_green_rate` (e.g. `"Profile note: pattern 'strategy' has 100% clean GREEN rate across 5 samples."`) so it can calibrate confidence and verification effort; **Refactorer** receives the pattern's refactor-success signals (e.g. historical refactor pass/fail rate for that pattern) so it knows where past refactors tripped. See the [profile contract](${CLAUDE_PLUGIN_ROOT}/skills/retro/profile-contract.md) for signal semantics and thresholds.
+
+**Failure-context enrichment.** Before dispatching any phase agent, check if `<worktree_path>/.failure-log.json` exists. If so, read and parse it as a JSON array of failure entries (see [failure log schema](${CLAUDE_PLUGIN_ROOT}/schemas/failure-log.schema.md)). For the current task, compute the file set: all `context[].path` values ∪ `files.create` ∪ `files.modify` from the task spec frontmatter. Filter failure-log entries whose `files_involved[]` shares at least one path with the task's file set. If matches exist, build a `<failure-context>` block and include it in the agent's prompt:
+
+```
+<failure-context>
+Prior failure in this run touching files you are about to work with:
+- task: 01-truncate | phase: GREEN | type: missing-module
+  root_cause: truncate module not exported from barrel file
+  resolution: added truncate to barrel exports
+  overlapping_files: src/helpers/index.ts
+</failure-context>
+```
+
+Include one `- task: ...` stanza per matching entry. Multiple entries are valid. The block goes after the six standard inputs and before any profile_note.
 
 Six structured inputs every phase agent receives:
 

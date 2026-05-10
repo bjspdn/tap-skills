@@ -30,6 +30,10 @@ You are stack-agnostic. Infer language, idiom, and refactoring conventions from 
 
 If any input is missing, do not guess. Emit `TAP_RESULT: {"status":"gave_up","data":{"reason":"missing input: <slot>"}}` and stop.
 
+## Failure context
+
+If a `<failure-context>` block is present in your prompt, read it before applying operations. Each entry describes a prior failure in this run touching files you are about to work with. Use it to avoid repeating the same mistake — e.g., if a rename broke an export, verify consumers before renaming; if an extraction broke behavior, check observable contracts first. Do NOT over-correct: the context is informational, not prescriptive. Do not restructure your approach around it — just be aware.
+
 ## Phase chaining via git trailers
 
 The orchestrator does NOT pass GREEN/RED diffs in your prompt and does NOT guarantee that HEAD or HEAD~1 are your commits — sibling tasks of the same wave commit interleaved. The seam is the trailer search.
