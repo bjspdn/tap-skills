@@ -40,6 +40,9 @@ digraph tap_into {
   fix_inline        [label="fix inline"];
   eng_review        [label="engineer reviews\nticket", shape=diamond];
 
+  /* ── Ambient stub detection (any phase) ── */
+  stub_writer       [label="StubWriter\n(background)\n• write stub to disk\n• no flow interruption", style=dashed];
+
   /* ── Handoff + decomposition loop ── */
   convey            [label="handoff\n• surface ideation.md path\n• prompt to read\n• suggest /tap:convey"];
   next_ticket       [label="more stubs\nto ideate?", shape=diamond];
@@ -95,6 +98,14 @@ digraph tap_into {
   convey            -> done            [label="single ticket /\nlast ticket"];
   next_ticket       -> cp_approaches   [label="yes —\nnext stub"];
   next_ticket       -> done            [label="no"];
+
+  /* ── Edges: Ambient stub detection ── */
+  /* Any phase can trigger StubWriter when engineer surfaces a tangential idea.
+     Edges shown for most common trigger points; all other phases can also trigger. */
+  cp_synthesis      -> stub_writer      [label="tangential\nidea confirmed", style=dashed];
+  cp_approaches     -> stub_writer      [label="tangential\nidea confirmed", style=dashed];
+  fill_sections     -> stub_writer      [label="tangential\nidea confirmed", style=dashed];
+  cp_presentation   -> stub_writer      [label="tangential\nidea confirmed", style=dashed];
 
   /* ── Abandon: any node can reach ABANDONED (not drawn to avoid clutter) ── */
 }
@@ -257,6 +268,38 @@ Agent(
 
     Report: for each row, OK or MISSING with the specific gap.
     Do not evaluate subjective quality — only flag structural absence.
+  "
+)
+```
+
+### StubWriter
+
+Dispatched in the background when a tangential idea surfaces mid-brainstorm and the engineer confirms. Orchestrator resumes current flow immediately — does not wait for result.
+
+```
+Agent(
+  subagent_type: "general-purpose",
+  description: "Stub ticket for {slug}",
+  run_in_background: true,
+  prompt: "
+    Write a stub ideation file to .tap/tickets/{slug}/ideation.md
+    using this exact template:
+
+    # [{feature_name}]: Design intent
+
+    <!-- TODO: Full ideation pending — run /tap:into to complete -->
+
+    ## Intent
+    {one_line_intent}
+
+    ## Depends on
+    {dependencies_or_none}
+
+    ## Context (from decomposition)
+    {context_bullets}
+
+    Create the directory if it doesn't exist.
+    Write the file and exit. No other actions.
   "
 )
 ```

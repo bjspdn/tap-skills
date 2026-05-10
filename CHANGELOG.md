@@ -6,6 +6,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **Ambient stub detection** `tap:into` now picks up tangential ideas during any brainstorming phase. When engineer mentions a related feature or "we should also handle X," orchestrator offers to stub it as a deferred ticket. On confirmation, dispatches StubWriter subagent in background — no context bloat, no flow interruption. Constraint, anti-rationalization row, and dispatch shape added.
+
 ### Fixed
 
 - **Decomposition stub enforcement** added stub verification gate to `tap:into` RUN_FLOW step 6 — `ls .tap/tickets/` must match full decomposition roadmap before advancing to approach selection. Added anti-rationalization row for "I'll stub the other tickets later" to prevent deferred tickets from existing only in conversation memory.

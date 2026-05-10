@@ -13,6 +13,7 @@ These apply across all phases & steps:
   - Prefer the smallest implementation that satisfies the behavioral spec. If a design can be implemented correctly in 50 lines, do not propose an architecture that requires 200. Fewer moving parts means fewer failure modes, less surface area to test, and less to maintain.
   - Ask one question at a time. Multiple simultaneous questions overwhelm — the engineer loses focus and answers shallowly.
   - Always use free-form prose questions. Do not use `AskUserQuestion` — brainstorming needs latitude, not a menu. When a decision is genuinely finite (approach pick, contradiction resolution, premise audit), present numbered options inline.
+  - When a tangential idea surfaces during any phase — engineer mentions a related feature, a prerequisite, or a "we should also handle X" — offer to stub it as a deferred ticket. On confirmation, dispatch StubWriter (see RUN_FLOW.md dispatch shapes) in the background and resume the current thread without waiting.
 
 ## Anti-rationalization table
 
@@ -33,6 +34,7 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Convergence gate   | "I can verify the mechanical checks myself, no need for the agent"           | Skips ConvergenceChecker dispatch, self-validates (grader grading own test)                           | Always dispatch the agent. Mechanical validation is cheap — skipping it saves nothing                                                                              |
 | Self-review        | "I just wrote it, I know it's correct"                                       | Skips schema validation because the ticket was just emitted                                           | Read the emitted file back. Check against template. Writing and validating are different cognitive modes                                                           |
 | Decomposition loop | "The engineer probably wants to stop here"                                   | Doesn't ask about next stub, assumes session is over                                                  | Always ask "continue to next ticket?" when stubs remain. Let the engineer decide                                                                                   |
+| Ambient ideas      | "That's a good idea but let's stay focused on the current ticket"            | Tangential idea lives only in conversation — context compaction or session end loses it               | Offer to stub it. On confirmation, dispatch StubWriter in background. Don't derail current flow, don't silently drop the idea                                      |
 
 ## Next step
 
