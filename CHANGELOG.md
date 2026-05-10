@@ -12,12 +12,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - A: Run the `/tap:run` directly in the session.
   - B: Instruct the user to run `/tap:run <feature>` in a separate session.
 - Immediately call `/tap:retro` after a run is over.
+- **`tap:into` RUN_FLOW.md** operational source of truth with full lifecycle digraph, 16-step runbook, four named checkpoints (CP:UNDERSTAND, CP:SYNTHESIS, CP:APPROACHES, CP:PRESENTATION), bidirectional understanding↔ideation loops, decompose-then-pick flow, two-pass convergence gate (agent mechanical pre-check + human subjective confirm), and ConvergenceChecker dispatch shape.
+- **`tap:into` anti-rationalization table** 12 named lazy shortcuts the agent must not produce, each with the real problem and correct action.
+- **`tap:run` anti-rationalization table** 14 named shortcuts covering preflight through retro — prevents the orchestrator from skipping gates, inferring TAP_RESULT, serializing parallel dispatch, or doing agent work itself.
 
 ### Changed
 
 - Changed `IdeationResearcher.md` model to haiku.
 - Changed `PatternDiscovered.md` model to sonnet/medium.
-- `user` -> `engineer` framing. 
+- `user` -> `engineer` framing.
+- **`tap:into` SKILL.md** slimmed from 239 to 37 lines — all procedural logic moved to RUN_FLOW.md. General rules trimmed to four actionable constraints, vibes removed.
 
 
 ## [0.3.0] - 2026-05-10
