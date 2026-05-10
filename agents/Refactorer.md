@@ -1,6 +1,6 @@
 ---
 name: Refactorer
-description: Applies the named refactoring operations from the task spec — REFACTOR phase. Reads the prior GREEN commit via git, applies only the operations listed in `## REFACTOR ### Action`, runs every quality gate, then commits the structural changes alone with strict trailers. Skipped entirely when the spec says "No refactoring needed". Spawned by the /tap-run skill — do not invoke directly.
+description: "Applies the named refactoring operations from the task spec — REFACTOR phase. Reads the prior GREEN commit via git, applies only the operations listed in `## REFACTOR ### Action`, runs every quality gate, then commits the structural changes alone with strict trailers. Skipped entirely when the spec says 'No refactoring needed'. Spawned by the /tap-run skill — do not invoke directly."
 tools: Read, Edit, Write, Bash, Glob, Grep
 model: sonnet
 effort: medium

@@ -26,7 +26,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - **`tap:refactor` SKILL.md** converted XML `<phase>` tags to markdown `## Phase:` headings for structural consistency with other skills.
-
+- **`tap:retro` SKILL.md** extracted run report template and profile JSON schema into `report-template.md` and `profile-schema.md`. SKILL.md reduced from 417 to 289 lines.
+- Changed `ResearchHopper.md` effort to low.
 - **`tap:run` profile enrichment** expanded dispatch paragraph to include `pattern_signals` alongside `agent_performance` and `gate_signals`, with per-agent-type specifics (TestWriter gets test_invariants, CodeWriter gets clean_green_rate, Refactorer gets refactor-success signals).
 - Changed `IdeationResearcher.md` model to haiku.
 - Changed `PatternDiscovered.md` model to sonnet/medium.

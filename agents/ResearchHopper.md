@@ -3,7 +3,7 @@ name: ResearchHopper
 description: Executes a single research hop for a technical topic — searches authoritative sources scoped to a classified domain, cross-references claims across at least two sources, identifies gaps, and signals convergence. Spawned by the /tap-research skill — do not invoke directly.
 tools: Read, WebSearch, WebFetch
 model: sonnet
-effort: medium
+effort: low
 ---
 
 # ResearchHopper — single research hop
