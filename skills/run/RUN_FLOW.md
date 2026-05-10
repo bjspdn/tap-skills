@@ -75,6 +75,56 @@ digraph tap_run {
 }
 ```
 
+## Session resume (checkpoint)
+
+Before entering the main runbook, the orchestrator checks for a prior interrupted session.
+
+### Resume detection (runs before step 1)
+
+1. Check if `$REPO_ROOT/.tap/SESSION_RESUME.json` exists.
+2. If it does NOT exist → proceed to Runbook step 1 normally.
+3. If it exists → read and validate against `schemas/session-resume.schema.json`.
+   - Parse error or schema mismatch → WARN, delete the stale file, proceed fresh.
+4. Surface the checkpoint to the user:
+   ```
+   Found interrupted session for ticket "<ticket_slug>".
+   Started: <started_at>  |  Last checkpoint: <updated_at>
+   Progress: <completed_waves>/<total_waves> waves complete.
+   Tasks: <N complete> | <M in_progress> | <P pending>
+
+   Resume from where it stopped, or start fresh?
+   ```
+5. If user chooses **resume**:
+   - Skip Preflight, Discovery, and Planning (steps 1–3).
+   - Restore worktree state: verify `active_worktrees` paths still exist. If a worktree is missing, recreate it (`git worktree add`).
+   - Build the resume-skip set from checkpoint: tasks with `status: "complete"` are skipped entirely. Tasks with `status: "in_progress"` restart from the phase AFTER `last_phase` (e.g., if `last_phase: "RED"`, resume at GREEN). Tasks with `status: "pending"` run normally.
+   - Jump to the first incomplete wave and continue execution from Runbook step 5.
+6. If user chooses **fresh start**:
+   - Delete `SESSION_RESUME.json`.
+   - If `active_worktrees` paths exist, offer to clean them up (`git worktree remove` + branch delete).
+   - Proceed to Runbook step 1 normally.
+
+### Checkpoint write (after each wave boundary)
+
+After every wave's `wave_join` completes (all task pipelines in the wave finish or saga-isolate), the orchestrator writes/overwrites `.tap/SESSION_RESUME.json`:
+
+1. Compute current state:
+   - `completed_waves` = number of waves where ALL tasks are `complete`, `failed`, or `saga_isolated`.
+   - For each task: derive `status` from its TAP_RESULT outcomes and `last_phase` from the last successfully committed phase.
+   - `commit_sha` = `git -C <wt> rev-parse --short HEAD` at the time of the task's last commit.
+   - `debugger_retries` = accumulated list of Shape A/B outcomes for the session.
+2. Write the JSON atomically (write to `.tap/SESSION_RESUME.json.tmp`, then `mv` to `.tap/SESSION_RESUME.json`).
+3. `updated_at` = current ISO 8601 timestamp.
+
+### Checkpoint cleanup (after successful completion)
+
+After step 8 (Integrate) succeeds for a ticket:
+
+1. Delete `.tap/SESSION_RESUME.json` if it exists.
+2. This ensures completed tickets leave no checkpoint residue.
+
+If all tickets complete successfully (reaching step 10 — Retro), the checkpoint file MUST NOT exist.
+
 ## Runbook
 
 1. **Preflight.** `git status --porcelain` on the main repo — must be empty, else halt and surface dirty paths. `git worktree prune` to clear stale entries.

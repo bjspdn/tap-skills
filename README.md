@@ -51,6 +51,10 @@ The primary way to use this set of skills/agents is to first start with `/tap:in
 It will create an artefact at `.tap/tickets/<slug>/ideation.md`. That ideation.md will then be used by `/tap:convey` to decompose it into tasks at the same location. Once everything is done and settled, run `/tap:run` to run the TDD cycle.
 
 
+## Worked example
+
+See [`examples/cache-warming/`](examples/cache-warming/) for a complete walkthrough showing what tap produces at each pipeline stage.
+
 ## Versioning + releases
 
 **Semver, automated via `bump-version.sh`.**
@@ -79,7 +83,12 @@ The script reads `.version-bump.json` for the list of files that carry a version
 | **research** | `/tap:research` | Deep multi-hop research on any technical topic. Cross-references sources, emits structured artifact at `.tap/research/<topic-slug>.md`.                        |
 | **refactor** | `/tap:refactor` | Aggressive structural refactoring targeting 80% reduction in countable lines without behavior change. Splits monoliths into focused submodules.                |
 | **retro**    | `/tap:retro`    | Post-mortem of completed runs. Extracts commit trailers, classifies failures, computes per-agent metrics, builds rolling aggregate profile.                    |
+| **health**   | `/tap:health`   | Validates `.tap/` directory integrity: detects stale worktrees, orphaned lockfiles, incomplete tickets, stale branches, and profile corruption. Reports a summary table and offers safe auto-repair with user confirmation. |
 
+
+## Architecture
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for system diagram, skill-to-agent dispatch map, artifact topology, and end-to-end data flow.
 
 ## Pattern catalog API
 

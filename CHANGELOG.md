@@ -6,6 +6,17 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **`examples/cache-warming/` worked example** complete walkthrough showing what tap produces at each pipeline stage (ideation, task files, commits, retro). Synthetic but structurally accurate artifacts for a TypeScript config service feature.
+
+- **ARCHITECTURE.md** single-page system overview with Mermaid diagram, skill-to-agent dispatch map, artifact topology, pattern catalog integration flow, and end-to-end data path.
+
+- **`tap:health` skill** validates `.tap/` directory integrity — detects stale worktrees, orphaned lockfiles, incomplete tickets, stale branches, and profile corruption. Reports a summary table and offers safe auto-repair with user confirmation.
+- **SESSION_RESUME checkpointing** `tap:run` writes `.tap/SESSION_RESUME.json` after every wave boundary. On next invocation, offers resume from last checkpoint or fresh start. Completed runs delete the file automatically.
+- **`tap:health` stale-session-checkpoint check** detects leftover `SESSION_RESUME.json` files older than 24 hours and offers deletion as a safe repair.
+- **`schemas/session-resume.schema.json`** JSON Schema for the checkpoint file, used by `tap:health` for validation.
+
 ## [0.4.0] - 2026-05-10
 
 ### Added
