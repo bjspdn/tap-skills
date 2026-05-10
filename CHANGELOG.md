@@ -6,6 +6,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-05-10
+
 ### Added
 
 - **Context pressure hook** (`hooks/context-pressure.sh` + `hooks/hooks.json`) self-contained hook that reads real token counts from the transcript on every turn and injects a `CONTEXT_PRESSURE` signal with inline behavioral rules at moderate (>100K) or high (>150K). Grounded on 200K effective budget regardless of model window size to avoid lost-in-the-middle degradation. Ships as plugin hook via `${CLAUDE_PLUGIN_ROOT}`.
