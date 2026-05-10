@@ -6,6 +6,10 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Decomposition stub enforcement** added stub verification gate to `tap:into` RUN_FLOW step 6 — `ls .tap/tickets/` must match full decomposition roadmap before advancing to approach selection. Added anti-rationalization row for "I'll stub the other tickets later" to prevent deferred tickets from existing only in conversation memory.
+
 ## [0.5.1] - 2026-05-10
 
 ### Changed

@@ -122,7 +122,8 @@ digraph tap_into {
 
 6. **Decomposition (conditional).** If scope too large:
    - Help engineer decompose into sub-tickets through discussion.
-   - Once decomposition confirmed, stub ALL deferred tickets immediately (see Stub format). `ls .tap/tickets/` must show full roadmap before diving in.
+   - Once decomposition confirmed, stub ALL deferred tickets immediately (see Stub format) — every ticket discussed gets a stub on disk, no exceptions.
+   - **Stub verification gate.** Run `ls .tap/tickets/` and confirm every decomposed ticket has a directory with a stub `ideation.md`. If any ticket from the decomposition discussion is missing its stub, write it before proceeding. Do not advance to approach selection until the directory listing matches the full decomposition roadmap.
    - Engineer picks which ticket to ideate first (not necessarily lex-first).
    - Flow continues with picked ticket.
 
