@@ -181,6 +181,34 @@ Compute correlations:
 3. "Pattern hint P correlates with clean GREEN at rate Q" — group by pattern name, compute rate of clean GREEN (no DEBUG).
 4. "Gate G fails most often during phase H" — parse failure categories to extract gate names and phases.
 
+### Step: compute-token-consumption
+
+Capture token usage per task and per phase from the session's agent dispatch results. The Agent tool returns a usage summary after each subagent completes — these summaries are the source of truth for token data.
+
+**Data source**: when `tap:run` dispatches phase agents (TestWriter, CodeWriter, Refactorer, Debugger), the Agent tool's response includes `input_tokens` and `output_tokens` consumed by that subagent call. If `SESSION_RESUME.json` or an equivalent run artifact captures these values, read them. Otherwise, token data is unavailable — record `"token_data": "unavailable"` and skip quantitative analysis for this run.
+
+When token data IS available, compute per-task:
+
+```
+{
+  task_id,
+  phases: {
+    RED:      { input_tokens, output_tokens, total_tokens },
+    GREEN:    { input_tokens, output_tokens, total_tokens },
+    REFACTOR: { input_tokens, output_tokens, total_tokens },  // null if skipped
+    DEBUG:    { input_tokens, output_tokens, total_tokens, invocations: N }  // null if none
+  },
+  total_tokens,
+  outlier: <bool>  // true if total_tokens > 3x run average
+}
+```
+
+Then compute run-level aggregates:
+
+1. **Per-phase averages**: mean `total_tokens` for RED, GREEN, REFACTOR, DEBUG across all tasks in the run. This reveals if a phase is consistently cheaper/more expensive.
+2. **Outlier tasks**: tasks consuming 3x+ the run average. Flag these — complexity was likely underestimated at decomposition time.
+3. **Total run consumption**: sum of all task tokens.
+
 ### Step: cross-reference-pattern-smells
 
 For each pattern extracted in `extract-pattern-hints`, read its pattern card at `${CLAUDE_PLUGIN_ROOT}/patterns/<category>/<pattern_name>.md` and collect the `smells_it_introduces` frontmatter field (a list of kebab-case smell tags).
@@ -216,6 +244,10 @@ For each structural observation from this run:
 3. **pattern_signals**: merge pattern adherence and clean-GREEN rates per pattern name. For each `pattern_smell_correlation` entry from `cross-reference-pattern-smells`, find or create a `smell_correlations` sub-entry on the matching pattern signal; increment `failure_count`, set `last_seen`.
 4. **gate_signals**: merge gate failure rates per gate per phase.
 5. **smell_signals**: if the retro detects recurring failure patterns (same category appearing 3+ times across runs), check the pattern catalog at `${CLAUDE_PLUGIN_ROOT}/patterns/` for matching smell tags. Add entries mapping failure patterns to smell tags.
+6. **token_signals**: if token data was available for this run, merge into the profile:
+   - Per-phase averages: weighted-average merge of `avg_tokens_per_phase.<PHASE>` with existing profile values.
+   - Per-complexity-class averages: if tasks can be classified by complexity (file count as proxy — 1-2 files = `simple`, 3-4 = `moderate`, 5+ = `complex`), compute average tokens per class and merge.
+   - Outlier registry: append outlier tasks (3x+ average) with their characteristics (`pattern_used`, `file_count`, `phase_breakdown`). Keep only the 20 most recent outliers (FIFO eviction).
 
 **Expiry**: after merging, scan all profile entries. Any entry where `last_seen` is older than `expiry_threshold_runs` runs (default 20) gets removed. Increment `runs_analyzed`. Set `last_updated` to today's date.
 
@@ -275,6 +307,8 @@ Do not produce these rationalizations. If you catch yourself reasoning toward on
 | Update profile | "Profile already has this data, no need to merge" | Skips merge because existing data "looks the same." Rates shift with new samples — even confirming data updates the average | Always merge. Recompute weighted averages, increment sample counts, update last_seen. Stale data expires — fresh data keeps entries alive |
 | Surface findings | "All tentative signals look actionable, surfacing them" | Presents tentative observations (< 3 samples) as actionable guidance. Premature advice based on noise | Only surface established signals as actionable. Prefix tentative findings with "[tentative]" and frame as early signals, not recommendations |
 | Surface findings | "I'll add my own interpretation of what went wrong" | Invents correlations or narratives not backed by the data. Retro reports facts, not theories | Tie every observation to specific sample counts and rates. If the data doesn't support a claim, don't make it |
+| Token analysis | "Token data isn't available, skip the whole section" | Omits the section entirely instead of recording unavailability. Future retros need to know the data gap exists | Always emit the token section. If data is unavailable, write `"token_data": "unavailable"` and state "Token data unavailable for this run" in the report. The absence is itself data |
+| Token analysis | "This task used a lot of tokens because it was complex" | Rationalizes high consumption without checking whether it's actually an outlier relative to the run average | Apply the 3x threshold mechanically. A task is an outlier if `total_tokens > 3 * run_average` — not because it "seems complex" |
 
 ## General rules
 

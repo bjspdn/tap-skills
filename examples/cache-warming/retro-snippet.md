@@ -5,7 +5,7 @@
 ## Summary
 
 | Metric            | Value |
-|-------------------|-------|
+| -------------------| -------|
 | Tasks completed   | 3/3   |
 | Saga-isolated     | 0     |
 | Debugger retries  | 0     |

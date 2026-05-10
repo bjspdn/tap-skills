@@ -6,7 +6,16 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **Reviewer agent** added spec drift detection step (step 6) that compares the implementation diff against ideation.md design decisions and flags pattern downgrades, constraint violations, scope reductions, and signature divergences as Warnings.
+
 ### Added
+
+- **Token & cost analysis dimension (`tap:retro`)** tracks per-task and per-phase token consumption from agent dispatch results, flags outlier tasks (3x+ run average), and feeds rolling averages into `_profile.json` for future run calibration. Gracefully degrades to "token data unavailable" for older runs or sketch executions.
+
+- **`scripts/validate.sh` schema validation** checks pattern frontmatter, `_index.json` integrity, agent/skill specs, schemas, and examples. Zero dependencies beyond bash + jq.
+- **`scripts/hooks/pre-commit` git hook** runs validate.sh on every commit; enable with `git config core.hooksPath scripts/hooks`.
 
 - **`examples/cache-warming/` worked example** complete walkthrough showing what tap produces at each pipeline stage (ideation, task files, commits, retro). Synthetic but structurally accurate artifacts for a TypeScript config service feature.
 

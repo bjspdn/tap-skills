@@ -96,6 +96,28 @@ If the file does not exist, skip all profile-informed adjustments — the pipeli
 - **PatternsDiscoverer / PatternScanner**: when scanning for patterns near seed files, cross-reference with smell_signals. If a recurring failure pattern maps to a smell tag, check whether the seed files exhibit that smell. Surface it in the pattern map if so.
 - **refactor**: during the investigate phase, check smell_signals for the target file. If the file appears in areas where a mapped smell has high occurrences, prioritize that smell in the reduction plan.
 
+### token_signals
+
+**Who reads it**: `run` orchestrator, `convey` skill during slicing/task estimation.
+
+```json
+"token_signals": {
+  "avg_tokens_per_phase": { "RED": 8000, "GREEN": 15000, "REFACTOR": 6000, "DEBUG": 20000 },
+  "avg_tokens_per_complexity": { "simple": 12000, "moderate": 25000, "complex": 50000 },
+  "sample_count": 5,
+  "confidence": "established",
+  "outlier_registry": [ { "task_id": "task-03-complex-wiring", "total_tokens": 45000, ... } ]
+}
+```
+
+**How to apply**:
+
+- **Orchestrator** (run): use `avg_tokens_per_complexity` to anticipate which tasks in the current wave may be expensive. If a task matches the `complex` class (5+ files) and established data shows high token consumption, no action needed — this is observational context for post-run retro.
+- **convey**: during slicing, if established token data shows that tasks with certain properties (high file count, specific patterns) are outliers, surface this as a decomposition advisory: `"Profile note: tasks touching 5+ files average {N} tokens (established, {sample_count} samples). Consider splitting."` Advisory only — do not auto-split.
+- **retro** (self): use `outlier_registry` to detect recurring outlier characteristics. If the same pattern or file-count profile appears in 3+ outlier entries, surface it as an established finding.
+
+**Token data may be unavailable** for older runs, sketch-mode executions, or interrupted sessions. When `token_signals` is absent or `sample_count == 0`, skip all token-informed adjustments silently.
+
 ## Hard rules
 
 - **Never halt on missing profile.** The profile is optional enrichment. Every skill and agent must function identically without it.

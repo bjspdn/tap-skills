@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Pre-commit hook: runs tap schema validation.
+# Enable with: git config core.hooksPath scripts/hooks
+
+exec "$(dirname "$0")/../validate.sh"

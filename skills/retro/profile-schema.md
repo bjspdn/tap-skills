@@ -67,6 +67,40 @@ Reference for `.tap/retros/_profile.json` — the rolling aggregate that accumul
       "last_seen": "<YYYY-MM-DD>"
     }
   ],
+  "token_signals": {
+    "avg_tokens_per_phase": {
+      "RED": <N>,
+      "GREEN": <N>,
+      "REFACTOR": <N>,
+      "DEBUG": <N>
+    },
+    "avg_tokens_per_complexity": {
+      "simple": <N>,
+      "moderate": <N>,
+      "complex": <N>
+    },
+    "sample_count": <N>,
+    "confidence": "<tentative | established>",
+    "last_seen": "<YYYY-MM-DD>",
+    "outlier_registry": [
+      {
+        "task_id": "<task id>",
+        "slug": "<run slug>",
+        "total_tokens": <N>,
+        "run_average": <N>,
+        "multiplier": <float>,
+        "pattern_used": "<pattern name or null>",
+        "file_count": <N>,
+        "phase_breakdown": {
+          "RED": <N>,
+          "GREEN": <N>,
+          "REFACTOR": <N>,
+          "DEBUG": <N>
+        },
+        "date": "<YYYY-MM-DD>"
+      }
+    ]
+  },
   "expiry_threshold_runs": 20
 }
 ```
@@ -80,6 +114,7 @@ When merging a new run's data into an existing profile:
 - **pattern_signals**: match on `pattern`. Same weighted-average merge for rates. For `smell_correlations`, match on `smell_tag` within the pattern entry; increment `failure_count`, update `last_seen`.
 - **gate_signals**: match on `gate` + `phase`. Same weighted-average merge.
 - **smell_signals**: match on `failure_pattern`. Increment `occurrences`.
+- **token_signals**: if token data was available for the run, weighted-average merge for `avg_tokens_per_phase` and `avg_tokens_per_complexity` (same formula as slicing_signals). Increment `sample_count`. Append new outlier entries to `outlier_registry`; if registry exceeds 20 entries, evict oldest by `date` (FIFO). Skip merge entirely if run had no token data.
 
 ## Confidence thresholds
 

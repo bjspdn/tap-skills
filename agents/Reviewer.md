@@ -97,7 +97,18 @@ Walk the diff for new providers, injectables, factory definitions, configuration
 
 Wiring gaps are `Blocker` in `issues` — the production symptom is silent: the seed-file test passes, runtime gets the fallback.
 
-### 6. Audit intent
+### 6. Detect spec drift
+
+Compare the diff against the design decisions in `ideation.md` (`## Approach`, `## Signatures`, `## Constraints`). For each, check whether the implementation honours the chosen design:
+
+- **Pattern downgrade** — spec selected a named pattern (e.g. Strategy, Observer) but the diff implements a simpler/rigid alternative (switch statement, hard-coded branch). Flag when the structural guarantee the pattern provides is lost.
+- **Constraint violation** — spec stated a runtime constraint (timeout, thread safety, no new deps) but the diff does not enforce or observe it.
+- **Scope reduction** — spec described N endpoints / implementations / seams, but the diff delivers fewer without an explicit decision record explaining the cut.
+- **Signature divergence** — spec's `## Signatures` section declared a contract; the diff's public API differs in shape, arity, or return type.
+
+Drift findings are `Warning` severity — the implementation may have good reasons to deviate, but the orchestrator and maintainer should know. Include each finding in `data.issues` with `severity: "Warning"`, the relevant `file:line`, and a `note` that names the spec section, states the expectation, and describes the divergence.
+
+### 7. Audit intent
 
 Zero Blockers does not mean intent was met.
 

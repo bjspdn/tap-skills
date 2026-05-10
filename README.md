@@ -102,6 +102,20 @@ Each card has machine-readable frontmatter (`name`, `category`, `aliases`, `inte
 
 Adding a pattern: drop a new `<category>/<kebab-name>.md` conforming to [`patterns/_schema.md`](patterns/_schema.md) and regenerate `_index.json`.
 
+## Development setup
+
+Enable pre-commit validation:
+
+```bash
+git config core.hooksPath scripts/hooks
+```
+
+Run validation manually:
+
+```bash
+./scripts/validate.sh
+```
+
 ## License
 
 MIT

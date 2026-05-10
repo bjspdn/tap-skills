@@ -36,6 +36,32 @@ Phase values: `pass` (clean), `retry` (required DEBUG), `skip` (intentional no-o
 |------|---------|-----------|-------------|------|
 <tasks sorted by heat score, descending>
 
+## Token & cost analysis
+
+> _Source: agent dispatch usage summaries returned by the Agent tool during run execution._
+
+| Phase | Avg tokens | Min | Max | Tasks |
+|-------|-----------|-----|-----|-------|
+| RED | <avg> | <min> | <max> | <N> |
+| GREEN | <avg> | <min> | <max> | <N> |
+| REFACTOR | <avg> | <min> | <max> | <N> |
+| DEBUG | <avg> | <min> | <max> | <N> |
+| **Total run** | — | — | — | **<sum>** |
+
+### Per-task token breakdown
+
+| Task | RED | GREEN | REFACTOR | DEBUG | Total | Outlier |
+|------|-----|-------|----------|-------|-------|---------|
+<for each task, one row — token counts per phase, total, and outlier flag (yes/no)>
+
+### Outliers (3x+ run average)
+
+<bulleted list of outlier tasks with their characteristics>
+<e.g. "task-03-complex-wiring: 45k tokens (avg: 12k) — 5 files, pattern: strategy, 2 DEBUG retries">
+
+_If no outliers: "No outlier tasks detected."_
+_If token data unavailable: "Token data unavailable for this run (older run format or sketch execution)."_
+
 ## Failure taxonomy
 
 | Task | Phase | Category | Detail |
