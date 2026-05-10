@@ -10,16 +10,6 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **Context pressure hook** (`hooks/context-pressure.sh` + `hooks/hooks.json`) self-contained hook that reads real token counts from the transcript on every turn and injects a `CONTEXT_PRESSURE` signal with inline behavioral rules at moderate (>100K) or high (>150K). Grounded on 200K effective budget regardless of model window size to avoid lost-in-the-middle degradation. Ships as plugin hook via `${CLAUDE_PLUGIN_ROOT}`.
 
-### Changed
-
-- **Rule/constraint section naming** unified across all agents, skills, and shared schemas. "Hard rules", "Rules", "General rules", and "Critical Rules" all renamed to `## Constraints` with positive framing (e.g. "Stage only named files" instead of "Never `git add -A`"). Anti-rationalization tables kept as-is. BECAUSE clauses preserved where they existed.
-- **TAP_RESULT envelope contract** extracted from 5 inline definitions (TestWriter, CodeWriter, Refactorer, Reviewer, Debugger) into `schemas/tap-result.md`. Agents now reference the shared schema and keep only their agent-specific `data` shapes inline. `scripts/validate.sh` checks that every agent file references the shared contract.
-- **Agent input contracts** converted prose-bullet input descriptions to structured tables (Slot / Type / Required / Source) in TestWriter, CodeWriter, Refactorer, Reviewer, and Debugger. Critical usage notes retained below each table.
-- **Agent anti-pattern checks** reformatted from prose bullets to 4-column tables (Where / Rationalization / Real problem / Correct action) in TestWriter, CodeWriter, Refactorer, and Debugger for consistency with skill-file format.
-- **Reviewer agent** added spec drift detection step (step 6) that compares the implementation diff against ideation.md design decisions and flags pattern downgrades, constraint violations, scope reductions, and signature divergences as Warnings.
-
-### Added
-
 - **Token & cost analysis dimension (`tap:retro`)** tracks per-task and per-phase token consumption from agent dispatch results, flags outlier tasks (3x+ run average), and feeds rolling averages into `_profile.json` for future run calibration. Gracefully degrades to "token data unavailable" for older runs or sketch executions.
 
 - **`scripts/validate.sh` schema validation** checks pattern frontmatter, `_index.json` integrity, agent/skill specs, schemas, and examples. Zero dependencies beyond bash + jq.
@@ -33,6 +23,15 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **SESSION_RESUME checkpointing** `tap:run` writes `.tap/SESSION_RESUME.json` after every wave boundary. On next invocation, offers resume from last checkpoint or fresh start. Completed runs delete the file automatically.
 - **`tap:health` stale-session-checkpoint check** detects leftover `SESSION_RESUME.json` files older than 24 hours and offers deletion as a safe repair.
 - **`schemas/session-resume.schema.json`** JSON Schema for the checkpoint file, used by `tap:health` for validation.
+
+### Changed
+
+- **Rule/constraint section naming** unified across all agents, skills, and shared schemas. "Hard rules", "Rules", "General rules", and "Critical Rules" all renamed to `## Constraints` with positive framing (e.g. "Stage only named files" instead of "Never `git add -A`"). Anti-rationalization tables kept as-is. BECAUSE clauses preserved where they existed.
+- **TAP_RESULT envelope contract** extracted from 5 inline definitions (TestWriter, CodeWriter, Refactorer, Reviewer, Debugger) into `schemas/tap-result.md`. Agents now reference the shared schema and keep only their agent-specific `data` shapes inline. `scripts/validate.sh` checks that every agent file references the shared contract.
+- **Agent input contracts** converted prose-bullet input descriptions to structured tables (Slot / Type / Required / Source) in TestWriter, CodeWriter, Refactorer, Reviewer, and Debugger. Critical usage notes retained below each table.
+- **Agent anti-pattern checks** reformatted from prose bullets to 4-column tables (Where / Rationalization / Real problem / Correct action) in TestWriter, CodeWriter, Refactorer, and Debugger for consistency with skill-file format.
+- **Reviewer agent** added spec drift detection step (step 6) that compares the implementation diff against ideation.md design decisions and flags pattern downgrades, constraint violations, scope reductions, and signature divergences as Warnings.
+
 
 ## [0.4.0] - 2026-05-10
 
