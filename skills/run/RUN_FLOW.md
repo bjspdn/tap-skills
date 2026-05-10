@@ -27,6 +27,7 @@ digraph tap_run {
 
   red        [label="dispatch TestWriter\n(skipped if RED already in trailers)"];
   green      [label="dispatch CodeWriter\n(skipped if GREEN already in trailers)"];
+  smell_chk  [label="smell-check\n• task has pattern hint?\n• read smells_it_introduces\n• heuristic scan of phase diff\n• append .smell-warnings.json\n• build <smell-warnings> block"];
   refactor   [label="dispatch Refactorer\n(skipped if REFACTOR already in trailers,\n or spec says no-op)"];
   phase_ok   [label="phase status?", shape=diamond];
   debug_a    [label="Debugger Shape A\n(one retry — same phase)"];
@@ -56,8 +57,10 @@ digraph tap_run {
   phase_ok  -> debug_a    [label="failed"];
   green     -> phase_ok;
   refactor  -> phase_ok;
-  green     -> refactor   [label="ok"];
-  refactor  -> wave_join  [label="ok / skipped\n(task pipeline done)"];
+  green     -> smell_chk  [label="ok"];
+  smell_chk -> refactor;
+  refactor  -> smell_chk  [label="ok\n(REFACTOR smell-check)"];
+  smell_chk -> wave_join  [label="no next phase\n(task pipeline done)"];
   debug_a   -> red        [label="ok (retry phase)"];
   debug_a   -> phase_q    [label="gave_up"];
   phase_q   -> saga_drop  [label="RED / GREEN"];
@@ -135,7 +138,14 @@ If all tickets complete successfully (reaching step 10 — Retro), the checkpoin
 4. **Per ticket — open worktree.** `git -C <main> worktree add .tap/worktrees/<slug> -b tap-<slug>`. Capture `parent_sha = git -C <wt> rev-parse --short HEAD`. Set `commit_lock = "$(git -C <wt> rev-parse --absolute-git-dir)/tap-commit.lock"` — resolves the linked worktree's real gitdir (`<main>/.git/worktrees/<slug>/`); never write to `<wt>/.git/...` directly because `<wt>/.git` is a gitdir-pointer file in linked worktrees, not a directory, and `flock` will hit `ENOTDIR` and fall back to creating stray lockfiles in cwd. Parse trailers — `git -C <wt> log <parent_sha>..HEAD --format=%B` — and build the resume-skip set keyed on `(Tap-Task, Tap-Phase)`.
 5. **For each wave (in order).**
    - **5a. Failure-context injection.** Before dispatching any phase in this wave, check if `<worktree_path>/.failure-log.json` exists. If so, read and parse it. For each task in the wave, compute the task's file set (`context[].path` ∪ `files.create` ∪ `files.modify`). Filter failure-log entries where any `files_involved[]` path overlaps with the task's file set. If matches exist, build a `<failure-context>` block for that task's agent prompt containing: `task_id` (of the failed task), `phase`, `failure_type`, `root_cause`, `resolution`, and the overlapping files. Include this block in every phase dispatch for that task within this wave.
-   - **5b. Dispatch.** Dispatch all RED tasks in ONE assistant message (N parallel `Agent` tool uses, one per task). Join on every `TAP_RESULT`. Then dispatch all GREEN in one message; join. Then dispatch all REFACTOR in one message (skip per task whose spec declares `## REFACTOR ### Action` no-op or that saga-isolated); join. Skip any phase whose `(task, phase)` is already in the resume-skip set.
+   - **5b. Dispatch.** Dispatch all RED tasks in ONE assistant message (N parallel `Agent` tool uses, one per task). Join on every `TAP_RESULT`. Then dispatch all GREEN in one message; join. After GREEN joins, run smell-check (step 5c) for every task that just committed GREEN. Then dispatch all REFACTOR in one message (skip per task whose spec declares `## REFACTOR ### Action` no-op or that saga-isolated), injecting any `<smell-warnings>` built in 5c; join. After REFACTOR joins, run smell-check (step 5c) again for every task that just committed REFACTOR — these warnings carry forward to subsequent waves or the Reviewer. Skip any phase whose `(task, phase)` is already in the resume-skip set.
+   - **5c. Smell-check (after GREEN or REFACTOR commit).** For each task that just committed a phase with `status: ok` (not skipped or saga-isolated):
+     1. Check if the task spec has a `### Pattern hint`. If not, skip this task.
+     2. Read the pattern card at `${CLAUDE_PLUGIN_ROOT}/patterns/<category>/<name>.md` and parse `smells_it_introduces` from frontmatter. If empty, skip.
+     3. Get the diff of the just-committed phase: `git -C <worktree_path> diff HEAD~1..HEAD`.
+     4. For each smell tag in `smells_it_introduces`, apply the heuristic check (see Smell heuristics table below). If the heuristic fires, build a warning entry.
+     5. If any warnings were generated, append them to `<worktree_path>/.smell-warnings.json` (create the file if it doesn't exist; read and extend the array if it does).
+     6. Before dispatching the NEXT phase agent for this task, read `<worktree_path>/.smell-warnings.json`, filter entries matching this `task_id`, and build a `<smell-warnings>` block for the agent prompt (see format below).
 6. **Phase failure handling.** Any `TAP_RESULT.status == "failed"` → dispatch Debugger Shape A once for that task (same phase). On Shape A `ok`, re-dispatch the original phase. On Shape A `gave_up`, branch via the Phase failure branches table.
 7. **After all waves.** If survivors ≥ 2, dispatch Reviewer once. On `pass` (or `fail` with only `Warning`/`minor`) → step 8. On `fail` with ≥1 `Blocker`, dispatch Debugger Shape B with the blocker list, then rerun Reviewer ONCE. If Reviewer still returns Blockers → ticket FAILED, leave worktree, advance to next ticket. Survivors < 2 → skip Reviewer.
 8. **Integrate.** `git -C <wt> rebase <parent_sha>` onto the main branch's tip; `git -C <main> merge --ff-only tap-<slug>`; `git -C <main> mv .tap/tickets/<slug> .tap/tickets/done/<slug>`; `git -C <main> commit -m "docs: move <slug> to done"`; `git -C <main> merge --ff-only tap-<slug>` again to keep parity; `git -C <main> worktree remove .tap/worktrees/<slug>`; `git -C <main> branch -D tap-<slug>`. Rebase conflict → halt ticket, leave worktree, advance.
@@ -261,6 +271,47 @@ Six structured inputs every phase agent receives:
 **Per-shape extras.** Reviewer takes the same six (parent_sha is already standard). Debugger Shape A: `failed_phase` tag + `failure_stderr`. Debugger Shape B: `blocker_list` (Reviewer's `issues[]` filtered to `severity == "Blocker"`).
 
 **TAP_RESULT envelope.** Each agent emits a final-line `TAP_RESULT: {...}` JSON. Orchestrator parses `status` (`ok` | `failed` | `gave_up` for phase agents; `pass` | `fail` for Reviewer) and branches per the runbook + Phase failure branches table. Missing / malformed / non-final envelope → halt ticket.
+
+## Smell-introduction detection
+
+After each GREEN or REFACTOR commit lands, the orchestrator checks whether the applied pattern's known trade-offs have manifested in the diff. This is a heuristic scan — false positives are acceptable; agents dismiss irrelevant warnings. The Refactorer is the primary consumer; CodeWriter receives warnings as informational context only.
+
+### Smell heuristics table
+
+Each heuristic receives the output of `git -C <worktree_path> diff HEAD~1..HEAD` and answers a yes/no question. When the answer is yes, the orchestrator records the smell tag, the evidence description, and the files involved.
+
+| Smell tag | Heuristic | Evidence description |
+|-----------|-----------|---------------------|
+| `over-abstraction-single-variant` | Diff adds an interface/abstract-class/trait/protocol AND only one concrete implementation of it | "interface X introduced with only one implementing class Y" |
+| `speculative-generality` | Diff adds a class/function/type that is not referenced by any test or call site in the diff itself | "symbol X defined but not exercised by any test or caller in this diff" |
+| `god-class` | A single file in the diff gains 5+ new method/function definitions | "file X gains N new methods in this commit" |
+| `feature-envy` | New code in file A imports 3+ symbols from a single other module B and uses them heavily (more references to B's symbols than to A's own) | "file A references N symbols from module B, suggesting feature envy" |
+| `shotgun-surgery` | The same small change pattern (same identifier rename, same parameter addition, same import) appears across 4+ files | "change pattern 'X' scattered across N files" |
+| `temporal-coupling` | Diff introduces ordered method calls (e.g., `init()` before `execute()`, `open()` before `read()`) with no structural enforcement (no builder, no state machine) | "methods X and Y require ordered invocation with no compile-time enforcement" |
+| `inappropriate-intimacy` | New code directly accesses another class's private/internal fields or reaches through 2+ levels of object navigation (e.g., `a.b.c.doThing()`) | "code in X reaches into internals of Y via chained access" |
+| `mutable-shared-state` | Diff introduces a module-level or static mutable variable accessed from multiple functions | "mutable shared variable X defined at module scope and accessed by N functions" |
+| `parallel-inheritance-hierarchy` | Diff adds 2+ new class/interface declarations that mirror an existing hierarchy (similar naming pattern, one-to-one correspondence) | "new classes X, Y mirror existing hierarchy A, B" |
+| `large-class` | A single file in the diff exceeds 300 net new lines | "file X adds N new lines in a single commit" |
+
+For smell tags not listed above: skip the check silently. The table covers the most common pattern-introduced smells; exotic tags pass through undetected rather than producing false heuristics.
+
+### `<smell-warnings>` block format
+
+Injected into the agent prompt after `<failure-context>` (if any) and before `<calibration>` (if any):
+
+```
+<smell-warnings>
+Pattern "strategy" applied in GREEN may have introduced these smells:
+- smell: over-abstraction-single-variant
+  evidence: interface DiscountStrategy introduced with only one implementing class FlatDiscount
+  files: src/discount/strategy.ts, src/discount/flat-discount.ts
+- smell: speculative-generality
+  evidence: symbol DiscountRegistry defined but not exercised by any test or caller in this diff
+  files: src/discount/registry.ts
+</smell-warnings>
+```
+
+Include one `- smell: ...` stanza per warning entry. Multiple entries from different phases are valid. The `phase_that_introduced` field is implicit from the header text ("applied in GREEN" vs "applied in REFACTOR").
 
 ## Commit policy
 

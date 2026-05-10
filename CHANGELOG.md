@@ -10,6 +10,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **Profile-driven agent calibration** established profile signals actively reshape agent prompts at dispatch time via `<calibration>` blocks, adjusting verification intensity and injecting pattern-specific guidance based on historical performance. Only `established` signals (≥3 samples) are injected; `tentative` signals are never included.
 - **Cross-task failure intelligence** agent failures captured to `.failure-log.json` during runs; subsequent agent dispatches receive `<failure-context>` with relevant prior failures, preventing repeated mistakes across tasks.
+- **Smell-introduction detection** after GREEN/REFACTOR commits, orchestrator checks the task's pattern hint's `smells_it_introduces` against the phase diff using heuristic rules, writes matches to `.smell-warnings.json`, and injects `<smell-warnings>` into the next phase agent's prompt. Refactorer treats warnings as prescriptive; CodeWriter treats them as informational only.
 
 ## [0.5.2] - 2026-05-10
 

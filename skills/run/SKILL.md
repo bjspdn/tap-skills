@@ -31,6 +31,7 @@ Drives decomposed tickets in `.tap/tickets/<slug>/` through a wave-parallel TDD 
 12. Subjects follow the exact form: `test(<task-id>): …`, `feat(<task-id>): …`, `refactor(<task-id>): …`, `fix(<scope>): …`.
 13. Before each wave dispatch, read `.failure-log.json` from the worktree and inject `<failure-context>` into agent prompts for tasks whose files overlap with prior failures.
 14. Before each agent dispatch, build and inject a `<calibration>` block from established `_profile.json` signals. Only `established` (≥3 samples) signals enter the block; `tentative` signals are never injected.
+15. After each GREEN or REFACTOR commit, run smell-check: if the task has a pattern hint, scan the phase diff against the pattern's `smells_it_introduces` heuristics and append matches to `.smell-warnings.json`. Inject `<smell-warnings>` into the next phase agent's prompt.
 
 ## Halt paths
 
