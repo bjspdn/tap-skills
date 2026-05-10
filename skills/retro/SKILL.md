@@ -3,6 +3,11 @@ name: retro
 description: Post-mortem analysis of completed /tap-run executions. Extracts commit trailers, classifies failures, computes per-agent and per-pattern metrics, and emits a two-layer output — an ephemeral run report plus a rolling aggregate profile. Use when the user invokes `/tap-retro`, says "run retro", "what happened in that run", "analyze the run", "post-mortem", or wants to understand why a pipeline succeeded or failed.
 ---
 
+## Context pressure
+
+Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
+Default posture when no signal present: **moderate**
+
 # tap-retro
 
 Read-only post-mortem of completed `/tap:run` executions. Two-layer output: an ephemeral run report (`.tap/retros/<slug>-<YYYY-MM-DD>.md`) scoped to one run, and a rolling aggregate profile (`.tap/retros/_profile.json`) that accumulates structural observations across runs.

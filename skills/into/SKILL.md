@@ -3,6 +3,11 @@ name: into
 description: Brainstorming partner that drives deep discussion about an idea before any code is written. Through natural conversation, explores the codebase and the web in parallel, challenges assumptions, and converges on a single well-specified ticket with structured description. Use when engineer invokes `/tap:into`, says "brainstorm", "let's think through X", "scope this out", "I want to build X but let's talk first", or has a `.tap/` directory and a feature ask they want to explore before committing.
 ---
 
+## Context pressure
+
+Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
+Default posture when no signal present: **nominal**
+
 All procedural logic — lifecycle, runbook, checkpoints, dispatch shapes, convergence gate, decomposition protocol, halt paths — lives in [RUN_FLOW.md](RUN_FLOW.md). This file carries triggers, constraints, and the final handoff.
 
 ## Constraints

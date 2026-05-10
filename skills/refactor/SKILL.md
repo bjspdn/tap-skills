@@ -3,6 +3,11 @@ name: refactor
 description: Aggressive structural refactoring targeting 80% reduction in countable lines — logic, orchestration, type ceremony, data constants — without changing behavior. Formatting, comments, whitespace, and naming are excluded from the metric and must never be degraded. Splits monolithic files into focused submodules. The original file becomes a lean entry point. Trigger ONLY on explicit `/tap-refactor` invocation. Not for small cleanups or formatting.
 ---
 
+## Context pressure
+
+Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
+Default posture when no signal present: **moderate**
+
 ## Principle
 
 **Target: eliminate 80% of countable lines without changing behavior.**

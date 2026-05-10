@@ -3,6 +3,11 @@ name: health
 description: Validates the integrity of the `.tap/` directory structure, detects stale worktrees, orphaned lockfiles, incomplete tickets, stale branches, and profile corruption. Reports a summary table and offers safe auto-repair with user confirmation. Use when the user invokes `/tap:health`, says "check tap health", "validate .tap", "clean up tap", "any stale worktrees", or wants to diagnose issues with their `.tap/` state.
 ---
 
+## Context pressure
+
+Follow the protocol in [shared/context-pressure.md](../../shared/context-pressure.md).
+Default posture when no signal present: **nominal**
+
 # tap-health
 
 Diagnostic and repair tool for the `.tap/` directory. Runs a fixed set of integrity checks, surfaces a summary table, and offers auto-repair for safe fixes. Never auto-repairs without explicit user confirmation.
