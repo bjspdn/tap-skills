@@ -387,6 +387,23 @@ Present key findings to the user. Structure the output as:
 
 Do NOT surface tentative observations as actionable suggestions. Prefix tentative findings with "[tentative]" and present them as "early signals, not yet reliable."
 
+## Anti-rationalization table
+
+Do not produce these rationalizations. If you catch yourself reasoning toward one, stop and take the correct action.
+
+| Where | Rationalization | Real problem | Correct action |
+|---|---|---|---|
+| Discovery | "Run was clean, nothing worth analyzing" | Skips retro for successful runs. Clean runs are signal too — they build the profile's success baselines | Analyze every completed run. Success data is as valuable as failure data for establishing rates |
+| Locate commits | "Commit messages are clear enough, skip trailer parsing" | Infers task/phase from subjects instead of parsing Tap-Task/Tap-Phase trailers. Subjects can drift from actual phase | Always parse trailers. `Tap-Task` and `Tap-Phase` are the structured contract. Subjects are human-readable, not machine-reliable |
+| Build timeline | "Task has no REFACTOR commit, it failed" | Assumes missing REFACTOR = failure. The task spec may declare REFACTOR as no-op (intentional skip) | Check the task file's `## REFACTOR ### Action` before classifying. Intentional skip ≠ failure |
+| Extract patterns | "No pattern hints in this run, skip pattern analysis" | Skips pattern extraction entirely. Tasks without hints should be classified as N/A, not ignored | Classify every task: `followed`, `ignored`, or `N/A`. The N/A count is useful data — it shows how much of the pipeline runs unguided |
+| Classify failures | "Tap-Decisions trailer says enough, don't need to read the diff" | Takes the Debugger's self-reported diagnosis at face value without verifying against commit content | Use Tap-Decisions as primary classifier but cross-reference with commit subject and phase. Debugger's diagnosis may be incomplete |
+| Compute metrics | "Only 2 samples but the signal is strong, mark as established" | Inflates confidence. Tentative threshold exists for a reason — small samples produce unreliable rates | `sample_count < 3` = tentative. Always. Strong signal from 2 samples is anecdotal, not established |
+| Detect patterns | "No structural patterns in this run" | Skips correlation computation because results seem obvious or uniform | Always compute correlations for file-count thresholds, per-phase failure rates, pattern adherence, and gate failures. "Nothing found" is a valid result — not computing is not |
+| Update profile | "Profile already has this data, no need to merge" | Skips merge because existing data "looks the same." Rates shift with new samples — even confirming data updates the average | Always merge. Recompute weighted averages, increment sample counts, update last_seen. Stale data expires — fresh data keeps entries alive |
+| Surface findings | "All tentative signals look actionable, surfacing them" | Presents tentative observations (< 3 samples) as actionable guidance. Premature advice based on noise | Only surface established signals as actionable. Prefix tentative findings with "[tentative]" and frame as early signals, not recommendations |
+| Surface findings | "I'll add my own interpretation of what went wrong" | Invents correlations or narratives not backed by the data. Retro reports facts, not theories | Tie every observation to specific sample counts and rates. If the data doesn't support a claim, don't make it |
+
 ## General rules
 
 - Retro never modifies source code or task files — read-only analysis only.

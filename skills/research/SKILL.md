@@ -265,6 +265,23 @@ When invoked by `tap:into` or `tap-convey` mid-conversation:
 5. If the calling agent later requests a persisted artifact, run the
    `synthesis` phase at that point.
 
+## Anti-rationalization table
+
+Do not produce these rationalizations. If you catch yourself reasoning toward one, stop and take the correct action.
+
+| Where | Rationalization | Real problem | Correct action |
+|---|---|---|---|
+| Context detection | "Topic is straightforward, skip manifest scan" | Misses framework version, key deps, runtime — queries land on wrong version's docs | Always run context detection. Even "simple" topics need version-scoped queries |
+| Classify domain | "This is just a library question" | Misclassifies domain, uses wrong search strategy and authority ranking | Map to specific domain(s). Many topics span two (e.g., "ECS in Bevy" = game-systems + software-patterns). Get it right before hop 1 |
+| Hop 1 | "First result answers the question fully" | Stops at 1 source, no cross-reference. Single-source claims cap at Probable, not Established | Every Established claim needs 2+ sources. One result is a starting point, not a conclusion |
+| Hop N | "This blog post is authoritative enough" | Weak source quality. Community blog ≠ official docs ≠ RFC | Follow authority ranking: official docs > specs/papers > cited blogs > community. A blog is evidence of practice, not authoritative guidance |
+| Hop N | "Sources agree, cross-referencing is redundant" | Agreement doesn't mean correctness. Sources may share the same upstream misconception | Cross-reference every claim. Agreement from independent sources is evidence. Agreement from sources citing each other is one data point |
+| Termination | "3 hops is enough for any topic" | Premature convergence. Complex topics need 4-5 hops to reach Established confidence | Check termination criteria: convergence signal, saturation, diminishing returns. Hop count alone is not a termination criterion |
+| Termination | "Remaining unknowns are edge cases, not worth another hop" | Declares unknowns unimportant to avoid another hop. The user might care about those edges | Surface remaining Unknowns explicitly. Let the user decide if they matter. Don't triage on their behalf |
+| Crossref | "No codebase context, skip cross-referencing entirely" | Pure-knowledge mode still requires source-vs-source cross-referencing for contradictions | Route correctly: project-bound → codebase scan, pure-knowledge → source crossref. Neither mode skips crossref |
+| Synthesis | "Findings are clear, self-review is a formality" | Skips verification that every claim has source attribution and confidence labels | Run self-review mechanically. Check every Established claim for 2+ sources, every Probable for 1+, every Uncertain flagged. Not optional |
+| Synthesis | "I'll note this recommendation since it's obvious" | Research skill does not recommend — it presents findings. Recommendations are the user's or tap:into's job | Present what exists. Distinguish fact, convention, opinion, constraint. Never pick a winner |
+
 ## General rules
 
 - Every search query scoped to its context. Project-bound: include

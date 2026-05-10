@@ -19,8 +19,13 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`tap:run` anti-rationalization table** 14 named shortcuts covering preflight through retro — prevents the orchestrator from skipping gates, inferring TAP_RESULT, serializing parallel dispatch, or doing agent work itself.
 - **`tap:convey` anti-rationalization table** 14 named shortcuts covering ingestion through emission — prevents skipping dependency/pattern scans, horizontal slicing, vague REFACTOR actions, placeholder tokens, and skipping the independent audit.
 - **`tap:retro` pattern smell cross-reference** new `cross-reference-pattern-smells` analysis step correlates a pattern card's `smells_it_introduces` against the run's failure taxonomy, recording matches as `pattern_smell_correlation` entries in the run report and accumulating them in `_profile.json`'s `pattern_signals.smell_correlations`.
+- **`tap:refactor` anti-rationalization table** 11 named shortcuts covering discover through report — prevents counting non-countable lines, scattering vs reducing, modifying tests, renaming for brevity, and inflating reported numbers.
+- **`tap:research` anti-rationalization table** 10 named shortcuts covering context detection through synthesis — prevents premature convergence, weak source acceptance, skipping cross-referencing, and making recommendations.
+- **`tap:retro` anti-rationalization table** 10 named shortcuts covering discovery through surface-findings — prevents skipping clean runs, inflating confidence, inventing correlations, and presenting tentative signals as actionable.
 
 ### Changed
+
+- **`tap:refactor` SKILL.md** converted XML `<phase>` tags to markdown `## Phase:` headings for structural consistency with other skills.
 
 - **`tap:run` profile enrichment** expanded dispatch paragraph to include `pattern_signals` alongside `agent_performance` and `gate_signals`, with per-agent-type specifics (TestWriter gets test_invariants, CodeWriter gets clean_green_rate, Refactorer gets refactor-success signals).
 - Changed `IdeationResearcher.md` model to haiku.
