@@ -6,6 +6,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-05-10
+
 ### Added
 
 - **Ambient stub detection** `tap:into` now picks up tangential ideas during any brainstorming phase. When engineer mentions a related feature or "we should also handle X," orchestrator offers to stub it as a deferred ticket. On confirmation, dispatches StubWriter subagent in background — no context bloat, no flow interruption. Constraint, anti-rationalization row, and dispatch shape added.
